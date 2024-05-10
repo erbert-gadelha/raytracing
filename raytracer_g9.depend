@@ -1,0 +1,46 @@
+# depslib dependency file v1.0
+1715322834 source:c:\users\erbert\onedrive\documentos\raytracer_g9\main.cpp
+	<iostream>
+	"vector3.h"
+	"object.h"
+	"sphere.h"
+	"plane.h"
+
+1715322694 c:\users\erbert\onedrive\documentos\raytracer_g9\include\vector3.h
+	<string>
+	<iostream>
+
+1715322687 source:c:\users\erbert\onedrive\documentos\raytracer_g9\src\vector3.cpp
+	"vector3.h"
+	<iostream>
+	<string>
+
+1715318228 source:c:\users\erbert\onedrive\documentos\raytracer_g9\src\mesh.cpp
+	"mesh.h"
+	<string>
+	"vector3.h"
+
+1715318127 c:\users\erbert\onedrive\documentos\raytracer_g9\include\mesh.h
+	<string>
+	"vector3.h"
+
+1715323023 source:c:\users\erbert\onedrive\documentos\raytracer_g9\src\sphere.cpp
+	"sphere.h"
+
+1715320318 c:\users\erbert\onedrive\documentos\raytracer_g9\include\sphere.h
+	"object.h"
+	<string>
+
+1715323386 c:\users\erbert\onedrive\documentos\raytracer_g9\include\object.h
+	"vector3.h"
+
+1715320427 source:c:\users\erbert\onedrive\documentos\raytracer_g9\src\object.cpp
+	"object.h"
+
+1715320747 source:c:\users\erbert\onedrive\documentos\raytracer_g9\src\plane.cpp
+	"plane.h"
+
+1715320734 c:\users\erbert\onedrive\documentos\raytracer_g9\include\plane.h
+	"object.h"
+	<string>
+
