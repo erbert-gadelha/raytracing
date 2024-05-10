@@ -3,6 +3,8 @@
 #define OBJECT_H
 
 #include "vector3.h"
+#include "transform_.h"
+#include "colorRGB.h"
 
 class object {
 
@@ -10,15 +12,15 @@ class object {
         // Construtor com parâmetro position
         virtual ~object();
         virtual std::string to_string();
-        vector3* scale;
-        vector3* position;
-        vector3* rotation;
+        transform_ * transform;
+        colorRGB* color;
+
         object();
 
     protected:
-        object(vector3* scale);
+        /*object(vector3* scale);
         object(vector3* scale, vector3* position);
-        object(vector3* scale, vector3* position, vector3* rotation);
+        object(vector3* scale, vector3* position, vector3* rotation);*/
 
     private:
 };

@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -32,16 +34,18 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/mesh.h" />
+		<Unit filename="include/colorRGB.h" />
 		<Unit filename="include/object.h" />
 		<Unit filename="include/plane.h" />
 		<Unit filename="include/sphere.h" />
+		<Unit filename="include/transform_.h" />
 		<Unit filename="include/vector3.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/mesh.cpp" />
+		<Unit filename="src/colorRGB.cpp" />
 		<Unit filename="src/object.cpp" />
 		<Unit filename="src/plane.cpp" />
 		<Unit filename="src/sphere.cpp" />
+		<Unit filename="src/transform_.cpp" />
 		<Unit filename="src/vector3.cpp" />
 		<Extensions />
 	</Project>

@@ -5,6 +5,9 @@
 #include "plane.h"
 
 #include <math.h>       /* sqrt */
+#include "transform_.h"
+#include "colorRGB.h"
+
 
 using namespace std;
 
@@ -16,6 +19,9 @@ float distance(int x1, int y1, int x2, int y2) {
 }
 
 int main() {
+    colorRGB* RED = new colorRGB(255, 0, 0);
+    colorRGB* GREEN = new colorRGB(0, 255, 0);
+    colorRGB* BLUE = new colorRGB(0, 0, 255);
 
     /*object** objects = new object*[2];
     objects[0] = new sphere(new vector3(1, 1, 1), new vector3(1, 1, 1));
@@ -25,11 +31,27 @@ int main() {
         printf("m%d: %s\n", i, objects[i]->to_string().c_str() );
     }*/
 
+    //transform_* trf = new transform_();
+    //printf("transform: %s\n", trf->to_string().c_str() );
+
+    /*cout << RED->to_string() << endl;
+    cout << GREEN->to_string() << endl;
+    cout << BLUE->to_string() << endl;*/
+    object* bola = new sphere(new vector3(1, 1, 1), new vector3(1, 1, 1));
+    cout << bola->to_string();
+
+    object* plano = new plane(new vector3(1, 1, 1), new vector3(1, 1, 1));
+    cout << plano->to_string();
+
+
+
+    //cout << (trf->to_string());
+
 
 
         // Image
 
-        int image_width = 256;
+        /*int image_width = 256;
         int image_height = 256;
 
         // Render
@@ -51,6 +73,8 @@ int main() {
 
                 printf("%d %d %d\n", r, g, b);
             }
-        }
+        }*/
+
+        return 0;
 
 }

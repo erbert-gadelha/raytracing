@@ -44,3 +44,80 @@
 	"object.h"
 	<string>
 
+1715364492 source:/home/CIN/ebgr/Desktop/raytracing/main.cpp
+	<iostream>
+	"vector3.h"
+	"object.h"
+	"sphere.h"
+	"plane.h"
+	<math.h>
+	"transform_.h"
+	"colorRGB.h"
+
+1715360166 source:/home/CIN/ebgr/Desktop/raytracing/src/mesh.cpp
+	"mesh.h"
+	<string>
+	"vector3.h"
+
+1715361209 source:/home/CIN/ebgr/Desktop/raytracing/src/object.cpp
+	"object.h"
+
+1715364543 source:/home/CIN/ebgr/Desktop/raytracing/src/plane.cpp
+	"plane.h"
+
+1715362969 source:/home/CIN/ebgr/Desktop/raytracing/src/sphere.cpp
+	"sphere.h"
+	<iostream>
+	"transform_.h"
+	"vector3.h"
+
+1715360166 source:/home/CIN/ebgr/Desktop/raytracing/src/vector3.cpp
+	"vector3.h"
+	<iostream>
+	<string>
+
+1715360166 /home/CIN/ebgr/Desktop/raytracing/include/mesh.h
+	<string>
+	"vector3.h"
+
+1715360166 /home/CIN/ebgr/Desktop/raytracing/include/vector3.h
+	<string>
+	<iostream>
+
+1715364028 /home/CIN/ebgr/Desktop/raytracing/include/object.h
+	"vector3.h"
+	"transform_.h"
+	"colorRGB.h"
+
+1715363083 /home/CIN/ebgr/Desktop/raytracing/include/plane.h
+	"object.h"
+	<string>
+
+1715364373 /home/CIN/ebgr/Desktop/raytracing/include/sphere.h
+	"object.h"
+	<string>
+
+1715362853 source:/home/CIN/ebgr/Desktop/raytracing/src/transform_.cpp
+	"transform_.h"
+	<string>
+
+1715361903 /home/CIN/ebgr/Desktop/raytracing/include/transform_.h
+	"vector3.h"
+	<string>
+
+1715363738 source:/home/CIN/ebgr/Desktop/raytracing/src/color.cpp
+	"color.h"
+	<iostream>
+	<string>
+
+1715363817 /home/CIN/ebgr/Desktop/raytracing/include/color.h
+	<string>
+
+1715364112 /home/CIN/ebgr/Desktop/raytracing/include/colorRGB.h
+	<string>
+
+1715364133 source:/home/CIN/ebgr/Desktop/raytracing/src/colorRGB.cpp
+	"colorRGB.h"
+	<iostream>
+	<string>
+
