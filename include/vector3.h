@@ -16,6 +16,12 @@ public:
     vector3* operator*(const double scale) const { return new vector3(cord_XYZ[0]*scale, cord_XYZ[1]*scale, cord_XYZ[2]*scale); }
     vector3* operator/(const double scale) const { return new vector3(cord_XYZ[0]/scale, cord_XYZ[1]/scale, cord_XYZ[2]/scale); }
 
+    void setX(double x);
+    void setY(double y);
+    void setZ(double y);
+    double getX();
+    double getY();
+    double getZ();
 
 private:
     double cord_XYZ[3];

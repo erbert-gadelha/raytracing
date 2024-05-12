@@ -121,3 +121,73 @@
 	<iostream>
 	<string>
 
+1715490307 source:/home/ebgr/Documents/cpp-projects/raytracing/main.cpp
+	<iostream>
+	"vector3.h"
+	"object.h"
+	"sphere.h"
+	"plane.h"
+	<math.h>
+	"transform_.h"
+	"colorRGB.h"
+	"camera.h"
+
+1715487871 /home/ebgr/Documents/cpp-projects/raytracing/include/vector3.h
+	<string>
+	<iostream>
+
+1715364028 /home/ebgr/Documents/cpp-projects/raytracing/include/object.h
+	"vector3.h"
+	"transform_.h"
+	"colorRGB.h"
+
+1715490069 /home/ebgr/Documents/cpp-projects/raytracing/include/transform_.h
+	"vector3.h"
+	<string>
+
+1715364112 /home/ebgr/Documents/cpp-projects/raytracing/include/colorRGB.h
+	<string>
+
+1715364373 /home/ebgr/Documents/cpp-projects/raytracing/include/sphere.h
+	"object.h"
+	<string>
+
+1715363083 /home/ebgr/Documents/cpp-projects/raytracing/include/plane.h
+	"object.h"
+	<string>
+
+1715364133 source:/home/ebgr/Documents/cpp-projects/raytracing/src/colorRGB.cpp
+	"colorRGB.h"
+	<iostream>
+	<string>
+
+1715361209 source:/home/ebgr/Documents/cpp-projects/raytracing/src/object.cpp
+	"object.h"
+
+1715364543 source:/home/ebgr/Documents/cpp-projects/raytracing/src/plane.cpp
+	"plane.h"
+
+1715364582 source:/home/ebgr/Documents/cpp-projects/raytracing/src/sphere.cpp
+	"sphere.h"
+	<iostream>
+	"transform_.h"
+	"vector3.h"
+
+1715490062 source:/home/ebgr/Documents/cpp-projects/raytracing/src/transform_.cpp
+	"transform_.h"
+	<string>
+	<math.h>
+
+1715487981 source:/home/ebgr/Documents/cpp-projects/raytracing/src/vector3.cpp
+	"vector3.h"
+	<iostream>
+	<string>
+
+1715490366 source:/home/ebgr/Documents/cpp-projects/raytracing/src/camera.cpp
+	"object.h"
+	"camera.h"
+	<string>
+
+1715490426 /home/ebgr/Documents/cpp-projects/raytracing/include/camera.h
+	<object.h>
+

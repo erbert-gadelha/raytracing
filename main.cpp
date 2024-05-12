@@ -7,6 +7,7 @@
 #include <math.h>       /* sqrt */
 #include "transform_.h"
 #include "colorRGB.h"
+#include "camera.h"
 
 
 using namespace std;
@@ -37,11 +38,14 @@ int main() {
     /*cout << RED->to_string() << endl;
     cout << GREEN->to_string() << endl;
     cout << BLUE->to_string() << endl;*/
-    object* bola = new sphere(new vector3(1, 1, 1), new vector3(1, 1, 1));
-    cout << bola->to_string();
+    //object* bola = new sphere(new vector3(1, 1, 1), new vector3(1, 1, 1));
+    //cout << bola->transform->up->to_string();
 
-    object* plano = new plane(new vector3(1, 1, 1), new vector3(1, 1, 1));
-    cout << plano->to_string();
+    object* camera_ = new camera();
+    cout << camera_->to_string();
+
+    //object* plano = new plane(new vector3(1, 1, 1), new vector3(1, 1, 1));
+    // << plano->to_string();
 
 
 
