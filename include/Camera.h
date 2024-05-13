@@ -10,7 +10,9 @@ class Camera : public Object
 {
     public:
         Camera();
-        Camera(int w, int h, double distance);
+        Camera(int horizontal, int vertical, double distance);
+        int horizontal;
+        int vertical;
         std::string to_string() override;
         Screen* screen;
         double distance;

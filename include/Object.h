@@ -9,16 +9,16 @@
 class Object {
 
     public:
-        // Construtor com parâmetro position
+        Object();
         virtual ~Object();
         virtual std::string to_string();
+        virtual Vector3* cast(Vector3* point, Vector3* vector);
         Transform * transform;
         colorRGB color;
 
         void setColor(int r, int g, int b);
         std::string getColor();
 
-        Object();
 
     protected:
         /*object(vector3* scale);

@@ -2,13 +2,17 @@
 
 Camera::Camera() {
     this->transform = new Transform();
-    this->screen = new Screen(64,64);
+    this->horizontal = 256;
+    this->vertical = 256;
+    this->screen = new Screen(horizontal,vertical);
     this->distance = 1;
 }
 
-Camera::Camera(int w, int h, double distance) {
+Camera::Camera(int horizontal, int vertical, double distance) {
     this->transform = new Transform();
-    this->screen = new Screen(w, h);
+    this->horizontal = horizontal;
+    this->vertical = vertical;
+    this->screen = new Screen(horizontal,vertical);
     this->distance = distance;
 }
 

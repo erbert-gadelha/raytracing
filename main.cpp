@@ -32,6 +32,13 @@ int main() {
     colorRGB BLUE  = {0,0,255};
     colorRGB YELLOW  = {255,255,0};
 
+
+    Object* sphere = new Sphere();
+    std::cout<< sphere->cast(new Vector3(0,0,-10), new Vector3(0,0,1)) << std::endl;
+
+
+    return 0;
+
     // Image
     int image_height = 256;
     int image_width = 256;
@@ -59,6 +66,5 @@ int main() {
 
     saveAsImage(screen_->to_string(), "image.ppm");
 
-    return 0;
 
 }

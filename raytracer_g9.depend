@@ -121,7 +121,7 @@
 	<iostream>
 	<string>
 
-1715577480 source:/home/ebgr/Documents/cpp-projects/raytracing/main.cpp
+1715581923 source:/home/ebgr/Documents/cpp-projects/raytracing/main.cpp
 	<iostream>
 	"Vector3.h"
 	"Object.h"
@@ -212,7 +212,7 @@
 	<string>
 	<iostream>
 
-1715577480 /home/ebgr/Documents/cpp-projects/raytracing/include/Sphere.h
+1715581391 /home/ebgr/Documents/cpp-projects/raytracing/include/Sphere.h
 	"Object.h"
 	<string>
 
@@ -220,12 +220,12 @@
 	"Object.h"
 	<string>
 
-1715577480 /home/ebgr/Documents/cpp-projects/raytracing/include/Camera.h
+1715580643 /home/ebgr/Documents/cpp-projects/raytracing/include/Camera.h
 	<Object.h>
 	<string>
 	<Screen.h>
 
-1715577227 source:/home/ebgr/Documents/cpp-projects/raytracing/src/Camera.cpp
+1715580706 source:/home/ebgr/Documents/cpp-projects/raytracing/src/Camera.cpp
 	"Camera.h"
 
 1715577227 source:/home/ebgr/Documents/cpp-projects/raytracing/src/Screen.cpp
@@ -242,7 +242,7 @@
 	<iostream>
 	<string>
 
-1715577480 /home/ebgr/Documents/cpp-projects/raytracing/include/Object.h
+1715581222 /home/ebgr/Documents/cpp-projects/raytracing/include/Object.h
 	"Vector3.h"
 	"Transform.h"
 	"colorRGB.h"
@@ -251,12 +251,12 @@
 	"Plane.h"
 	"colorRGB.h"
 
-1715577480 source:/home/ebgr/Documents/cpp-projects/raytracing/src/Sphere.cpp
+1715582065 source:/home/ebgr/Documents/cpp-projects/raytracing/src/Sphere.cpp
 	"Sphere.h"
 	<iostream>
 	"Transform.h"
 	"Vector3.h"
 
-1715577480 source:/home/ebgr/Documents/cpp-projects/raytracing/src/Object.cpp
+1715581324 source:/home/ebgr/Documents/cpp-projects/raytracing/src/Object.cpp
 	"Object.h"
 
