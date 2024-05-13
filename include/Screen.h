@@ -4,15 +4,15 @@
 #include <colorRGB.h>
 
 
-class screen {
+class Screen {
     public:
-        screen(int w, int h);
+        Screen(int w, int h);
         int width();
         int height();
         colorRGB get(int x, int y);
         void set(int x, int y, colorRGB color);
         std::string to_string();
-        ~screen();
+        ~Screen();
 
     protected:
         int w;

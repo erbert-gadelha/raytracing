@@ -1,7 +1,7 @@
-#include "screen.h"
+#include "Screen.h"
 #include <iostream>
 
-screen::screen(int w, int h) {
+Screen::Screen(int w, int h) {
     this->w = w;
     this->h = h;
     this->pixels = new colorRGB*[h];
@@ -16,7 +16,7 @@ screen::screen(int w, int h) {
     }
 }
 
-screen::~screen() {
+Screen::~Screen() {
     for (int y = 0; y < h; ++y) {
         delete[] this->pixels[y];
     }
@@ -24,15 +24,15 @@ screen::~screen() {
 }
 
 
-colorRGB screen::get(int x, int y) {
+colorRGB Screen::get(int x, int y) {
     return this->pixels[y][x];
 }
 
-void screen::set(int x, int y, colorRGB color) {
+void Screen::set(int x, int y, colorRGB color) {
     this->pixels[y][x] = color;
 }
 
-std::string screen::to_string() {
+std::string Screen::to_string() {
     std::string retorno = "P3\n" + std::to_string(w) + " " + std::to_string(h) + "\n255\n";
     for(int y = 0; y < h; y++) {
         for(int x = 0; x < w; x++) {

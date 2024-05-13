@@ -1,27 +1,27 @@
 #ifndef TRANSFORM__H
 #define TRANSFORM__H
-#include "vector3.h"
+#include "Vector3.h"
 #include <string>
 
 
-class transform_
+class Transform
 {
     public:
-        transform_();
-        vector3* rotation;
-        vector3* position;
-        vector3* scale;
+        Transform();
+        Vector3* rotation;
+        Vector3* position;
+        Vector3* scale;
 
-        vector3* up;
-        vector3* right;
-        vector3* forward;
+        Vector3* up;
+        Vector3* right;
+        Vector3* forward;
         void refresh_axys();
 
         std::string to_string();
 
 
     protected:
-        vector3*  relative_vector3(vector3* v);
+        Vector3*  relative_vector3(Vector3* v);
 
     private:
         double cos_x;

@@ -2,23 +2,23 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "vector3.h"
-#include "transform_.h"
+#include "Vector3.h"
+#include "Transform.h"
 #include "colorRGB.h"
 
-class object {
+class Object {
 
     public:
         // Construtor com parâmetro position
-        virtual ~object();
+        virtual ~Object();
         virtual std::string to_string();
-        transform_ * transform;
+        Transform * transform;
         colorRGB color;
 
         void setColor(int r, int g, int b);
         std::string getColor();
 
-        object();
+        Object();
 
     protected:
         /*object(vector3* scale);

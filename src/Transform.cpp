@@ -1,17 +1,17 @@
-#include "transform_.h"
+#include "Transform.h"
 #include <string>
 #include <math.h>
 
 const double pi = atan(1)*4;
 
-transform_::transform_() {
-    scale = new vector3(1,1,1);
-    position = new vector3(0,0,0);
-    rotation = new vector3(0,0,0);
+Transform::Transform() {
+    scale = new Vector3(1,1,1);
+    position = new Vector3(0,0,0);
+    rotation = new Vector3(0,0,0);
     refresh_axys();
 }
 
-void transform_::refresh_axys() {
+void Transform::refresh_axys() {
     cos_x = cos(rotation->getX()*(pi/180));
     sin_x = sin(rotation->getX()*(pi/180));
 
@@ -21,13 +21,13 @@ void transform_::refresh_axys() {
     cos_z = cos(rotation->getZ()*(pi/180));
     sin_z = sin(rotation->getZ()*(pi/180));
 
-    up =     relative_vector3(new vector3(0, 1, 0));
-    right =  relative_vector3(new vector3(1, 0, 0));
-    forward = relative_vector3(new vector3(0, 0, 1));
+    up =     relative_vector3(new Vector3(0, 1, 0));
+    right =  relative_vector3(new Vector3(1, 0, 0));
+    forward = relative_vector3(new Vector3(0, 0, 1));
 }
 
 
-vector3* transform_::relative_vector3(vector3* v) {
+Vector3* Transform::relative_vector3(Vector3* v) {
     double x = v->getX();
     double y = v->getY();
     double z = v->getZ();
@@ -38,7 +38,7 @@ vector3* transform_::relative_vector3(vector3* v) {
     return v;
 }
 
-std::string transform_::to_string () {
+std::string Transform::to_string () {
         return ("{\n\tscale: " + scale->to_string() + "\n\tposition: " + position->to_string() +",\n\trotation: " + rotation->to_string() + "\n}");
 
 }

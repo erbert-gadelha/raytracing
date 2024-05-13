@@ -34,23 +34,23 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/camera.h" />
+		<Unit filename="include/Camera.h" />
+		<Unit filename="include/Object.h" />
+		<Unit filename="include/Plane.h" />
+		<Unit filename="include/Screen.h" />
+		<Unit filename="include/Sphere.h" />
+		<Unit filename="include/Transform.h" />
+		<Unit filename="include/Vector3.h" />
 		<Unit filename="include/colorRGB.h" />
-		<Unit filename="include/object.h" />
-		<Unit filename="include/plane.h" />
-		<Unit filename="include/screen.h" />
-		<Unit filename="include/sphere.h" />
-		<Unit filename="include/transform_.h" />
-		<Unit filename="include/vector3.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/camera.cpp" />
+		<Unit filename="src/Camera.cpp" />
+		<Unit filename="src/Object.cpp" />
+		<Unit filename="src/Plane.cpp" />
+		<Unit filename="src/Screen.cpp" />
+		<Unit filename="src/Sphere.cpp" />
+		<Unit filename="src/Transform.cpp" />
+		<Unit filename="src/Vector3.cpp" />
 		<Unit filename="src/colorRGB.cpp" />
-		<Unit filename="src/object.cpp" />
-		<Unit filename="src/plane.cpp" />
-		<Unit filename="src/screen.cpp" />
-		<Unit filename="src/sphere.cpp" />
-		<Unit filename="src/transform_.cpp" />
-		<Unit filename="src/vector3.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
