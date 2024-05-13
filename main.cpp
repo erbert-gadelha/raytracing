@@ -3,81 +3,72 @@
 #include "object.h"
 #include "sphere.h"
 #include "plane.h"
+#include "camera.h"
+#include "transform_.h"
+//#include "colorRGB.h"
+#include "screen.h"
 
 #include <math.h>       /* sqrt */
-#include "transform_.h"
-#include "colorRGB.h"
-#include "camera.h"
+#include <fstream>
 
 
 using namespace std;
 
-float distance(int x1, int y1, int x2, int y2) {
-    int dx = x1-x2;
-    int dy = y1-y2;
+void saveAsImage (std::string image, std::string fileName) {
+    std::ofstream outputFile(fileName);
 
-    return sqrt((dx*dx)+(dy*dy));
+    if (!outputFile.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo." << std::endl;
+        return;
+    }
+
+    outputFile << image;
+    outputFile.close();
+    std::cout << "Arquivo gerado com sucesso." << std::endl;
 }
 
 int main() {
-    colorRGB* RED = new colorRGB(255, 0, 0);
-    colorRGB* GREEN = new colorRGB(0, 255, 0);
-    colorRGB* BLUE = new colorRGB(0, 0, 255);
+    colorRGB RED   = {255,0,0};
+    colorRGB GREEN = {0,255,0};
+    colorRGB BLUE  = {0,0,255};
+    colorRGB YELLOW  = {255,255,0};
 
-    /*object** objects = new object*[2];
-    objects[0] = new sphere(new vector3(1, 1, 1), new vector3(1, 1, 1));
-    objects[1] = new plane(new vector3(1, 1, 1));
+    //screen* screen_ = new screen(1080, 720);
+    /*screen* screen_ = new screen(64, 32);
+    screen_->set(0, 0, RED);
+    screen_->set(1, 0, GREEN);
+    screen_->set(2, 0, BLUE);
 
-    for(int i = 0; i < 2; i++) {
-        printf("m%d: %s\n", i, objects[i]->to_string().c_str() );
-    }*/
-
-    //transform_* trf = new transform_();
-    //printf("transform: %s\n", trf->to_string().c_str() );
-
-    /*cout << RED->to_string() << endl;
-    cout << GREEN->to_string() << endl;
-    cout << BLUE->to_string() << endl;*/
-    //object* bola = new sphere(new vector3(1, 1, 1), new vector3(1, 1, 1));
-    //cout << bola->transform->up->to_string();
-
-    object* camera_ = new camera();
-    cout << camera_->to_string();
-
-    //object* plano = new plane(new vector3(1, 1, 1), new vector3(1, 1, 1));
-    // << plano->to_string();
-
-
-
-    //cout << (trf->to_string());
+    saveAsImage(screen_->to_string(), "image.ppm");*/
 
 
 
         // Image
-
-        /*int image_width = 256;
         int image_height = 256;
+        int image_width = 256;
+        screen* screen_ = new screen(image_width, image_height);
 
         // Render
-
-        std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
         int center_x = image_width/2;
         int center_y = image_height/2;
 
-        for (int j = 0; j < image_height; j++) {
-            for (int i = 0; i < image_width; i++) {
-                int r = 0;
-                int g = 0;
-                int b = distance(i,j, center_x, center_y);
-
-                if(distance(i,j, center_x, center_y) < 50)
-                    r = 255;
-
-
-                printf("%d %d %d\n", r, g, b);
+        for (int y = 0; y < image_height; y++) {
+            for (int x = 0; x < image_width; x++) {
+                if(y > center_y)
+                    if(x > center_x)
+                        screen_->set(x, y, GREEN);
+                    else
+                        screen_->set(x, y, BLUE);
+                else
+                    if(x > center_x)
+                        screen_->set(x, y, RED);
+                    else
+                        screen_->set(x, y, YELLOW);
             }
-        }*/
+        }
+
+        saveAsImage(screen_->to_string(), "image.ppm");
 
         return 0;
 

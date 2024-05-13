@@ -13,7 +13,10 @@ class object {
         virtual ~object();
         virtual std::string to_string();
         transform_ * transform;
-        colorRGB* color;
+        colorRGB color;
+
+        void setColor(int r, int g, int b);
+        std::string getColor();
 
         object();
 

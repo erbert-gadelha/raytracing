@@ -34,16 +34,20 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/camera.h" />
 		<Unit filename="include/colorRGB.h" />
 		<Unit filename="include/object.h" />
 		<Unit filename="include/plane.h" />
+		<Unit filename="include/screen.h" />
 		<Unit filename="include/sphere.h" />
 		<Unit filename="include/transform_.h" />
 		<Unit filename="include/vector3.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/camera.cpp" />
 		<Unit filename="src/colorRGB.cpp" />
 		<Unit filename="src/object.cpp" />
 		<Unit filename="src/plane.cpp" />
+		<Unit filename="src/screen.cpp" />
 		<Unit filename="src/sphere.cpp" />
 		<Unit filename="src/transform_.cpp" />
 		<Unit filename="src/vector3.cpp" />

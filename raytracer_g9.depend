@@ -121,22 +121,22 @@
 	<iostream>
 	<string>
 
-1715490307 source:/home/ebgr/Documents/cpp-projects/raytracing/main.cpp
+1715574773 source:/home/ebgr/Documents/cpp-projects/raytracing/main.cpp
 	<iostream>
 	"vector3.h"
 	"object.h"
 	"sphere.h"
 	"plane.h"
-	<math.h>
-	"transform_.h"
-	"colorRGB.h"
 	"camera.h"
+	"transform_.h"
+	"screen.h"
+	<math.h>
 
 1715487871 /home/ebgr/Documents/cpp-projects/raytracing/include/vector3.h
 	<string>
 	<iostream>
 
-1715364028 /home/ebgr/Documents/cpp-projects/raytracing/include/object.h
+1715573544 /home/ebgr/Documents/cpp-projects/raytracing/include/object.h
 	"vector3.h"
 	"transform_.h"
 	"colorRGB.h"
@@ -145,8 +145,7 @@
 	"vector3.h"
 	<string>
 
-1715364112 /home/ebgr/Documents/cpp-projects/raytracing/include/colorRGB.h
-	<string>
+1715573719 /home/ebgr/Documents/cpp-projects/raytracing/include/colorRGB.h
 
 1715364373 /home/ebgr/Documents/cpp-projects/raytracing/include/sphere.h
 	"object.h"
@@ -156,18 +155,19 @@
 	"object.h"
 	<string>
 
-1715364133 source:/home/ebgr/Documents/cpp-projects/raytracing/src/colorRGB.cpp
+1715572995 source:/home/ebgr/Documents/cpp-projects/raytracing/src/colorRGB.cpp
 	"colorRGB.h"
 	<iostream>
 	<string>
 
-1715361209 source:/home/ebgr/Documents/cpp-projects/raytracing/src/object.cpp
+1715573633 source:/home/ebgr/Documents/cpp-projects/raytracing/src/object.cpp
 	"object.h"
 
-1715364543 source:/home/ebgr/Documents/cpp-projects/raytracing/src/plane.cpp
+1715573688 source:/home/ebgr/Documents/cpp-projects/raytracing/src/plane.cpp
 	"plane.h"
+	"colorRGB.h"
 
-1715364582 source:/home/ebgr/Documents/cpp-projects/raytracing/src/sphere.cpp
+1715573681 source:/home/ebgr/Documents/cpp-projects/raytracing/src/sphere.cpp
 	"sphere.h"
 	<iostream>
 	"transform_.h"
@@ -183,11 +183,18 @@
 	<iostream>
 	<string>
 
-1715490366 source:/home/ebgr/Documents/cpp-projects/raytracing/src/camera.cpp
-	"object.h"
+1715573213 source:/home/ebgr/Documents/cpp-projects/raytracing/src/camera.cpp
 	"camera.h"
+
+1715571069 /home/ebgr/Documents/cpp-projects/raytracing/include/camera.h
+	<object.h>
 	<string>
 
-1715490426 /home/ebgr/Documents/cpp-projects/raytracing/include/camera.h
-	<object.h>
+1715574875 source:/home/ebgr/Documents/cpp-projects/raytracing/src/screen.cpp
+	"screen.h"
+	<iostream>
+
+1715574232 /home/ebgr/Documents/cpp-projects/raytracing/include/screen.h
+	<string>
+	<colorRGB.h>
 
