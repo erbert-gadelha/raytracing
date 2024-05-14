@@ -32,53 +32,45 @@ Sphere::Sphere(Vector3 scale, Vector3 position, Vector3 rotation ) : Object() {
 
 
 std::vector<Vector3> Sphere::cast(Vector3 point, Vector3 vector) {
+    std::vector<Vector3> result;
 
     Vector3 df = point - transform.position;
-
     double x = vector.getX(); // VETOR DIRETOR DA RETA
     double y = vector.getY(); // VETOR DIRETOR DA RETA
     double z = vector.getZ(); // VETOR DIRETOR DA RETA
-    double xc = df.getX();    // CENTRO DA ESFERA
-    double yc = df.getY();    // CENTRO DA ESFERA
-    double zc = df.getZ();    // CENTRO DA ESFERA
+    double xc = df.getX();    // DIFERENCA DAS COORDENADAS
+    double yc = df.getY();    // DIFERENCA DAS COORDENADAS
+    double zc = df.getZ();    // DIFERENCA DAS COORDENADAS
     double radius = this->transform.scale.getX()/2;    // RAIO DA ESFERA
 
-
-    /*std::cout << "casting : {\n";
-    std::cout << "   sphere: { radius: " << radius << ", position: " << this->transform.position.getX() << ',' << this->transform.position.getY() << ',' << this->transform.position.getZ() << ") }\n";
-    std::cout << "   line: { point: (" << point.getX() << ',' << point.getY() << ',' <<  point.getZ() << "), vector: (" << x << ',' << y << ',' <<  z << ") }\n";
-    std::cout << "};\n";*/
-
-
     double a = (x*x) + (y*y) + (z*z);
-    double b = -(2*x*xc) - (2*y*yc) - (2*z*zc);
-    double c = (xc*xc)+(yc*yc)*(zc*zc) - (radius*radius);
+    double b = (-2)*((x*xc)+(y*yc)+(z*zc));
+    double c = (xc*xc)+(yc*yc)+(zc*zc) - (radius*radius);
     double delta = (b*b)-(4*a*c);
 
-    //printf("{\n   a: %f\n   b: %f\n   c: %f\n   delta:%f\n};\n", a, b, c, delta);
 
-
-
-    std::vector<Vector3> result;
-
-    if(delta < 0) {
-        //std::cout << "\n\tnao ha raiz\n" << std::endl;
+    if(delta < 0)
         return result;
-    }
 
     double square_root = sqrt(delta);
     double t1 = (-b+square_root)/(2*a);
+    double t2 = (-b-square_root)/(2*a);
+
+  //////////// DEBUG ////////////
+    /*std::cout << "casting : {\n";
+    std::cout << "   sphere: { radius: " << radius << ", position: " << this->transform.position.getX() << ',' << this->transform.position.getY() << ',' << this->transform.position.getZ() << ") }\n";
+    std::cout << "   line: { point: (" << point.getX() << ',' << point.getY() << ',' <<  point.getZ() << "), vector: (" << x << ',' << y << ',' <<  z << ") }\n";
+    std::cout << "};\n";
+    printf("{\n   a: %f\n   b: %f\n   c: %f\n   delta:%f\n};\n", a, b, c, delta);
+    std::cout << "   raiz [1]: " << t1 << ";\n";
+    std::cout << "   raiz [2]: " << t2 << ";\n";*/
+  //////////// DEBUG ////////////
+
 
     result.push_back( point + (vector*t1));
-    //std::cout << "   raiz [1]: " << t1 << ";\n";
-
     if (delta == 0)
         return result;
-
-    double t2 = (-b-square_root)/(2*a);
-    //std::cout << "   raiz [2]: " << t2 << ";\n";
     result.push_back( point + (vector*t2));
-
     return result;
 }
 

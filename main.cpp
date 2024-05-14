@@ -35,13 +35,27 @@ int main() {
     colorRGB BLUE  = {0,0,255};
     colorRGB YELLOW  = {255,255,0};
 
-    Camera camera = Camera(256, 256, 10);
+    Camera camera = Camera(512, 512, 1000);
     camera.transform.position.setZ(-10);
 
+    Sphere sphere1 = Sphere(Vector3().ONE*2, Vector3(0,0,0));
+    sphere1.color = RED;
+    Sphere sphere2 = Sphere(Vector3().ONE*1, Vector3(1,2,0));
+    sphere2.color = BLUE;
 
     vector<Object*> objects;
-    objects.push_back(new Sphere(Vector3().ONE*2, Vector3(0,0,0)));
+    objects.push_back(&sphere1);
+    objects.push_back(&sphere2);
     saveAsImage(camera.render(objects), "image.ppm");
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
