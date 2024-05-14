@@ -27,15 +27,21 @@ std::string Camera::render(std::vector<Object*> objects) {
     std::cout << "Rendering <" << objects.size() << "> object(s)";
     auto start = std::chrono::high_resolution_clock::now();
   ////////// DEBUG //////////
+    colorRGB SKY_COLOR = {120, 120, 255};
+    colorRGB WHITE = {255, 255, 255};
+
 
 
     Vector3 M = transform.position + (transform.forward()*distance);
-    for(int h = 0; h < horizontal; h++) {
-        for(int v = 0; v < vertical; v++) {
+    for(int v = 0; v < vertical; v++) {
+        colorRGB GRADIENT = SKY_COLOR + WHITE*(((double)v)/((double)vertical*2));
+
+        for(int h = 0; h < horizontal; h++) {
             double nearest = this->MAX_DISTANCE;
             Vector3 pixel = M + (transform.up()*(v-(vertical/2))) + (transform.right()*(h-(horizontal/2)));
             Vector3 V = (transform.position - pixel).Normalized();
 
+            screen.set(h, v, GRADIENT);
             for(int i = 0; i < objects.size(); i++) {
                 std::vector<Vector3> collisions = objects[i]->cast(transform.position, V);
                 for(int j = 0; j < collisions.size(); j++) {
@@ -44,7 +50,10 @@ std::string Camera::render(std::vector<Object*> objects) {
                     if(dist > nearest)
                         continue;
 
-                    screen.set(h, v, (objects[i]->color *(10/dist)));
+                    screen.set(h, v, (objects[i]->color *(30/dist) +
+                                      WHITE*(dist/30)
+                    ));
+                    //screen.set(h, v, (objects[i]->color *(10/dist)));
                     nearest = dist;
                 }
 

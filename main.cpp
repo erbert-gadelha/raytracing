@@ -44,16 +44,19 @@ int main() {
     camera.transform.position.setZ(-10);
 
     Object* sphere1 = new Sphere(Vector3().ONE*2, Vector3(0,0,0));
-    Object* sphere2 = new Sphere(Vector3().ONE*1, Vector3(1,2,10));
-    Object* plane1 = new Plane(Vector3().ONE, Vector3(0,-10,0), Vector3(15,0,0));
+    Object* sphere2 = new Sphere(Vector3().ONE*1, Vector3(1,0.5,0));
+    Object* plane1 = new Plane(Vector3().ONE, Vector3(3,0,0), Vector3(5,0,45));
+    Object* plane2 = new Plane(Vector3().ONE, Vector3(3,-3,0), Vector3(5,0,0));
     sphere1->color = RED;
     sphere2->color = BLUE;
     plane1->color = YELLOW;
+    plane2->color = GREEN;
 
     vector<Object*> objects;
     objects.push_back(sphere1);
     objects.push_back(sphere2);
     objects.push_back(plane1);
+    objects.push_back(plane2);
 
     saveAsImage(camera.render(objects), "image.ppm");
     return 0;

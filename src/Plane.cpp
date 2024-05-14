@@ -55,11 +55,11 @@ std::vector<Vector3> Plane::cast(Vector3 point, Vector3 vector) {
     double a = -(xn*xc + yn*yc + zn*zc);
     double b = (xn*x + yn*y + zn*z);
 
-    if(a == 0 || b == 0)
+    if (b >= 0)
         return result;
 
-    if(a < 0) a*= -1;
-    if(b < 0) b*= -1;
+    double t = a/b;
+    if (t < 0) t*= -1;
 
     result.push_back(point + (vector*(a/b)));
     return result;
