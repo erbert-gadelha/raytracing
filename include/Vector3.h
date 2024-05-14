@@ -22,6 +22,8 @@ public:
 
     double Magnitude();
     Vector3 Normalized();
+    static double Distance(Vector3 v1, Vector3 v2);
+
     void setX(double x);
     void setY(double y);
     void setZ(double y);

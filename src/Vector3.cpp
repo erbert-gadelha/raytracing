@@ -30,11 +30,16 @@ double Vector3::getZ() {    return this->cord_XYZ[2];   }
 
 
 double Vector3::Magnitude() {
-    return sqrt(cord_XYZ[0]*cord_XYZ[0])+(cord_XYZ[1]*cord_XYZ[1])+(cord_XYZ[2]*cord_XYZ[2]);
+    return sqrt((cord_XYZ[0]*cord_XYZ[0])+(cord_XYZ[1]*cord_XYZ[1])+(cord_XYZ[2]*cord_XYZ[2]));
 }
 
 Vector3 Vector3::Normalized() {
     return Vector3(cord_XYZ[0],cord_XYZ[1],cord_XYZ[2])/Magnitude();
+}
+
+
+double Vector3::Distance(Vector3 v1, Vector3 v2) {
+    return (v1-v2).Magnitude();
 }
 
 std::string Vector3::to_string() {

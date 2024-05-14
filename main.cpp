@@ -1,4 +1,9 @@
 #include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <vector>
+
+
 #include "Vector3.h"
 #include "Object.h"
 #include "Sphere.h"
@@ -6,10 +11,6 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "Screen.h"
-
-#include <math.h>       /* sqrt */
-#include <fstream>
-#include <vector>
 
 
 using namespace std;
@@ -24,9 +25,10 @@ void saveAsImage (std::string image, std::string fileName) {
 
     outputFile << image;
     outputFile.close();
-    std::cout << "Arquivo gerado com sucesso." << std::endl;
-}
 
+    std::cout << "Arquivo gerado com sucesso." << std::endl;
+    std::cout << '~' << std::filesystem::current_path().string() << '/' << fileName << std::endl;
+}
 
 
 int main() {
@@ -35,19 +37,25 @@ int main() {
     colorRGB BLUE  = {0,0,255};
     colorRGB YELLOW  = {255,255,0};
 
+
+    //Camera camera = Camera(1080, 1080, 1000);
     Camera camera = Camera(512, 512, 1000);
+    //Camera camera = Camera(32, 32, 100);
     camera.transform.position.setZ(-10);
 
-    Sphere sphere1 = Sphere(Vector3().ONE*2, Vector3(0,0,0));
-    sphere1.color = RED;
-    Sphere sphere2 = Sphere(Vector3().ONE*1, Vector3(1,2,0));
-    sphere2.color = BLUE;
+    Object* sphere1 = new Sphere(Vector3().ONE*2, Vector3(0,0,0));
+    Object* sphere2 = new Sphere(Vector3().ONE*1, Vector3(1,2,10));
+    Object* plane1 = new Plane(Vector3().ONE, Vector3(0,-10,0), Vector3(15,0,0));
+    sphere1->color = RED;
+    sphere2->color = BLUE;
+    plane1->color = YELLOW;
 
     vector<Object*> objects;
-    objects.push_back(&sphere1);
-    objects.push_back(&sphere2);
-    saveAsImage(camera.render(objects), "image.ppm");
+    objects.push_back(sphere1);
+    objects.push_back(sphere2);
+    objects.push_back(plane1);
 
+    saveAsImage(camera.render(objects), "image.ppm");
     return 0;
 }
 

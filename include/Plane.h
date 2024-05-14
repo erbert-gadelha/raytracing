@@ -13,6 +13,9 @@ class Plane : public Object
         Plane(Vector3 scale, Vector3 position);
         Plane(Vector3 scale, Vector3 position, Vector3 rotation);
         std::string to_string() override;
+        std::vector<Vector3>  cast(Vector3 point, Vector3 vector) override;
+        double contains (Vector3 point);
+        double getD();
 
     protected:
 

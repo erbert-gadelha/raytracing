@@ -9,26 +9,24 @@ Transform::Transform() {
     scale = Vector3(1,1,1);
     position = Vector3(0,0,0);
     rotation = Vector3(0,0,0);
-    refresh_axys();
 }
 
-void Transform::refresh_axys() {
-    cos_x = cos(rotation.getX()*(pi/180));
-    sin_x = sin(rotation.getX()*(pi/180));
-
-    cos_y = cos(rotation.getY()*(pi/180));
-    sin_y = sin(rotation.getY()*(pi/180));
-
-    cos_z = cos(rotation.getZ()*(pi/180));
-    sin_z = sin(rotation.getZ()*(pi/180));
-
-    up =      relative_vector3(Vector3(0, 1, 0));
-    right =   relative_vector3(Vector3(1, 0, 0));
-    forward = relative_vector3(Vector3(0, 0, 1));
-}
+Vector3 Transform::up() {    return relative_vector3(Vector3().UP);}
+Vector3 Transform::right() {    return relative_vector3(Vector3().RIGHT);}
+Vector3 Transform::forward() {    return relative_vector3(Vector3().FORWARD); }
 
 
 Vector3 Transform::relative_vector3(Vector3 v) {
+    double cos_x = cos(rotation.getX()*(pi/180));
+    double sin_x = sin(rotation.getX()*(pi/180));
+
+    double cos_y = cos(rotation.getY()*(pi/180));
+    double sin_y = sin(rotation.getY()*(pi/180));
+
+    double cos_z = cos(rotation.getZ()*(pi/180));
+    double sin_z = sin(rotation.getZ()*(pi/180));
+
+
     double x = v.getX();
     double y = v.getY();
     double z = v.getZ();

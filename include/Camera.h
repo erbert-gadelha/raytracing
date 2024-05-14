@@ -18,6 +18,7 @@ class Camera : public Object
         Screen screen;
         double distance;
         std::string render(std::vector<Object*>objects);
+        double MAX_DISTANCE;
 
     protected:
 
