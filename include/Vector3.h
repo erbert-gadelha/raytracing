@@ -5,17 +5,23 @@
 
 class Vector3 {
 public:
-    //static const vector3 ONE;
-    //static const vector3 ZERO;
+    static const Vector3 ONE;
+    static const Vector3 ZERO;
+    static const Vector3 UP;
+    static const Vector3 RIGHT;
+    static const Vector3 FORWARD;
 
+    Vector3();
     Vector3(double x, double y, double z);
     std::string to_string();
 
-    Vector3* operator+(const Vector3& other) const { return new Vector3(cord_XYZ[0]+other.cord_XYZ[0], cord_XYZ[1]+other.cord_XYZ[1], cord_XYZ[2]+other.cord_XYZ[2]); }
-    Vector3* operator-(const Vector3& other) const { return new Vector3(cord_XYZ[0]-other.cord_XYZ[0], cord_XYZ[1]-other.cord_XYZ[1], cord_XYZ[2]-other.cord_XYZ[2]); }
-    Vector3* operator*(const double scale) const { return new Vector3(cord_XYZ[0]*scale, cord_XYZ[1]*scale, cord_XYZ[2]*scale); }
-    Vector3* operator/(const double scale) const { return new Vector3(cord_XYZ[0]/scale, cord_XYZ[1]/scale, cord_XYZ[2]/scale); }
+    Vector3 operator+(const Vector3 other) const { return Vector3(cord_XYZ[0]+other.cord_XYZ[0], cord_XYZ[1]+other.cord_XYZ[1], cord_XYZ[2]+other.cord_XYZ[2]); }
+    Vector3 operator-(const Vector3 other) const { return Vector3(cord_XYZ[0]-other.cord_XYZ[0], cord_XYZ[1]-other.cord_XYZ[1], cord_XYZ[2]-other.cord_XYZ[2]); }
+    Vector3 operator*(const double scale) const { return Vector3(cord_XYZ[0]*scale, cord_XYZ[1]*scale, cord_XYZ[2]*scale); }
+    Vector3 operator/(const double scale) const { return Vector3(cord_XYZ[0]/scale, cord_XYZ[1]/scale, cord_XYZ[2]/scale); }
 
+    double Magnitude();
+    Vector3 Normalized();
     void setX(double x);
     void setY(double y);
     void setZ(double y);

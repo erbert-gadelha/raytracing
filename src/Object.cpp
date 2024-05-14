@@ -1,4 +1,5 @@
 #include "Object.h"
+#include <vector>
 
 Object::~Object() {
 }
@@ -12,8 +13,9 @@ void Object::setColor(int r, int g, int b) {
 }
 
 
-Vector3* Object::cast(Vector3* point, Vector3* vector) {
-    return nullptr;
+std::vector<Vector3> Object::cast(Vector3 point, Vector3 vector) {
+    std::vector<Vector3> result;
+    return result;
 }
 
 std::string Object::getColor() {

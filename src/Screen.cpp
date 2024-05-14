@@ -1,6 +1,21 @@
 #include "Screen.h"
 #include <iostream>
 
+Screen::Screen() {
+    this->w = 256;
+    this->h = 256;
+    this->pixels = new colorRGB*[h];
+    for (int y = 0; y < h; y++) {
+        this->pixels[y] = new colorRGB[w];
+
+        for (int x = 0; x < w; ++x) {
+            this->pixels[y][x].red = 0;
+            this->pixels[y][x].green = 0;
+            this->pixels[y][x].blue = 0;
+        }
+    }
+}
+
 Screen::Screen(int w, int h) {
     this->w = w;
     this->h = h;
@@ -16,12 +31,12 @@ Screen::Screen(int w, int h) {
     }
 }
 
-Screen::~Screen() {
+/*Screen::~Screen() {
     for (int y = 0; y < h; ++y) {
         delete[] this->pixels[y];
     }
     delete[] this->pixels;
-}
+}*/
 
 
 colorRGB Screen::get(int x, int y) {

@@ -1,9 +1,10 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <Object.h>
 #include <string>
-#include <Screen.h>
+#include "Object.h"
+#include "Screen.h"
+#include <vector>
 
 
 class Camera : public Object
@@ -14,8 +15,9 @@ class Camera : public Object
         int horizontal;
         int vertical;
         std::string to_string() override;
-        Screen* screen;
+        Screen screen;
         double distance;
+        std::string render(std::vector<Object*>objects);
 
     protected:
 

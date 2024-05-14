@@ -5,6 +5,7 @@
 #include "Vector3.h"
 #include "Transform.h"
 #include "colorRGB.h"
+#include <vector>
 
 class Object {
 
@@ -12,8 +13,8 @@ class Object {
         Object();
         virtual ~Object();
         virtual std::string to_string();
-        virtual Vector3* cast(Vector3* point, Vector3* vector);
-        Transform * transform;
+        virtual std::vector<Vector3> cast(Vector3 point, Vector3 vector);
+        Transform transform;
         colorRGB color;
 
         void setColor(int r, int g, int b);

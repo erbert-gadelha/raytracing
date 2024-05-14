@@ -3,17 +3,18 @@
 
 #include "Object.h"
 #include <string>
+#include <vector>
 
 
 class Sphere : public Object
 {
     public:
         Sphere();
-        Sphere(Vector3* scale);
-        Sphere(Vector3* scale, Vector3* position);
-        Sphere(Vector3* scale, Vector3* position, Vector3* rotation);
+        Sphere(Vector3 scale);
+        Sphere(Vector3 scale, Vector3 position);
+        Sphere(Vector3 scale, Vector3 position, Vector3 rotation);
         std::string to_string() override;
-        Vector3* cast(Vector3* point, Vector3* vector) override;
+        std::vector<Vector3>  cast(Vector3 point, Vector3 vector) override;
 
     protected:
 
