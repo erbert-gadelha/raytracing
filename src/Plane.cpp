@@ -36,9 +36,12 @@ double Plane::contains (Vector3 point) {
     return ((normal.getX()*pos.getX()) + (normal.getY()*pos.getY()) + (normal.getZ()*pos.getZ()) - this->getD());
 }
 
-
-std::vector<Vector3> Plane::cast(Vector3 point, Vector3 vector) {
+std::vector<Vector3> Plane::cast(Ray ray) {
     std::vector<Vector3> result;
+
+    //Vector3 point, Vector3 vector
+    Vector3 point = ray.origin(),
+            vector = ray.direction();
 
     Vector3 normal = transform.up();
     Vector3 df = (point - transform.position);

@@ -13,7 +13,7 @@ void Object::setColor(int r, int g, int b) {
 }
 
 
-std::vector<Vector3> Object::cast(Vector3 point, Vector3 vector) {
+std::vector<Vector3> Object::cast(Ray ray) {
     std::vector<Vector3> result;
     return result;
 }

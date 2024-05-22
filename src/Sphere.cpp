@@ -31,8 +31,12 @@ Sphere::Sphere(Vector3 scale, Vector3 position, Vector3 rotation ) : Object() {
 
 
 
-std::vector<Vector3> Sphere::cast(Vector3 point, Vector3 vector) {
+std::vector<Vector3> Sphere::cast(Ray ray) {
     std::vector<Vector3> result;
+
+    //Vector3 point, Vector3 vector
+    Vector3 point = ray.origin(),
+            vector = ray.direction();
 
     Vector3 df = point - transform.position;
     double x = vector.getX(); // VETOR DIRETOR DA RETA

@@ -10,6 +10,7 @@ public:
 
     Vector3 origin()  { return orig; }
     Vector3 direction() { return dir; }
+    Vector3 at(double t) { return (orig + (dir*t)); }
 
     std::string to_string();
 

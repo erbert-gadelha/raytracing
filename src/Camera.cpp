@@ -23,10 +23,11 @@ Camera::Camera(int horizontal, int vertical, double distance) {
 }
 
 std::string Camera::render(std::vector<Object*> objects) {
-  ////////// DEBUG //////////
+  // ===== DEBUG ===== //
     std::cout << "Rendering <" << objects.size() << "> object(s)";
     auto start = std::chrono::high_resolution_clock::now();
-  ////////// DEBUG //////////
+  // ===== DEBUG ===== //
+
     colorRGB SKY_COLOR = {120, 120, 255};
     colorRGB WHITE = {255, 255, 255};
 
@@ -42,32 +43,36 @@ std::string Camera::render(std::vector<Object*> objects) {
             Vector3 V = (transform.position - pixel).Normalized();
 
             screen.set(h, v, GRADIENT);
-            for(int i = 0; i < objects.size(); i++) {
-                std::vector<Vector3> collisions = objects[i]->cast(transform.position, V);
-                for(int j = 0; j < collisions.size(); j++) {
+            Ray ray = Ray(transform.position, V);
 
+            for(int i = 0; i < objects.size(); i++) {
+                std::vector<Vector3> collisions = objects[i]->cast(ray);
+                for(int j = 0; j < collisions.size(); j++) {
                     double dist = (transform.position-collisions[j]).Magnitude();
                     if(dist > nearest)
                         continue;
 
-                    screen.set(h, v, (objects[i]->color *(30/dist) +
-                                      WHITE*(dist/30)
-                    ));
                     //screen.set(h, v, (objects[i]->color *(10/dist)));
+                    screen.set(h, v, (
+                        objects[i]->color *(30/dist) +
+                        WHITE*(dist/30)
+                    ));
+
                     nearest = dist;
                 }
 
             }
+            
         }
     }
 
-  ////////// DEBUG //////////
+  // ===== DEBUG ===== //
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << " ~ (Complete in (" << (elapsed_seconds.count()) << ") seconds)." << std::endl;
-  ////////// DEBUG //////////
+  // ===== DEBUG ===== //
 
-    return screen.to_string();
+    return this->screen.to_string();
 }
 
 std::string Camera::to_string() {

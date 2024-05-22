@@ -31,13 +31,6 @@ Screen::Screen(int w, int h) {
     }
 }
 
-/*Screen::~Screen() {
-    for (int y = 0; y < h; ++y) {
-        delete[] this->pixels[y];
-    }
-    delete[] this->pixels;
-}*/
-
 
 colorRGB Screen::get(int x, int y) {
     return this->pixels[y][x];
