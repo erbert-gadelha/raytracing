@@ -33,6 +33,7 @@ public:
 
 private:
     double cord_XYZ[3];
+    std::string doubleToString(double value);
 };
 
 #endif

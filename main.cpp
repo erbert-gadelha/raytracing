@@ -1,22 +1,39 @@
 #include <iostream>
 #include <vector>
+#include <tuple>
 
-#include "FileWriter.h"
-#include "Ray.h"
-#include "Vector3.h"
-#include "Object.h"
+
+/*#include "Object.h"
 #include "Sphere.h"
-#include "Plane.h"
-#include "Camera.h"
-#include "Transform.h"
-#include "Screen.h"
+#include "Plane.h"*/
+#include "Mesh.h"
+#include "Vector3.h"
+
+/*#include "Camera.h"
+#include "Vector3.h"
+
+#include "FileWriter.h"*/
 
 
 using namespace std;
 
 
 int main() {
-    colorRGB RED   = {255,0,0};
+    vector<Vector3> vertices = {
+        Vector3(1,2,3),
+        Vector3(-1,1,4),
+        Vector3(1,-3,5),
+        Vector3(4,5,0)
+        };
+    vector<tuple<int, int, int>> faces = {{0,1,2},{1,2,3}};
+    Mesh m = Mesh(vertices, faces);
+
+    cout << m.to_string() << endl;
+
+
+
+
+    /*colorRGB RED   = {255,0,0};
     colorRGB GREEN = {0,255,0};
     colorRGB BLUE  = {0,0,255};
     colorRGB YELLOW  = {255,255,0};
@@ -44,7 +61,7 @@ int main() {
 
 
     string image_ppm = camera.render(objects);
-    FileWriter::saveAsImage(image_ppm);
+    FileWriter::saveAsImage(image_ppm);*/
 
     std::cout << "\n===============================\n" << std::endl;
     return 0;

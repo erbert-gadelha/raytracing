@@ -43,6 +43,20 @@ double Vector3::Distance(Vector3 v1, Vector3 v2) {
 }
 
 std::string Vector3::to_string() {
-    return ("(" + std::to_string(cord_XYZ[0]) + ", " + std::to_string(cord_XYZ[1]) + ", " + std::to_string(cord_XYZ[2]) + ")");
+    //return ("(" + std::to_string(cord_XYZ[0]) + ", " + std::to_string(cord_XYZ[1]) + ", " + std::to_string(cord_XYZ[2]) + ")");
+
+
+    return ("(" + doubleToString(cord_XYZ[0]) + ", " + doubleToString(cord_XYZ[1]) + ", " + doubleToString(cord_XYZ[2]) + ")");
 }
 
+
+
+
+
+
+std::string Vector3::doubleToString(double value) {
+    std::string str = std::to_string(value);
+    str.erase ( str.find_last_not_of('0') + 1, std::string::npos );
+    str.erase ( str.find_last_not_of('.') + 1, std::string::npos );
+    return str;
+}
