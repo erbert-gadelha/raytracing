@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <time.h>
 
 
 #include "Vector3.h"
@@ -15,8 +16,17 @@
 
 using namespace std;
 
-void saveAsImage (std::string image, std::string fileName) {
-    std::ofstream outputFile(fileName);
+void saveAsImage (std::string image) {
+
+    time_t seconds = time (NULL);
+    string fileName = ("image_" + to_string(seconds) + ".ppm");
+
+    string folderName = "screenshots/";
+    std::ofstream outputFile(folderName + fileName);
+
+
+
+
 
     if (!outputFile.is_open()) {
         std::cerr << "Erro ao abrir o arquivo." << std::endl;
@@ -27,7 +37,7 @@ void saveAsImage (std::string image, std::string fileName) {
     outputFile.close();
 
     std::cout << "Arquivo gerado com sucesso." << std::endl;
-    std::cout << '~' << std::filesystem::current_path().string() << '/' << fileName << std::endl;
+    std::cout << '~' << std::filesystem::current_path().string() << '/' << folderName << fileName << std::endl;
 }
 
 
@@ -58,7 +68,12 @@ int main() {
     objects.push_back(plane1);
     objects.push_back(plane2);
 
-    saveAsImage(camera.render(objects), "image.ppm");
+    saveAsImage(camera.render(objects));
+
+
+
+
+    std::cout << "\n\n.\n.\n." << std::endl;
     return 0;
 }
 
