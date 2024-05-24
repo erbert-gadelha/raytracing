@@ -29,6 +29,7 @@ int main() {
     Mesh m = Mesh(vertices, faces);
 
     cout << m.to_string() << endl;
+    cout << "wasd" << endl;
 
 
 
