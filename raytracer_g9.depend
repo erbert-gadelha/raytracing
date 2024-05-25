@@ -275,3 +275,124 @@
 	"Object.h"
 	<vector>
 
+1716517481 source:c:\users\erbert\desktop\raytracing\main.cpp
+	<iostream>
+	<vector>
+	<tuple>
+	"Sphere.h"
+	"Plane.h"
+	"Mesh.h"
+	"Vector3.h"
+	"Vector3.h"
+	"FileWriter.h"
+
+1716501153 c:\users\erbert\desktop\raytracing\include\sphere.h
+	"Object.h"
+	<string>
+	<vector>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\object.h
+	"Vector3.h"
+	"Ray.h"
+	"Transform.h"
+	"colorRGB.h"
+	<vector>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\vector3.h
+	<string>
+	<iostream>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\ray.h
+	<string>
+	"Vector3.h"
+
+1716501153 c:\users\erbert\desktop\raytracing\include\transform.h
+	"Vector3.h"
+	<string>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\colorrgb.h
+	<string>
+	<algorithm>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\plane.h
+	"Object.h"
+
+1716501153 c:\users\erbert\desktop\raytracing\include\mesh.h
+	"Object.h"
+	"Vector3.h"
+	"Ray.h"
+	"Transform.h"
+	"colorRGB.h"
+	<vector>
+	<tuple>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\filewriter.h
+	<filesystem>
+	<time.h>
+	<string>
+	<vector>
+	<chrono>
+	<iostream>
+	<fstream>
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\camera.cpp
+	"Camera.h"
+	"Screen.h"
+	<string>
+	<vector>
+	<chrono>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\camera.h
+	<string>
+	"Object.h"
+	"Screen.h"
+	<vector>
+
+1716501153 c:\users\erbert\desktop\raytracing\include\screen.h
+	<string>
+	"colorRGB.h"
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\object.cpp
+	"Object.h"
+	<vector>
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\plane.cpp
+	"Plane.h"
+	"colorRGB.h"
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\screen.cpp
+	"Screen.h"
+	<iostream>
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\sphere.cpp
+	"Sphere.h"
+	<iostream>
+	"Transform.h"
+	"Vector3.h"
+	<math.h>
+	<vector>
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\transform.cpp
+	"Transform.h"
+	<string>
+	<math.h>
+	"Vector3.h"
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\vector3.cpp
+	"Vector3.h"
+	<iostream>
+	<string>
+	<math.h>
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\filewriter.cpp
+	"FileWriter.h"
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\mesh.cpp
+	"Mesh.h"
+
+1716501153 source:c:\users\erbert\desktop\raytracing\src\ray.cpp
+	"Ray.h"
+	<iostream>
+	<string>
+	<math.h>
+
