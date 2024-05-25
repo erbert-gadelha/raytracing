@@ -30,15 +30,16 @@ double Vector3::getZ() {    return this->cord_XYZ[2];   }
 
 
 double Vector3::Magnitude() {
-    return sqrt((cord_XYZ[0]*cord_XYZ[0])+(cord_XYZ[1]*cord_XYZ[1])+(cord_XYZ[2]*cord_XYZ[2]));
+    return sqrt(Product(*this,*this));
 }
 
 Vector3 Vector3::Normalized() {
     double m = Magnitude();
-    if(m == 0)
-        return Vector3::ZERO;
 
-    return Vector3(cord_XYZ[0],cord_XYZ[1],cord_XYZ[2])/m;
+    if(m != 0) 
+        return Vector3(cord_XYZ[0],cord_XYZ[1],cord_XYZ[2])/m;
+        
+    return Vector3::ZERO;
 }
 
 
@@ -53,14 +54,39 @@ std::string Vector3::to_string() {
     return ("(" + doubleToString(cord_XYZ[0]) + ", " + doubleToString(cord_XYZ[1]) + ", " + doubleToString(cord_XYZ[2]) + ")");
 }
 
-
-
-
-
-
 std::string Vector3::doubleToString(double value) {
     std::string str = std::to_string(value);
     str.erase ( str.find_last_not_of('0') + 1, std::string::npos );
     str.erase ( str.find_last_not_of('.') + 1, std::string::npos );
     return str;
+}
+
+
+
+double Vector3::Product(Vector3 v1, Vector3 v2) {
+    return v1.getX()*v2.getX() + v1.getY()*v2.getY() + v1.getZ()*v2.getZ();
+}
+
+
+
+
+
+
+
+Vector3 Vector3::CrossProduct(Vector3 v1, Vector3 v2) {
+    //(a.y*b.z - a.z*b.y),(a.z*b.x - a.x*b.z),(a.x*b.y - a.y*b.x)
+    /*std::cout << "A:" << v1.to_string() << std::endl;
+    std::cout << "B:" << v2.to_string() << std::endl;
+
+    std::cout << "X:" << (v1.getY()*v2.getZ() - v1.getZ()*v2.getY()) << std::endl;
+    std::cout << "Y:" << (v1.getZ()*v2.getX() - v1.getX()*v2.getZ()) << std::endl;
+    std::cout << "Z:" << (v1.getX()*v2.getY() - v1.getY()*v2.getX()) << std::endl;
+    std::cout << std::endl;*/
+
+    
+    return Vector3 (
+        v1.getY()*v2.getZ() - v1.getZ()*v2.getY(),
+        v1.getZ()*v2.getX() - v1.getX()*v2.getZ(),
+        v1.getX()*v2.getY() - v1.getY()*v2.getX()
+    );
 }
