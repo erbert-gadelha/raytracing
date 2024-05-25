@@ -19,6 +19,10 @@ class Mesh : public Object {
         std::vector<Vector3> cast(Ray ray) override;
         colorRGB color;
 
+        Vector3 normal_v(int v);
+        Vector3 normal_f(int f);
+
+
         int v() {return vertices.size();}
         int f() {return faces.size();}
 
