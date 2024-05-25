@@ -21,6 +21,7 @@ class Camera : public Object
         double MAX_DISTANCE;
 
     protected:
+        colorRGB dephFog(colorRGB color, colorRGB fog, double distance);
 
     private:
 };
