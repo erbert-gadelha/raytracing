@@ -48,13 +48,14 @@ CollisionResult Sphere::cast(Ray ray) {
     double zc = df.getZ();    // DIFERENCA DAS COORDENADAS
     double radius = this->transform.scale.getX()/2;    // RAIO DA ESFERA
 
+    // equaçao que define a interseccao da esfera com o raio
     double a = (x*x) + (y*y) + (z*z);
     double b = (-2)*((x*xc)+(y*yc)+(z*zc));
     double c = (xc*xc)+(yc*yc)+(zc*zc) - (radius*radius);
     double delta = (b*b)-(4*a*c);
 
 
-    if(delta < 0)
+    if(delta < 0) // verifica colisão da esfera
         return result;
 
     double square_root = sqrt(delta);
