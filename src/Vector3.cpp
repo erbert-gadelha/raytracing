@@ -34,7 +34,11 @@ double Vector3::Magnitude() {
 }
 
 Vector3 Vector3::Normalized() {
-    return Vector3(cord_XYZ[0],cord_XYZ[1],cord_XYZ[2])/Magnitude();
+    double m = Magnitude();
+    if(m == 0)
+        return Vector3::ZERO;
+
+    return Vector3(cord_XYZ[0],cord_XYZ[1],cord_XYZ[2])/m;
 }
 
 
