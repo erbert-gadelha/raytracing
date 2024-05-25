@@ -8,19 +8,21 @@
 #include "colorRGB.h"
 #include <vector>
 #include <tuple>
+#include "Plane.h"
 
 
 class Mesh : public Object {
 
     public:
         Mesh() {};
-        Mesh(const std::vector<Vector3>& vertices, const std::vector<std::tuple<int, int, int>>& faces) : vertices(vertices), faces(faces) {};
+        Mesh(const std::vector<Vector3>& vertices, const std::vector<std::tuple<int, int, int>>& faces);
         std::string to_string() override;
-        std::vector<Vector3> cast(Ray ray) override;
-        colorRGB color;
+        CollisionResult cast(Ray ray) override;
 
         Vector3 normal_v(int v);
         Vector3 normal_f(int f);
+        CollisionResult cast_face(Ray ray, int f);
+
 
 
         int v() {return vertices.size();}
