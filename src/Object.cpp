@@ -13,8 +13,8 @@ void Object::setColor(int r, int g, int b) {
 }
 
 
-std::vector<Vector3> Object::cast(Ray ray) {
-    std::vector<Vector3> result;
+CollisionResult Object::cast(Ray ray) {
+    CollisionResult result;
     return result;
 }
 

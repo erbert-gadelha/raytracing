@@ -31,14 +31,15 @@ Sphere::Sphere(Vector3 scale, Vector3 position, Vector3 rotation ) : Object() {
 
 
 
-std::vector<Vector3> Sphere::cast(Ray ray) {
-    std::vector<Vector3> result;
+CollisionResult Sphere::cast(Ray ray) {
+    CollisionResult result;
 
     //Vector3 point, Vector3 vector
     Vector3 point = ray.origin(),
             vector = ray.direction();
 
-    Vector3 df = point - transform.position;
+    //Vector3 df = point - transform.position;
+    Vector3 df = transform.position-point;
     double x = vector.getX(); // VETOR DIRETOR DA RETA
     double y = vector.getY(); // VETOR DIRETOR DA RETA
     double z = vector.getZ(); // VETOR DIRETOR DA RETA
@@ -71,10 +72,14 @@ std::vector<Vector3> Sphere::cast(Ray ray) {
   //////////// DEBUG ////////////
 
 
-    result.push_back( point + (vector*t1));
     if (delta == 0)
-        return result;
-    result.push_back( point + (vector*t2));
+        result.t = t1;
+    else
+        result.t = (t1<t2?t1:t2);
+
+    result.color = this->color;
+    result.normal = (transform.position-ray.at(result.t)).Normalized();
+
     return result;
 }
 

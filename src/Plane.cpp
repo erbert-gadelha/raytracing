@@ -36,8 +36,8 @@ double Plane::contains (Vector3 point) {
     return ((normal.getX()*pos.getX()) + (normal.getY()*pos.getY()) + (normal.getZ()*pos.getZ()) - this->getD());
 }
 
-std::vector<Vector3> Plane::cast(Ray ray) {
-    std::vector<Vector3> result;
+CollisionResult Plane::cast(Ray ray) {
+    CollisionResult result;
 
     //Vector3 point, Vector3 vector
     Vector3 point = ray.origin(),
@@ -58,13 +58,16 @@ std::vector<Vector3> Plane::cast(Ray ray) {
     double a = -(xn*xc + yn*yc + zn*zc);
     double b = (xn*x + yn*y + zn*z);
 
-    if (b >= 0)
-        return result;
 
     double t = a/b;
-    if (t < 0) t*= -1;
 
-    result.push_back(point + (vector*(a/b)));
+    if (b == 0 || t < 0)
+        return result;
+
+    result.t = t;
+    result.color = this->color;
+    result.normal = normal;
+
     return result;
 }
 

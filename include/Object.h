@@ -6,6 +6,7 @@
 #include "Ray.h"
 #include "Transform.h"
 #include "colorRGB.h"
+#include "CollisionResult.h"
 #include <vector>
 
 class Object {
@@ -14,7 +15,7 @@ class Object {
         Object();
         virtual ~Object();
         virtual std::string to_string();
-        virtual std::vector<Vector3> cast(Ray ray);
+        virtual CollisionResult cast(Ray ray);
         Transform transform;
         colorRGB color;
 
