@@ -23,6 +23,8 @@ public:
     double Magnitude();
     Vector3 Normalized();
     static double Distance(Vector3 v1, Vector3 v2);
+    static double Product(Vector3 v1, Vector3 v2);
+    static Vector3 CrossProduct(Vector3 v1, Vector3 v2);
 
     void setX(double x);
     void setY(double y);

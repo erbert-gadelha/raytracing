@@ -39,28 +39,20 @@ std::string Camera::render(std::vector<Object*> objects) {
 
         for(int h = 0; h < horizontal; h++) {
             double nearest = this->MAX_DISTANCE;
-            Vector3 pixel = M + (transform.up()*(v-(vertical/2))) + (transform.right()*(h-(horizontal/2)));
-            Vector3 V = (transform.position - pixel).Normalized();
+            Vector3 pixel = M - (transform.up()*(v-(vertical/2))) + (transform.right()*(h-(horizontal/2)));
+            Vector3 V = (pixel-transform.position).Normalized();
 
             screen.set(h, v, GRADIENT);
             Ray ray = Ray(transform.position, V);
 
             for(int i = 0; i < objects.size(); i++) {
-                std::vector<Vector3> collisions = objects[i]->cast(ray);
-                for(int j = 0; j < collisions.size(); j++) {
-                    double dist = (transform.position-collisions[j]).Magnitude();
-                    if(dist > nearest)
-                        continue;
+                CollisionResult result = objects[i]->cast(ray);
 
-                    //screen.set(h, v, (objects[i]->color *(10/dist)));
-                    screen.set(h, v, (
-                        objects[i]->color *(30/dist) +
-                        WHITE*(dist/30)
-                    ));
+                if(result.t < 0 || result.t > nearest)
+                    continue;
 
-                    nearest = dist;
-                }
-
+                screen.set(h, v, dephFog(result.color, WHITE, result.t));
+                nearest = result.t;
             }
             
         }
@@ -73,6 +65,12 @@ std::string Camera::render(std::vector<Object*> objects) {
   // ===== DEBUG ===== //
 
     return this->screen.to_string();
+}
+
+
+
+colorRGB Camera::dephFog(colorRGB color, colorRGB fog, double distance) {
+    return ( color*(50/distance) + fog*(distance/50));
 }
 
 std::string Camera::to_string() {
