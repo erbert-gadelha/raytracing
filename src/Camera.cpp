@@ -33,20 +33,20 @@ std::string Camera::render(std::vector<Object*> objects) {
 
 
 
-    Vector3 M = transform.position + (transform.forward()*distance);
+    Vector3 M = transform.position + (transform.forward()*distance);  // posição e direção câmera 
     for(int v = 0; v < vertical; v++) {
         colorRGB GRADIENT = SKY_COLOR + WHITE*(((double)v)/((double)vertical*2));
 
         for(int h = 0; h < horizontal; h++) {
             double nearest = this->MAX_DISTANCE;
-            Vector3 pixel = M - (transform.up()*(v-(vertical/2))) + (transform.right()*(h-(horizontal/2)));
-            Vector3 V = (pixel-transform.position).Normalized();
+            Vector3 pixel = M - (transform.up()*(v-(vertical/2))) + (transform.right()*(h-(horizontal/2))); 
+            Vector3 V = (pixel-transform.position).Normalized(); // cria um vetor da câmera para o pixel
 
-            screen.set(h, v, GRADIENT);
+            screen.set(h, v, GRADIENT); // define a cor do pixel 
             Ray ray = Ray(transform.position, V);
 
-            for(int i = 0; i < objects.size(); i++) {
-                CollisionResult result = objects[i]->cast(ray);
+            for(int i = 0; i < objects.size(); i++) { // verifica cada objeto
+                CollisionResult result = objects[i]->cast(ray); // verifica a colisão
 
                 if(result.t < 0 || result.t > nearest)
                     continue;
