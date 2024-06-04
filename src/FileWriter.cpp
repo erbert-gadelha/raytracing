@@ -8,6 +8,9 @@ bool FileWriter::saveAsImage (std::string image) {
 
     std::string folderName = "screenshots/";
     std::ofstream outputFile(folderName + fileName);
+    //std::ofstream outputFile (fileName);
+
+    std::cout << "\"" << folderName << fileName << "\"" << std::endl;
 
     if (!outputFile.is_open()) {
         std::cerr << "Erro ao abrir o arquivo." << std::endl;
