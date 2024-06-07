@@ -2,6 +2,7 @@
 #include <vector>
 #include <tuple>
 
+
 #include "Object.h"
 #include "Sphere.h"
 #include "Plane.h"
@@ -36,22 +37,23 @@ void Scene_1() {
     colorRGB BLUE  = {0,0,255};
     colorRGB YELLOW  = {255,255,0};
 
-    //Camera camera = Camera(1080, 1080, 1000);
-    Camera camera = Camera(512, 512, 1000);
-    //Camera camera = Camera(32, 32, 100);
-    camera.transform.position.setZ(-10);
+    int RESOLUTION = 1080;
+    Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
+    camera.transform.position = Vector3(-5,5,-10);
+    camera.transform.rotation = Vector3(15,30,0);
 
 
 
 
     Object* sphere = new Sphere(Vector3().ONE*1, Vector3(2,1.5,0.25));
     Object* mesh = new Mesh({Vector3(0,2,0),Vector3(0,0,0),Vector3(2,0,0),Vector3(2,2,0)}, {{1,2,3}});
-    Object* plane = new Plane(Vector3().ONE, Vector3(3,-1,0), Vector3(0,0,0));
+    Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
     Object* cube = CreateCube();
+
     sphere->color = BLUE;
     plane->color = GREEN;
-    mesh->color = YELLOW;
-    cube->color = RED;
+    mesh->color = RED;
+    cube->color = YELLOW;
 
     vector<Object*> objects;
     objects.push_back(sphere);

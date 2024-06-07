@@ -20,8 +20,10 @@ public:
     Vector3 operator*(const double scale) const { return Vector3(cord_XYZ[0]*scale, cord_XYZ[1]*scale, cord_XYZ[2]*scale); }
     Vector3 operator/(const double scale) const { return Vector3(cord_XYZ[0]/scale, cord_XYZ[1]/scale, cord_XYZ[2]/scale); }
 
+    double Norm();
     double Magnitude();
     Vector3 Normalized();
+    static double Angle(Vector3 v1, Vector3 v2);
     static double Distance(Vector3 v1, Vector3 v2);
     static double Product(Vector3 v1, Vector3 v2);
     static Vector3 CrossProduct(Vector3 v1, Vector3 v2);

@@ -79,7 +79,7 @@ CollisionResult Sphere::cast(Ray ray) {
         result.t = (t1<t2?t1:t2);
 
     result.color = this->color;
-    result.normal = (transform.position-ray.at(result.t)).Normalized();
+    result.normal = (ray.at(result.t)-transform.position).Normalized();
 
     return result;
 }

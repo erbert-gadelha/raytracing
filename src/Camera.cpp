@@ -10,7 +10,7 @@ Camera::Camera() {
     this->vertical = 256;
     this->screen = Screen(horizontal,vertical);
     this->distance = 1;
-    this->MAX_DISTANCE = 10000;
+    this->MAX_DISTANCE = 500;
 }
 
 Camera::Camera(int horizontal, int vertical, double distance) {
@@ -19,7 +19,7 @@ Camera::Camera(int horizontal, int vertical, double distance) {
     this->vertical = vertical;
     this->screen = Screen(horizontal,vertical);
     this->distance = distance;
-    this->MAX_DISTANCE = 10000;
+    this->MAX_DISTANCE = 500;
 }
 
 std::string Camera::render(std::vector<Object*> objects) {
@@ -30,6 +30,8 @@ std::string Camera::render(std::vector<Object*> objects) {
 
     colorRGB SKY_COLOR = {120, 120, 255};
     colorRGB WHITE = {255, 255, 255};
+    colorRGB FOG = {124, 133, 148};
+    
 
 
 
@@ -51,7 +53,8 @@ std::string Camera::render(std::vector<Object*> objects) {
                 if(result.t < 0 || result.t > nearest)
                     continue;
 
-                screen.set(h, v, dephFog(result.color, WHITE, result.t));
+                screen.set(h, v, specular(result, FOG));
+                //screen.set(h, v, dephFog(result.color, FOG, result.t));
                 nearest = result.t;
             }
             
@@ -69,8 +72,19 @@ std::string Camera::render(std::vector<Object*> objects) {
 
 
 
+colorRGB Camera::specular(CollisionResult result, colorRGB fog) {
+    Vector3 vector3;
+    double angle = vector3.Angle(Vector3(0,-1,0),result.normal)+0.2;
+    
+    return dephFog(result.color*angle, fog, result.t);
+}
+
 colorRGB Camera::dephFog(colorRGB color, colorRGB fog, double distance) {
-    return ( color*(50/distance) + fog*(distance/50));
+    if(distance > this->MAX_DISTANCE)
+        return fog;
+    
+    double f = distance/this->MAX_DISTANCE;
+    return fog*f + color*(1-f);
 }
 
 std::string Camera::to_string() {

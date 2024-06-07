@@ -28,9 +28,12 @@ double Vector3::getX() {    return this->cord_XYZ[0];   }
 double Vector3::getY() {    return this->cord_XYZ[1];   }
 double Vector3::getZ() {    return this->cord_XYZ[2];   }
 
+double Vector3::Norm() {
+    return Product(*this,*this);
+}
 
 double Vector3::Magnitude() {
-    return sqrt(Product(*this,*this));
+    return sqrt(Norm());
 }
 
 Vector3 Vector3::Normalized() {
@@ -40,6 +43,24 @@ Vector3 Vector3::Normalized() {
         return Vector3(cord_XYZ[0],cord_XYZ[1],cord_XYZ[2])/m;
         
     return Vector3::ZERO;
+}
+
+double Vector3::Angle(Vector3 v1, Vector3 v2) {
+    double dotProduct = v1.Product(v1,v2);
+    double magnitudeProduct = v1.Magnitude() * v2.Magnitude();
+
+    // Ensure that the magnitude product is not zero to avoid division by zero
+    if (magnitudeProduct == 0.0) {
+        throw std::invalid_argument("Cannot calculate angle with zero magnitude vector.");
+    }
+
+    double cosTheta = dotProduct / magnitudeProduct;
+
+    // Clamp the value to the valid range for acos to avoid numerical errors
+    if (cosTheta < -1.0) cosTheta = -1.0;
+    if (cosTheta > 1.0) cosTheta = 1.0;
+
+    return std::acos(cosTheta) / 3.14;
 }
 
 

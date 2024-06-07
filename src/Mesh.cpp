@@ -4,6 +4,11 @@
 Mesh::Mesh(const std::vector<Vector3>& vertices, const std::vector<std::tuple<int, int, int>>& faces) {
     this->vertices = vertices;
     this->faces = faces;
+
+    this->face_normal = std::vector<Vector3>(this->faces.size());
+    for(int i = 0; i < this->faces.size(); i++)
+        this->face_normal[i] = normal_f(i);
+    
 }
 
 
@@ -40,22 +45,20 @@ CollisionResult Mesh::cast(Ray ray) {
 
 CollisionResult Mesh::cast_face(Ray ray, int f) {
 
-    std::tuple<int,int,int> face = faces[f];
-    Vector3 A, B, C;
-
-    A = vertices[std::get<0>(face)];
-    B = vertices[std::get<1>(face)];
-    C = vertices[std::get<2>(face)];
-
-
-    //Vector3 point, Vector3 vector
     Vector3 point = ray.origin(),
             vector = ray.direction();
 
+    std::tuple<int,int,int> face = faces[f];
+    Vector3 A = vertices[std::get<0>(face)],
+            B = vertices[std::get<1>(face)],
+            C = vertices[std::get<2>(face)];
 
-    Vector3 normal = normal_f(f);
-    Vector3 baricenter = (A+B+C)/3;
-    Vector3 df = (point - baricenter);
+
+
+
+    Vector3 normal = face_normal[f];
+    Vector3 barycenter = (A+B+C)/3;
+    Vector3 df = (point - barycenter);
 
     double xc = df.getX();  // VETOR (PONTO RETA) - (PONTO PLANO)
     double yc = df.getY();  // VETOR (PONTO RETA) - (PONTO PLANO)
@@ -79,51 +82,16 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
         return result;
 
 
-    Vector3 PA = (A-baricenter);
-    Vector3 PB = (B-baricenter);
-    Vector3 PC = (C-baricenter);
-    double areaPAB = Vector3::CrossProduct(PA, PB).Magnitude();
-    double areaPAC = Vector3::CrossProduct(PA, PC).Magnitude();
-    double areaPBC = Vector3::CrossProduct(PB, PC).Magnitude();
-    double areaTriangle = areaPAB + areaPAC + areaPBC;
-
-
     Vector3 T = ray.at(t);
     Vector3 TA = (A-T);
     Vector3 TB = (B-T);
     Vector3 TC = (C-T);
-
     double areaTAB = Vector3::CrossProduct(TA, TB).Magnitude();
     double areaTAC = Vector3::CrossProduct(TA, TC).Magnitude();
     double areaTBC = Vector3::CrossProduct(TB, TC).Magnitude();
     double areaTotal = areaTAB + areaTAC + areaTBC;
 
-    /*std::cout << std::endl;
-    std::cout << "A  = " << A.to_string() << std::endl;
-    std::cout << "B  = " << B.to_string() << std::endl;
-    std::cout << "C  = " << C.to_string() << std::endl;
-    std::cout << "P  = " << baricenter.to_string() << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "PA = " << PA.to_string() << std::endl;
-    std::cout << "PB = " << PB.to_string() << std::endl;
-    std::cout << "PC = " << PC.to_string() << std::endl;
-    std::cout << "PAB = " << areaPAB << std::endl;
-    std::cout << "cross PAB: " << Vector3::CrossProduct(PA, PB).to_string() << std::endl;
-    std::cout << "magnitude PAB: " << Vector3::CrossProduct(PA, PB).Magnitude() << std::endl;
-    std::cout << "PAC = " << areaPAC << std::endl;
-    std::cout << "PBC = " << areaPBC << std::endl;
-    std::cout << "AREA:" << areaTriangle << std::endl;
-
-    std::cout << std::endl;
-    std::cout << "DA = " << TA.to_string() << std::endl;
-    std::cout << "DB = " << TB.to_string() << std::endl;
-    std::cout << "DC = " << TC.to_string() << std::endl;
-    std::cout << "DAB = " << areaTAB << std::endl;
-    std::cout << "DAC = " << areaTAC << std::endl;
-    std::cout << "DBC = " << areaTBC << std::endl;
-    std::cout << "AREA:" << areaTotal << std::endl;*/
-
+    double areaTriangle = Vector3::CrossProduct(A-barycenter, B-barycenter).Magnitude() * 3;
 
     // SUBITRACAO EH FEITA DEVIDA A IMPRECISAO DO PONTO FLUTUANTE
     if((areaTotal-0.00005) > areaTriangle)
@@ -148,23 +116,9 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
 
 
-std::string Mesh::to_string() {
-    std::string result = "{\n\tfaces: [";
-
-    for(int i = 0; i < f(); i++){
-        std::tuple<int,int,int> face = faces[i];
-        int i1 = std::get<0>(face),
-            i2 = std::get<1>(face),
-            i3 = std::get<2>(face);
-        result += ("\n\t(" + std::to_string(i1) + "," + std::to_string(i2) + "," + std::to_string(i3) + "): ");
-        result += (" [" + vertices[i1].to_string() + ", " + vertices[i2].to_string() + ", " + vertices[i3].to_string() + "]");
-    }
-    result += "\n\t]\n}";
-
-    return result;
-}
 
 Vector3 Mesh::normal_f(int f) {
+
     std::tuple<int,int,int> face = faces[f];
     Vector3 A, B, C, AB, AC;
 
@@ -207,10 +161,27 @@ Vector3 Mesh::normal_v(int v) {
     if(faces.empty())
         return Vector3::UP;
 
-    Vector3 mediam = Vector3(0,0,0);
-    for(int f = 0; f < faces.size(); f++)
-        mediam = mediam + normal_f(f);
+    Vector3 mediam = face_normal[0];
+    for(int f = 1; f < faces.size(); f++)
+        mediam = mediam + face_normal[f];
 
     return mediam.Normalized();
 }
 
+
+
+std::string Mesh::to_string() {
+    std::string result = "{\n\tfaces: [";
+
+    for(int i = 0; i < f(); i++){
+        std::tuple<int,int,int> face = faces[i];
+        int i1 = std::get<0>(face),
+            i2 = std::get<1>(face),
+            i3 = std::get<2>(face);
+        result += ("\n\t(" + std::to_string(i1) + "," + std::to_string(i2) + "," + std::to_string(i3) + "): ");
+        result += (" [" + vertices[i1].to_string() + ", " + vertices[i2].to_string() + ", " + vertices[i3].to_string() + "]");
+    }
+    result += "\n\t]\n}";
+
+    return result;
+}
