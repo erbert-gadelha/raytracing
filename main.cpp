@@ -12,7 +12,7 @@
 #include "Vector3.h"
 
 #include "FileWriter.h"
-
+#include "TransformAfim.h"
 
 using namespace std;
 
@@ -40,7 +40,7 @@ void Scene_1() {
     int RESOLUTION = 1080;
     Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
     camera.transform.position = Vector3(-5,5,-10);
-    camera.transform.rotation = Vector3(15,30,0);
+    camera.transform.rotation = Vector3(10,25,0);
 
 
 
@@ -49,6 +49,29 @@ void Scene_1() {
     Object* mesh = new Mesh({Vector3(0,2,0),Vector3(0,0,0),Vector3(2,0,0),Vector3(2,2,0)}, {{1,2,3}});
     Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
     Object* cube = CreateCube();
+
+    // Transformação 
+
+    // std::vector<Vector3> vertices = {
+    //     {0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0},
+    //     {0, 0, 1}, {1, 0, 1}, {1, 1, 1}, {0, 1, 1}
+    // };
+
+    // std::vector<std::tuple<int, int, int>> faces = {
+    //     {0, 1, 2}, {2, 3, 0},{4, 5, 6}, {6, 7, 4}, 
+    //     {0, 1, 5}, {5, 4, 0},{2, 3, 7}, {7, 6, 2},
+    //     {1, 2, 6}, {6, 5, 1},{0, 3, 7}, {7, 4, 0} 
+    // };
+    // std::vector<Vector3> newVertices;
+
+    // for (int i = 0; i < vertices.size(); i++) {
+    //     TransformAfim transform = TransformAfim("rotY", 90, vertices[i].getX(), vertices[i].getY(), vertices[i].getZ());
+    //     std::vector<double> coord = transform.getCoord();
+    //     newVertices.push_back({coord[0], coord[1], coord[2]});
+
+    // }
+    // cube = new Mesh(newVertices, faces);
+
 
     sphere->color = BLUE;
     plane->color = GREEN;
