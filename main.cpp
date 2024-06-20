@@ -123,8 +123,8 @@ void Scene_2() {
 }
 
 int main() {
-    //Scene_1();
-    Scene_2();
+    Scene_1();
+    //Scene_2();
     
     std::cout << "\n===============================\n" << std::endl;
     return 0;

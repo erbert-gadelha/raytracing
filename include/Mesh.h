@@ -37,6 +37,8 @@ class Mesh : public Object {
     private:
         std::vector<Vector3> vertice_normal;
         std::vector<Vector3> face_normal;
+        std::vector<double> face_areas;
+        std::vector<Vector3> face_barycenters;
 };
 
 #endif // MESH_H

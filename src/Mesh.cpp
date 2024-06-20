@@ -5,9 +5,21 @@ Mesh::Mesh(const std::vector<Vector3>& vertices, const std::vector<std::tuple<in
     this->vertices = vertices;
     this->faces = faces;
 
+    this->face_areas = std::vector<double>(this->faces.size());
+    this->face_barycenters = std::vector<Vector3>(this->faces.size());
     this->face_normal = std::vector<Vector3>(this->faces.size());
-    for(int i = 0; i < this->faces.size(); i++)
+    for(int i = 0; i < this->faces.size(); i++) {
         this->face_normal[i] = normal_f(i);
+
+        std::tuple<int,int,int> face = this->faces[i];
+        Vector3 A = vertices[std::get<0>(face)],
+                B = vertices[std::get<1>(face)],
+                C = vertices[std::get<2>(face)];
+
+        Vector3 barycenter = (A+B+C)/3;
+        this->face_barycenters[i] = barycenter;
+        this->face_areas[i] = Vector3::CrossProduct(A-barycenter, B-barycenter).Magnitude() * 3;
+    }
     
 }
 
@@ -57,8 +69,7 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
 
     Vector3 normal = face_normal[f];
-    Vector3 barycenter = (A+B+C)/3;
-    Vector3 df = (point - barycenter);
+    Vector3 df = (point - this->face_barycenters[f]);
 
     double xc = df.getX();  // VETOR (PONTO RETA) - (PONTO PLANO)
     double yc = df.getY();  // VETOR (PONTO RETA) - (PONTO PLANO)
@@ -91,7 +102,8 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
     double areaTBC = Vector3::CrossProduct(TB, TC).Magnitude();
     double areaTotal = areaTAB + areaTAC + areaTBC;
 
-    double areaTriangle = Vector3::CrossProduct(A-barycenter, B-barycenter).Magnitude() * 3;
+    //double areaTriangle = Vector3::CrossProduct(A-barycenter, B-barycenter).Magnitude() * 3;
+    double areaTriangle = this->face_areas[f];
 
     // SUBITRACAO EH FEITA DEVIDA A IMPRECISAO DO PONTO FLUTUANTE
     if((areaTotal-0.00005) > areaTriangle)
