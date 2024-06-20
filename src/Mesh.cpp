@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "Matrix.h"
 
 
 Mesh::Mesh(const std::vector<Vector3>& vertices, const std::vector<std::tuple<int, int, int>>& faces) {
@@ -118,13 +119,23 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
     result.t = t;
     result.color = this->color;
+    //result.normal = normal;
+
     /*result.normal = normal_v(std::get<0>(face))*areaTAB +
                     normal_v(std::get<1>(face))*areaTAC +
                     normal_v(std::get<2>(face))*areaTBC;*/
 
+    /*result.normal = normal_v(std::get<0>(face))*areaTAB + 
+                    normal_v(std::get<2>(face))*areaTAC +
+                    normal_v(std::get<1>(face))*areaTBC;*/
+
     /*result.normal = normal_v(std::get<1>(face))*areaTAB +
                     normal_v(std::get<2>(face))*areaTAC +
                     normal_v(std::get<0>(face))*areaTBC;*/
+
+    result.normal = (normal_v(std::get<1>(face))*areaTAB +
+                    normal_v(std::get<0>(face))*areaTAC +
+                    normal_v(std::get<2>(face))*areaTBC)/3;
 
     /*result.normal = normal_v(std::get<2>(face))*areaTAB +
                     normal_v(std::get<0>(face))*areaTAC +
@@ -134,13 +145,14 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
                     normal_v(std::get<1>(face))*areaTAC +
                     normal_v(std::get<0>(face))*areaTBC;*/
 
-    /*result.normal = normal_v(std::get<0>(face))*areaTAB + 
-                    normal_v(std::get<2>(face))*areaTAC +
-                    normal_v(std::get<1>(face))*areaTBC;*/
+    result.normal = vertice_normal[std::get<0>(face)]*areaTAB +
+                    vertice_normal[std::get<1>(face)]*areaTAC +
+                    vertice_normal[std::get<2>(face)]*areaTBC;
 
-    result.normal = vertice_normal[1]*areaTAB +  // MAIS OU MENOS
-                    vertice_normal[0]*areaTAC +
-                    vertice_normal[2]*areaTBC;
+    std::cout << "["<<areaTAB<<", " << areaTAC << ", " << areaTBC << "]" << std::endl;
+    //std::cout << result.normal.to_string() << std::endl;
+
+    //result.normal = Vector3::RIGHT*(1);
 
     return result;
 }
@@ -164,20 +176,16 @@ Vector3 Mesh::normal_f(int f) {
     Vector3 C = vertices[std::get<2>(face)];
     Vector3 AB = B-A;
     Vector3 AC = C-A;
-
+    
+    Matrix mAB, mAC;
+    mAB = mAB.vectorToMatrix(AB);
+    mAC = mAC.vectorToMatrix(AC);
 
     /*Vector3 O = Vector3( AB.getY()*AC.getZ() - AB.getZ()*AC.getY(),
                          AB.getZ()*AC.getX() - AB.getX()*AC.getZ(),
-                         AB.getX()*AC.getY() - AB.getY()*AC.getX());*/
-
-    Vector3 O = Vector3( AB.getZ()*AC.getY() - AB.getY()*AC.getZ(),
-                         AB.getX()*AC.getZ() - AB.getZ()*AC.getX(),
-                         AB.getY()*AC.getX() - AB.getX()*AC.getY());
-    
-
-    std::cout << "f["<<f<<"]: " << AB.to_string() << " " << AC.to_string() << " = " << O.to_string() << std::endl;
-
-    return O;
+                         AB.getX()*AC.getY() - AB.getY()*AC.getX());
+    return O;*/
+    return mAB.dotProduct(mAC).to_vector().Normalized();
 
 }
 
@@ -198,15 +206,8 @@ Vector3 Mesh::normal_v(int v) {
         return Vector3::UP;
 
     Vector3 mediam = face_normal[0];
-    std::cout << "v[" << v << "]: ";
-    std::cout << face_normal[0].to_string() << " ";
-    for(int f = 1; f < faces.size(); f++) {
-        std::cout << face_normal[f].to_string() << " ";
-        mediam = mediam + face_normal[f].Normalized();
-    }
-
-    std::cout << ":" << (mediam/faces.size()).to_string() << std::endl << std::endl;    
-    
+    for(int f = 1; f < faces.size(); f++)
+        mediam = mediam + face_normal[f].Normalized();    
 
     return mediam.Normalized();
 }

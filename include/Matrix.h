@@ -131,8 +131,12 @@ struct Matrix {
         temp1 = create((v1==1?h1:v1),1)[0];
         temp2 = create((v2==1?h2:v2),1)[0];
         
-        if(temp1.size() != 3 && temp2.size() != 3)
-            throw std::invalid_argument("Matrix dimensions do not match for dotProduct");
+        if(temp1.size() < 3 && temp2.size() < 3){
+            std::cout << "Matrix dimensions do not match for dotProduct" << std::endl;
+            return {{{0}}};
+            //throw std::invalid_argument("Matrix dimensions do not match for dotProduct");
+        
+        }
         
         for(int i = 0; i < temp1.size(); i++)
             temp1[i] = (v1==1?m1.values[0][i]:m1.values[i][0]);
@@ -145,7 +149,8 @@ struct Matrix {
         Matrix m = {{
             {temp1[1]*temp2[2] - temp1[2]*temp2[1]},
             {temp1[2]*temp2[0] - temp1[0]*temp2[2]},
-            {temp1[0]*temp2[1] - temp1[1]*temp2[0]}
+            {temp1[0]*temp2[1] - temp1[1]*temp2[0]},
+            {1}
         }};
         return m;
     }
