@@ -20,6 +20,11 @@ Mesh::Mesh(const std::vector<Vector3>& vertices, const std::vector<std::tuple<in
         this->face_barycenters[i] = barycenter;
         this->face_areas[i] = Vector3::CrossProduct(A-barycenter, B-barycenter).Magnitude() * 3;
     }
+
+    this->vertice_normal = std::vector<Vector3>(this->vertices.size());
+    for(int j = 0; j < this->vertices.size(); j++) {
+        this->vertice_normal[j] = normal_v(j);
+    }
     
 }
 
@@ -94,9 +99,9 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
 
     Vector3 T = ray.at(t);
-    Vector3 TA = (A-T);
-    Vector3 TB = (B-T);
-    Vector3 TC = (C-T);
+    Vector3 TA = (A-T); // A - faces[f][0]
+    Vector3 TB = (B-T); // B - faces[f][1]
+    Vector3 TC = (C-T); // C - faces[f][2]
     double areaTAB = Vector3::CrossProduct(TA, TB).Magnitude();
     double areaTAC = Vector3::CrossProduct(TA, TC).Magnitude();
     double areaTBC = Vector3::CrossProduct(TB, TC).Magnitude();
@@ -113,7 +118,29 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
     result.t = t;
     result.color = this->color;
-    result.normal = normal;
+    /*result.normal = normal_v(std::get<0>(face))*areaTAB +
+                    normal_v(std::get<1>(face))*areaTAC +
+                    normal_v(std::get<2>(face))*areaTBC;*/
+
+    /*result.normal = normal_v(std::get<1>(face))*areaTAB +
+                    normal_v(std::get<2>(face))*areaTAC +
+                    normal_v(std::get<0>(face))*areaTBC;*/
+
+    /*result.normal = normal_v(std::get<2>(face))*areaTAB +
+                    normal_v(std::get<0>(face))*areaTAC +
+                    normal_v(std::get<1>(face))*areaTBC;*/
+
+    /*result.normal = normal_v(std::get<2>(face))*areaTAB +
+                    normal_v(std::get<1>(face))*areaTAC +
+                    normal_v(std::get<0>(face))*areaTBC;*/
+
+    /*result.normal = normal_v(std::get<0>(face))*areaTAB + 
+                    normal_v(std::get<2>(face))*areaTAC +
+                    normal_v(std::get<1>(face))*areaTBC;*/
+
+    result.normal = vertice_normal[1]*areaTAB +  // MAIS OU MENOS
+                    vertice_normal[0]*areaTAC +
+                    vertice_normal[2]*areaTBC;
 
     return result;
 }
@@ -132,25 +159,23 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 Vector3 Mesh::normal_f(int f) {
 
     std::tuple<int,int,int> face = faces[f];
-    Vector3 A, B, C, AB, AC;
-
-    A = vertices[std::get<0>(face)];
-    B = vertices[std::get<1>(face)];
-    C = vertices[std::get<2>(face)];
-    AB = B-A;
-    AC = C-A;
+    Vector3 A = vertices[std::get<0>(face)];
+    Vector3 B = vertices[std::get<1>(face)];
+    Vector3 C = vertices[std::get<2>(face)];
+    Vector3 AB = B-A;
+    Vector3 AC = C-A;
 
 
-    Vector3 O = Vector3( AB.getY()*AC.getZ() - AB.getZ()*AC.getY(),
+    /*Vector3 O = Vector3( AB.getY()*AC.getZ() - AB.getZ()*AC.getY(),
                          AB.getZ()*AC.getX() - AB.getX()*AC.getZ(),
-                         AB.getX()*AC.getY() - AB.getY()*AC.getX());
+                         AB.getX()*AC.getY() - AB.getY()*AC.getX());*/
 
-    /*std::cout << "A  = " << A.to_string() << std::endl;
-    std::cout << "B  = " << B.to_string() << std::endl;
-    std::cout << "C  = " << C.to_string() << std::endl;
-    std::cout << "AB = " << AB.to_string()<< std::endl;
-    std::cout << "AC = " << AC.to_string()<< std::endl;
-    std::cout << "O  = " << O.to_string() << std::endl;*/
+    Vector3 O = Vector3( AB.getZ()*AC.getY() - AB.getY()*AC.getZ(),
+                         AB.getX()*AC.getZ() - AB.getZ()*AC.getX(),
+                         AB.getY()*AC.getX() - AB.getX()*AC.getY());
+    
+
+    std::cout << "f["<<f<<"]: " << AB.to_string() << " " << AC.to_string() << " = " << O.to_string() << std::endl;
 
     return O;
 
@@ -169,13 +194,19 @@ Vector3 Mesh::normal_v(int v) {
             faces.push_back(i);
     }
 
-
     if(faces.empty())
         return Vector3::UP;
 
     Vector3 mediam = face_normal[0];
-    for(int f = 1; f < faces.size(); f++)
-        mediam = mediam + face_normal[f];
+    std::cout << "v[" << v << "]: ";
+    std::cout << face_normal[0].to_string() << " ";
+    for(int f = 1; f < faces.size(); f++) {
+        std::cout << face_normal[f].to_string() << " ";
+        mediam = mediam + face_normal[f].Normalized();
+    }
+
+    std::cout << ":" << (mediam/faces.size()).to_string() << std::endl << std::endl;    
+    
 
     return mediam.Normalized();
 }

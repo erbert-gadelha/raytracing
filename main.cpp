@@ -122,9 +122,38 @@ void Scene_2() {
     FileWriter::saveAsImage(image_ppm);
 }
 
+
+
+void Scene_3() {
+    colorRGB RED   = {255,0,0};
+    colorRGB GREEN = {0,255,0};
+    colorRGB BLUE  = {0,0,255};
+    colorRGB YELLOW  = {255,255,0};
+
+    int RESOLUTION = 512;
+    Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
+    camera.transform.position = Vector3(-5,5,-10);
+    camera.transform.rotation = Vector3(10,25,0);
+
+    Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
+    Object* cube = CreateCube();
+
+    plane->color = GREEN;
+    cube->color = YELLOW;
+
+    vector<Object*> objects;
+    objects.push_back(plane);
+    objects.push_back(cube);
+
+    string image_ppm = camera.render(objects);
+    FileWriter::saveAsImage(image_ppm);
+}
+
+
 int main() {
-    Scene_1();
+    //Scene_1();
     //Scene_2();
+    Scene_3();
     
     std::cout << "\n===============================\n" << std::endl;
     return 0;
