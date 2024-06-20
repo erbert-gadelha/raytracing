@@ -49,14 +49,13 @@ double Vector3::Angle(Vector3 v1, Vector3 v2) {
     double dotProduct = v1.Product(v1,v2);
     double magnitudeProduct = v1.Magnitude() * v2.Magnitude();
 
-    // Ensure that the magnitude product is not zero to avoid division by zero
     if (magnitudeProduct == 0.0) {
-        throw std::invalid_argument("Cannot calculate angle with zero magnitude vector.");
+        //throw std::invalid_argument("Cannot calculate angle with zero magnitude vector.");
+        return 0;
     }
 
     double cosTheta = dotProduct / magnitudeProduct;
 
-    // Clamp the value to the valid range for acos to avoid numerical errors
     if (cosTheta < -1.0) cosTheta = -1.0;
     if (cosTheta > 1.0) cosTheta = 1.0;
 

@@ -10,6 +10,7 @@
 #include "Vector3.h"
 #include "Camera.h"
 #include "Vector3.h"
+#include "Matrix.h"
 
 #include "FileWriter.h"
 #include "TransformAfim.h"
@@ -89,13 +90,41 @@ void Scene_1() {
 }
 
 void Scene_2() {
-    Mesh mesh = Mesh({Vector3(3,0,0),Vector3(0,0,0),Vector3(0,3,0),Vector3(2,2,0)}, {{0,1,2}});
-    mesh.cast(Ray(Vector3(0,0,-10), Vector3(0.01,0,0.9)));
+    colorRGB RED   = {255,0,0};
+    colorRGB GREEN = {0,255,0};
+    colorRGB BLUE  = {0,0,255};
+    colorRGB YELLOW  = {255,255,0};
+
+    int RESOLUTION = 512;
+    Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
+    camera.transform.position = Vector3(-5,5,-10);
+    camera.transform.rotation = Vector3(10,25,0);
+
+    Vector3 v_cord = Vector3(0,0,0);
+    Matrix m_cord = Matrix().vectorToMatrix(v_cord);
+    Matrix translate = {{{ 1, 0, 0,   2},
+                         { 0, 1, 0, 1.5},
+                         { 0, 0, 1, 0.25},
+                         { 0, 0, 0,   1}
+    }};
+
+    Object* sphere = new Sphere(Vector3().ONE*1, (translate*m_cord).to_vector());
+    Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
+
+    sphere->color = BLUE;
+    plane->color = GREEN;
+
+    vector<Object*> objects;
+    objects.push_back(sphere);
+    objects.push_back(plane);
+
+    string image_ppm = camera.render(objects);
+    FileWriter::saveAsImage(image_ppm);
 }
 
 int main() {
-    Scene_1();
-    //Scene_2();
+    //Scene_1();
+    Scene_2();
     
     std::cout << "\n===============================\n" << std::endl;
     return 0;
