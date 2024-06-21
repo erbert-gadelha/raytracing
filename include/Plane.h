@@ -14,6 +14,12 @@ class Plane : public Object
         CollisionResult cast(Ray ray) override;
         double contains (Vector3 point);
         double getD();
+        double k_d;
+        double k_s;
+        double k_a;
+        double k_r;
+        double k_t;
+        double n;
 
     protected:
 

@@ -11,7 +11,7 @@
 #include "Camera.h"
 #include "Vector3.h"
 #include "Matrix.h"
-
+#include "Light.h"
 #include "FileWriter.h"
 #include "TransformAfim.h"
 
@@ -37,13 +37,16 @@ void Scene_1() {
     colorRGB GREEN = {0,255,0};
     colorRGB BLUE  = {0,0,255};
     colorRGB YELLOW  = {255,255,0};
-
+    colorRGB WHITE = {255,255,255};
     int RESOLUTION = 1080;
     Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
     camera.transform.position = Vector3(-5,5,-10);
     camera.transform.rotation = Vector3(10,25,0);
 
 
+    // Luz
+    Light light = Light(WHITE, Vector3(0,0,0));
+    vector<Light> lights = {light};
 
 
     Object* sphere = new Sphere(Vector3().ONE*1, Vector3(2,1.5,0.25));
@@ -85,7 +88,7 @@ void Scene_1() {
     objects.push_back(mesh);
     objects.push_back(cube);
 
-    string image_ppm = camera.render(objects);
+    string image_ppm = camera.render(objects,lights);
     FileWriter::saveAsImage(image_ppm);
 }
 
@@ -118,8 +121,8 @@ void Scene_2() {
     objects.push_back(sphere);
     objects.push_back(plane);
 
-    string image_ppm = camera.render(objects);
-    FileWriter::saveAsImage(image_ppm);
+    // string image_ppm = camera.render(objects,Lights);
+    //FileWriter::saveAsImage(image_ppm);
 }
 
 int main() {

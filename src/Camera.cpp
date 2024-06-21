@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
-
+#include "Light.h"
 Camera::Camera() {
     this->transform = Transform();
     this->horizontal = 256;
@@ -22,7 +22,7 @@ Camera::Camera(int horizontal, int vertical, double distance) {
     this->MAX_DISTANCE = 500;
 }
 
-std::string Camera::render(std::vector<Object*> objects) {
+std::string Camera::render(std::vector<Object*> objects,std::vector<Light> lights) {
   // ===== DEBUG ===== //
     std::cout << "Rendering <" << objects.size() << "> object(s)";
     auto start = std::chrono::high_resolution_clock::now();
@@ -32,6 +32,8 @@ std::string Camera::render(std::vector<Object*> objects) {
     colorRGB WHITE = {255, 255, 255};
     colorRGB FOG = {124, 133, 148};
     
+   // Luz ambiente
+    colorRGB Cor_AMBIENT = SKY_COLOR;
 
 
 
@@ -53,7 +55,8 @@ std::string Camera::render(std::vector<Object*> objects) {
                 if(result.t < 0 || result.t > nearest)
                     continue;
 
-                screen.set(h, v, specular(result, FOG));
+
+                //screen.set(h, v, specular(result, FOG));
                 //screen.set(h, v, dephFog(result.color, FOG, result.t));
                 nearest = result.t;
             }
@@ -71,6 +74,43 @@ std::string Camera::render(std::vector<Object*> objects) {
 }
 
 
+
+colorRGB Camera::Phong(CollisionResult result, colorRGB fog,std::vector<Light> lights, Ray ray,colorRGB cor_ambiente,Vector3 posicao_camera) {
+    Vector3  ambiente  =  Vector3(cor_ambiente.red,cor_ambiente.green,cor_ambiente.blue) * result.k_a;
+    
+    Vector3 difusa = {0,0,0};
+    Vector3 especular =  {0,0,0};
+    std::vector<double>   reflexao =  {0,0,0};
+    std::vector<double> refracao =  {0,0,0};
+
+    std::vector<Vector3> v_luz;
+    std::vector<Vector3> v_reflexao;
+    Vector3 vec; 
+     for (int i = 0; i < lights.size(); i++)
+     {
+        Vector3 luz = (lights[i].transform.position - ray.direction()).Normalized();
+        v_luz.push_back(luz);
+        Vector3 ref  =  (( result.normal *  (2* vec.Product(result.normal,luz) )) - luz).Normalized();
+        v_reflexao.push_back(ref);
+     }
+    
+    // componente_difusa += k_d * I_l[i] * np.maximum(0, np.dot(N, L[i]))
+    // componente_especular += I_l[i] * k_s * np.maximum(0, np.dot(R[i], V) ** n)
+
+     for (int i = 0; i < lights.size(); i++)
+     {
+        double max = std::max( 0.0, vec.Product(result.normal,v_luz[i]) );
+        difusa  = difusa +  (Vector3(lights[i].color.red,lights[i].color.green,lights[i].color.blue) * result.k_d  )   * max; 
+        double max_especular = std::max(0.0 , vec.Product(v_reflexao[i], posicao_camera ));
+        especular = especular + ((v_luz[i] * result.k_s) * max_especular);
+     }
+    Vector3 ret = ambiente + difusa + especular;
+
+    colorRGB retorno =  {ret.getX(),ret.getY(),ret.getZ()};
+
+    return retorno;
+
+}
 
 colorRGB Camera::specular(CollisionResult result, colorRGB fog) {
     Vector3 vector3;

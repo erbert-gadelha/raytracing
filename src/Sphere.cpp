@@ -80,6 +80,12 @@ CollisionResult Sphere::cast(Ray ray) {
 
     result.color = this->color;
     result.normal = (ray.at(result.t)-transform.position).Normalized();
+    result.k_a = this->k_a;
+    result.k_d = this->k_d;
+    result.k_s = this->k_s;
+    result.k_r = this->k_r;
+    result.k_t = this->k_t;
+    result.n = this->n;
 
     return result;
 }
