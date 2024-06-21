@@ -5,6 +5,8 @@
 #include "Object.h"
 #include "Screen.h"
 #include <vector>
+#include <thread>         // std::thread
+
 
 
 class Camera : public Object
@@ -25,6 +27,7 @@ class Camera : public Object
         colorRGB dephFog(colorRGB color, colorRGB fog, double distance);
 
     private:
+    void threadRendering(std::vector<Object*>objects, int initial_x, int final_x, int initial_y, int final_y);
 };
 
 #endif // CAMERA_H
