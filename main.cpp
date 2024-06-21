@@ -199,9 +199,10 @@ void Scene_3(){
     colorRGB YELLOW  = {255,255,0};
 
     int RESOLUTION = 512;
-    Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
+    Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
+
 
 
     //Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
