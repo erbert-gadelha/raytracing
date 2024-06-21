@@ -88,7 +88,7 @@ std::string Camera::render(std::vector<Object*> objects) {
 
 colorRGB Camera::specular(CollisionResult result, colorRGB fog) {
     Vector3 vector3;
-    double angle = vector3.Angle(Vector3(0,-1,0),result.normal)+0.2;
+    double angle = vector3.Angle(Vector3(0,-1,0),result.normal)/*+0.2*/;
     
     return dephFog(result.color*angle, fog, result.t);
 }
