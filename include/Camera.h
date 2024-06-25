@@ -26,7 +26,7 @@ class Camera : public Object
     protected:
         colorRGB specular(CollisionResult result, colorRGB fog);
         colorRGB dephFog(colorRGB color, colorRGB fog, double distance);
-        colorRGB phong(CollisionResult collision, std::vector<Light*>lights, Light* ambient_light);
+        colorRGB phong(CollisionResult collision,Vector3 position, std::vector<Light*>lights, Light* ambient_light);
 
     private:
     void threadRendering(std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, int initial_x, int final_x, int initial_y, int final_y);
