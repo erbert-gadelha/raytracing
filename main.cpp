@@ -121,29 +121,6 @@ void Scene_1() {
     Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
     Object* cube = CreateCube();
 
-    // Transformação 
-
-    // std::vector<Vector3> vertices = {
-    //     {0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0},
-    //     {0, 0, 1}, {1, 0, 1}, {1, 1, 1}, {0, 1, 1}
-    // };
-
-    // std::vector<std::tuple<int, int, int>> faces = {
-    //     {0, 1, 2}, {2, 3, 0},{4, 5, 6}, {6, 7, 4}, 
-    //     {0, 1, 5}, {5, 4, 0},{2, 3, 7}, {7, 6, 2},
-    //     {1, 2, 6}, {6, 5, 1},{0, 3, 7}, {7, 4, 0} 
-    // };
-    // std::vector<Vector3> newVertices;
-
-    // for (int i = 0; i < vertices.size(); i++) {
-    //     TransformAfim transform = TransformAfim("rotY", 90, vertices[i].getX(), vertices[i].getY(), vertices[i].getZ());
-    //     std::vector<double> coord = transform.getCoord();
-    //     newVertices.push_back({coord[0], coord[1], coord[2]});
-
-    // }
-    // cube = new Mesh(newVertices, faces);
-
-
     sphere->color = BLUE;
     plane->color = GREEN;
     mesh->color = RED;
@@ -155,7 +132,7 @@ void Scene_1() {
     objects.push_back(mesh);
     objects.push_back(cube);
 
-    string image_ppm = camera.render(objects);
+    string image_ppm = camera.render(objects,{},nullptr);
     FileWriter::saveAsImage(image_ppm);
 }
 
@@ -188,7 +165,7 @@ void Scene_2() {
     objects.push_back(sphere);
     objects.push_back(plane);
 
-    string image_ppm = camera.render(objects);
+    string image_ppm = camera.render(objects,{},nullptr);
     FileWriter::saveAsImage(image_ppm);
 }
 
@@ -203,23 +180,41 @@ void Scene_3(){
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
 
-
-
-    //Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
-    //Object* cube = CreateCube();
     Object* icosaedro = CreateIcosaedro();
-
-    //plane->color = GREEN;
-    //cube->color = YELLOW;
     icosaedro->color = RED;
-
-
     vector<Object*> objects;
-    //objects.push_back(plane);
-    //objects.push_back(cube);
     objects.push_back(icosaedro);
 
-    string image_ppm = camera.render(objects);
+    string image_ppm = camera.render(objects,{},nullptr);
+    FileWriter::saveAsImage(image_ppm);
+}
+
+void Scene_4(){
+    colorRGB RED   = {255,0,0};
+    colorRGB GREEN = {0,255,0};
+    colorRGB BLUE  = {0,0,255};
+    colorRGB YELLOW = {255,255,0};
+    colorRGB WHITE  = {255,255,255};
+
+    int RESOLUTION = 512;
+    Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
+    camera.transform.position = Vector3(0,0,-5);
+    camera.transform.rotation = Vector3(0,0,0);
+
+    Object* sphere = new Sphere();
+    Object* plane = new Plane(Vector3::ONE, Vector3::UP*(-1));
+    sphere->color = RED;
+    plane->color = RED;
+
+    //Object* sphere2 = new Sphere(Vector3::ONE*0.2, Vector3(0,1.5,-0.5));
+    Vector3 lightPosition = Vector3(0,1,-.5);
+
+    Object* sphere2 = new Sphere(Vector3::ONE*0.2, lightPosition);
+    sphere2->color = YELLOW;
+
+    //Light* light = new Light(lightPosition, WHITE);
+
+    string image_ppm = camera.render({sphere, plane, sphere2},{new Light(lightPosition, WHITE)}, new Light(Vector3::UP*(-1), WHITE));
     FileWriter::saveAsImage(image_ppm);
 }
 
@@ -227,7 +222,8 @@ void Scene_3(){
 int main() {
     //Scene_1();
     //Scene_2();
-    Scene_3();
+    //Scene_3();
+    Scene_4();
     
     std::cout << "\n===============================\n" << std::endl;
     return 0;
