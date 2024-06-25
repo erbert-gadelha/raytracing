@@ -220,10 +220,10 @@ void Scene_4(){
 
 
 int main() {
-    //Scene_1();
+    Scene_1();
     //Scene_2();
     //Scene_3();
-    Scene_4();
+    //Scene_4();
     
     std::cout << "\n===============================\n" << std::endl;
     return 0;

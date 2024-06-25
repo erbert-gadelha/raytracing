@@ -45,6 +45,7 @@ Vector3 Vector3::Normalized() {
     return Vector3::ZERO;
 }
 
+///Função estática que retorna angulo formado entre dois vetores do R3
 double Vector3::Angle(Vector3 v1, Vector3 v2) {
     double dotProduct = v1.Product(v1,v2);
     double magnitudeProduct = v1.Magnitude() * v2.Magnitude();

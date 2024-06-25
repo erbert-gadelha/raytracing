@@ -40,6 +40,14 @@ struct colorRGB {
                 std::clamp(0,(int)(green/d),255),
                 std::clamp(0,(int)(blue/d),255)};
     }
+
+    inline colorRGB operator*(colorRGB c) {
+        c.red = std::clamp(0, red*c.red, 255);
+        c.green = std::clamp(0, green*c.green, 255);
+        c.blue = std::clamp(0, blue*c.blue, 255);
+
+        return c;
+    }
 };
 
 #endif // COLORRGB_H

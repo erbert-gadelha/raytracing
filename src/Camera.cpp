@@ -105,21 +105,19 @@ colorRGB Camera::dephFog(colorRGB color, colorRGB fog, double distance) {
 
 
 colorRGB Camera::phong(CollisionResult result, Vector3 position, std::vector<Light*>lights, Light* ambient_light) {
+
+    colorRGB I = {255, 0, 0};
     
     double d = this->MAX_DISTANCE;
 
-    //for(int i = 0; i < lights.size(); i++) {
-        d = Vector3::Distance(position, lights[0]->transform.position);
-    //}
+    /*for(int i = 0; i < lights.size(); i++) {
+        Vector3 v = position - ambient_light->transform.position;
+        d = v.Magnitude();
 
-
-    Vector3 vector3;
-    double angle = vector3.Angle(Vector3(0,-1,0),result.normal)/*+0.2*/;
+        double angle = Vector3::Angle(v, result.normal);
+    }*/
     
-    //return dephFog(result.color*angle, fog, result.t);
-    
-    //return result.color*angle + lights[0]->color *(10/distance);
-    return result.color*angle + lights[0]->color/distance;
+    return result.color*I;
 }
 
 
