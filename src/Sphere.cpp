@@ -78,7 +78,7 @@ CollisionResult Sphere::cast(Ray ray) {
     else
         result.t = (t1<t2?t1:t2);
 
-    result.color = this->color;
+    result.material = this->material;
     result.normal = (ray.at(result.t)-transform.position).Normalized();
 
     return result;
@@ -87,5 +87,5 @@ CollisionResult Sphere::cast(Ray ray) {
 
 
 std::string Sphere::to_string() {
-    return ("{\n\tmesh: sphere,\n\tcolor: (" + getColor() + ")\n\ttransform: " + this->transform.to_string() + "\n}");
+    return ("{\n\tmesh: sphere,\n\tcolor: (" + material.color.to_string() + ")\n\ttransform: " + this->transform.to_string() + "\n}");
 }

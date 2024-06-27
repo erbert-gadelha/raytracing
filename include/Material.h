@@ -1,7 +1,6 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
-#include <string>
-#include <algorithm>
+#include "colorRGB.h"
 
 /** coeficiente
  * @tparam double d, coeficiente difuso
@@ -18,6 +17,7 @@ struct Material {
     double r;   // coeficiente de reflexao
     double t;   // coeficiente de transmissão
     double n;   // coeficiente de rugosidade
+    colorRGB color = {128,128,128};
 };
 
 #endif // MATERIAL_H

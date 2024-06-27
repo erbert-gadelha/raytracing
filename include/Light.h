@@ -10,11 +10,13 @@ class Light {
 
     public:
         Light();
-        Light(Vector3 position, colorRGB color);
+        Light(colorRGB color, Vector3 position);
+        Light(colorRGB color, double intensity, Vector3 position);
         
         std::string to_string();
         Transform transform;
-        colorRGB color;
+        colorRGB color = {128, 128, 128};
+        double intensity = 1;
 
     protected:
 

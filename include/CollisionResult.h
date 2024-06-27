@@ -2,16 +2,16 @@
 #define COLLISIONRESULT_H
 #include <string>
 #include <algorithm>
-#include "colorRGB.h"
+#include "Material.h"
 #include "Vector3.h"
 
 struct CollisionResult {
     double t = -1;
     Vector3 normal;
-    colorRGB color;
+    Material material;
 
     std::string to_string() {
-        return ("{\n\tt: " + std::to_string(t) + "\n\tnormal: " + normal.to_string() + "\n\tcolor: " + color.to_string() + "\n}");
+        return ("{\n\tt: " + std::to_string(t) + "\n\tnormal: " + normal.to_string() + "\n\tcolor: " + material.color.to_string() + "\n}");
     }
 };
 

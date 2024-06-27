@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <Material.h>
+#include <math.h>
 
 Camera::Camera() {
     this->transform = Transform();
@@ -35,7 +37,7 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
 
         for(int y = initial_y; y < final_y; y++) {
             //CollisionResult nearest = {this->MAX_DISTANCE, Vector3::UP, GRADIENT};
-            CollisionResult nearest = {this->MAX_DISTANCE, Vector3::UP, GRADIENT};
+            CollisionResult nearest = {this->MAX_DISTANCE, Vector3::UP};
             Vector3 pixel = M - (transform.up()*(x-(vertical/2))) + (transform.right()*(y-(horizontal/2))); 
             Vector3 V = (pixel-transform.position).Normalized(); // cria um vetor da câmera para o pixel
 
@@ -49,7 +51,10 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
                 nearest = result;
             }
 
-            screen.set(y, x, phong(nearest, ray.at(nearest.t), transform.position, lights, ambient_light));
+            if(nearest.t != MAX_DISTANCE)
+                screen.set(y, x, phong(nearest, ray.at(nearest.t), transform.position, lights, ambient_light));
+            else
+                screen.set(y, x, GRADIENT);
             
         }
     }
@@ -88,36 +93,36 @@ std::string Camera::render(std::vector<Object*> objects, std::vector<Light*> lig
 
 
 
-colorRGB Camera::specular(CollisionResult result, colorRGB fog) {
-    Vector3 vector3;
-    double angle = vector3.Angle(Vector3(0,-1,0),result.normal)/*+0.2*/;
+colorRGB Camera::phong(CollisionResult result, Vector3 point, Vector3 observer, std::vector<Light*> lights, Light* ambient_light) {
+    // Inicializa as componentes de cor
+    //colorRGB ambient = (result.material.color*ambient_light->color) * ambient_light->intensity / (255*255) ;
+    colorRGB ambient = (result.material.color*ambient_light->color)*ambient_light->intensity;
+    ambient = ambient/255;
+
+
+    colorRGB diffuse = {0, 0, 0};
+    colorRGB specular = {0, 0, 0};
+
+    Vector3 normal = result.normal;
+    Vector3 viewDir = (observer - point).Normalized();
     
-    return dephFog(result.color*angle, fog, result.t);
-}
+    for (int i = 0; i < lights.size(); i++) {
+        Light light = *lights[i];
+        Vector3 lightDir = (light.transform.position - point).Normalized();
+        Vector3 reflectDir = ((normal *2* Vector3::Product(normal, lightDir)) - lightDir).Normalized();
+        
+        // Difusa
+        double diff = std::max(Vector3::Product(normal,lightDir), 0.0);
+        diffuse += (light.color*light.intensity) * diff;
+        
+        // Especular
+        double spec = std::pow(std::max(Vector3::Product(viewDir,reflectDir), 0.0), 2);
+        specular += (light.color*light.intensity) * spec;
+    }
 
-colorRGB Camera::dephFog(colorRGB color, colorRGB fog, double distance) {
-    if(distance > this->MAX_DISTANCE)
-        return fog;
-    
-    double f = distance/this->MAX_DISTANCE;
-    return fog*f + color*(1-f);
-}
-
-
-colorRGB Camera::phong(CollisionResult result, Vector3 position, Vector3 observer, std::vector<Light*>lights, Light* ambient_light) {
-
-    colorRGB I = {255, 0, 0};
-    
-    double d = this->MAX_DISTANCE;
-
-    /*for(int i = 0; i < lights.size(); i++) {
-        Vector3 v = position - ambient_light->transform.position;
-        d = v.Magnitude();
-
-        double angle = Vector3::Angle(v, result.normal);
-    }*/
-    
-    return result.color*I;
+    // Soma as componentes
+    colorRGB finalColor = ambient.clamped()*material.a + diffuse.clamped()*material.d + specular.clamped()*material.s;
+    return finalColor.clamped();
 }
 
 

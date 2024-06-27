@@ -4,7 +4,12 @@
 Light::Light() {
 
 }
-Light::Light(Vector3 position, colorRGB color) {
+Light::Light(colorRGB color, Vector3 position) {
+    this->color = color;
+    this->transform.position = position;
+}
+Light::Light(colorRGB color, double intensity, Vector3 position) {
+    this->intensity = intensity;
     this->color = color;
     this->transform.position = position;
 }

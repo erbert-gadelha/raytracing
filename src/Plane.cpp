@@ -46,19 +46,8 @@ CollisionResult Plane::cast(Ray ray) {
     Vector3 normal = transform.up();
     Vector3 df = (point - transform.position);
 
-    /*double xc = df.x;  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double yc = df.y;  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double zc = df.z;  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double xn = normal.x;   // VETOR NORMAL AO PLANO
-    double yn = normal.y;   // VETOR NORMAL AO PLANO
-    double zn = normal.z;   // VETOR NORMAL AO PLANO
-    double x = vector.x;   // VETOR DIRETOR DA RETA
-    double y = vector.y;   // VETOR DIRETOR DA RETA
-    double z = vector.z;   // VETOR DIRETOR DA RETA
-    double a = -(xn*xc + yn*yc + zn*zc);
-    double b = (xn*x + yn*y + zn*z);*/
-    double a = -(normal.x*df.x + normal.y*df.y + normal.z*df.z);
-    double b = (normal.x*vector.x + normal.y*vector.y + normal.x*vector.z);
+    double a = -Vector3::Product(normal, df);
+    double b = Vector3::Product(normal, vector);
 
 
     double t = a/b;
@@ -67,12 +56,12 @@ CollisionResult Plane::cast(Ray ray) {
         return result;
 
     result.t = t;
-    result.color = this->color;
+    result.material = this->material;
     result.normal = normal;
 
     return result;
 }
 
 std::string Plane::to_string() {
-    return ("{\n\tmesh: plane,\n\tcolor: (" + getColor() + ")\n\ttransform: " + this->transform.to_string() + "\n}");
+    return ("{\n\tmesh: plane,\n\tcolor: (" + material.color.to_string() + ")\n\ttransform: " + this->transform.to_string() + "\n}");
 }

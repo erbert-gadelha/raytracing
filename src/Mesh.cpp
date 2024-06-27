@@ -75,22 +75,11 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
 
 
-    Vector3 n = face_normal[f];
+    Vector3 normal = face_normal[f];
     Vector3 df = (point - this->face_barycenters[f]);
 
-    /*double xc = df.x;  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double yc = df.y;  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double zc = df.z;  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double xn = normal.x;   // VETOR NORMAL AO PLANO
-    double yn = normal.y;   // VETOR NORMAL AO PLANO
-    double zn = normal.z;   // VETOR NORMAL AO PLANO
-    double x = vector.x;    // VETOR DIRETOR DA RETA
-    double y = vector.y;    // VETOR DIRETOR DA RETA
-    double z = vector.z;    // VETOR DIRETOR DA RETA*/
-    double a = -(n.x*df.x + n.y*df.y + n.z*df.z);
-    double b = (n.x*vector.x + n.y*vector.y + n.x*vector.z);
-    //double a = -(xn*xc + yn*yc + zn*zc);
-    //double b = (xn*x + yn*y + zn*z);
+    double a = -Vector3::Product(normal, df);
+    double b = Vector3::Product(normal, vector);
 
 
 
@@ -117,7 +106,7 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
 
     result.t = t;
-    result.color = this->color;
+    result.material = this->material;
     // FLATTEN
         //result.normal = normal;
     

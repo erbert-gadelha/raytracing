@@ -24,7 +24,6 @@ class Camera : public Object
         double MAX_DISTANCE;
 
     protected:
-        colorRGB specular(CollisionResult result, colorRGB fog);
         colorRGB dephFog(colorRGB color, colorRGB fog, double distance);
         /**
          * Retorna cor do pixel aplicado o shading de phong.
