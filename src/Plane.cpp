@@ -24,17 +24,17 @@ Plane::Plane(Vector3 scale, Vector3 position, Vector3 rotation ) : Object() {
     this->transform.rotation = rotation;
 }
 
-double Plane::getD() {
+/*double Plane::getD() {
     Vector3 normal = transform.up();
     Vector3 pos = transform.position;
     return (normal.getX()*pos.getX()) + (normal.getY()*pos.getY()) + (normal.getZ()*pos.getZ());
-}
+}*/
 
-double Plane::contains (Vector3 point) {
+/*double Plane::contains (Vector3 point) {
     Vector3 normal = transform.up();
     Vector3 pos = transform.position;
-    return ((normal.getX()*pos.getX()) + (normal.getY()*pos.getY()) + (normal.getZ()*pos.getZ()) - this->getD());
-}
+    return ((normal.x*pos.x) + (normal.getY()*pos.getY()) + (normal.getZ()*pos.getZ()) - this->getD());
+}*/
 
 CollisionResult Plane::cast(Ray ray) {
     CollisionResult result;
@@ -46,17 +46,19 @@ CollisionResult Plane::cast(Ray ray) {
     Vector3 normal = transform.up();
     Vector3 df = (point - transform.position);
 
-    double xc = df.getX();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double yc = df.getY();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double zc = df.getZ();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double xn = normal.getX();   // VETOR NORMAL AO PLANO
-    double yn = normal.getY();   // VETOR NORMAL AO PLANO
-    double zn = normal.getZ();   // VETOR NORMAL AO PLANO
-    double x = vector.getX();   // VETOR DIRETOR DA RETA
-    double y = vector.getY();   // VETOR DIRETOR DA RETA
-    double z = vector.getZ();   // VETOR DIRETOR DA RETA
+    /*double xc = df.x;  // VETOR (PONTO RETA) - (PONTO PLANO)
+    double yc = df.y;  // VETOR (PONTO RETA) - (PONTO PLANO)
+    double zc = df.z;  // VETOR (PONTO RETA) - (PONTO PLANO)
+    double xn = normal.x;   // VETOR NORMAL AO PLANO
+    double yn = normal.y;   // VETOR NORMAL AO PLANO
+    double zn = normal.z;   // VETOR NORMAL AO PLANO
+    double x = vector.x;   // VETOR DIRETOR DA RETA
+    double y = vector.y;   // VETOR DIRETOR DA RETA
+    double z = vector.z;   // VETOR DIRETOR DA RETA
     double a = -(xn*xc + yn*yc + zn*zc);
-    double b = (xn*x + yn*y + zn*z);
+    double b = (xn*x + yn*y + zn*z);*/
+    double a = -(normal.x*df.x + normal.y*df.y + normal.z*df.z);
+    double b = (normal.x*vector.x + normal.y*vector.y + normal.x*vector.z);
 
 
     double t = a/b;

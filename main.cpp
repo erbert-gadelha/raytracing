@@ -14,7 +14,6 @@
 #include "Matrix.h"
 
 #include "FileWriter.h"
-#include "TransformAfim.h"
 
 using namespace std;
 
@@ -103,45 +102,37 @@ Object* CreateIcosaedro() {
 }
 
 void Scene_1() {
-    colorRGB RED   = {255,0,0};
-    colorRGB GREEN = {0,255,0};
-    colorRGB BLUE  = {0,0,255};
-    colorRGB YELLOW  = {255,255,0};
-
     int RESOLUTION = 1080;
     Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
-    camera.transform.position = Vector3(-5,5,-10);
-    camera.transform.rotation = Vector3(10,25,0);
+    camera.transform.position = {-5,5,-10};
+    camera.transform.rotation = {10,25,0};
 
 
 
-
-    Object* sphere = new Sphere(Vector3().ONE*1, Vector3(2,1.5,0.25));
-    Object* mesh = new Mesh({Vector3(0,2,0),Vector3(0,0,0),Vector3(2,0,0),Vector3(2,2,0)}, {{1,2,3}});
+    Object* sphere = new Sphere(Vector3::ONE, {2,1.5,0.25});
+    Object* mesh = new Mesh({ {0,2,0},{0,0,0},{2,0,0},{2,2,0}}, {{1,2,3}});
     Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
     Object* cube = CreateCube();
 
-    sphere->color = BLUE;
-    plane->color = GREEN;
-    mesh->color = RED;
-    cube->color = YELLOW;
 
-    vector<Object*> objects;
-    objects.push_back(sphere);
-    objects.push_back(plane);
-    objects.push_back(mesh);
-    objects.push_back(cube);
+    sphere->color = colorRGB::BLUE;
+    plane->color = colorRGB::GREEN;
+    mesh->color = colorRGB::RED;
+    cube->color = colorRGB::YELLOW;
+
+    vector<Object*> objects = {
+        sphere,
+        plane,
+        mesh,
+        cube
+    };
 
     string image_ppm = camera.render(objects,{},nullptr);
     FileWriter::saveAsImage(image_ppm);
 }
 
 void Scene_2() {
-    colorRGB RED   = {255,0,0};
-    colorRGB GREEN = {0,255,0};
-    colorRGB BLUE  = {0,0,255};
-    colorRGB YELLOW  = {255,255,0};
-
+    
     int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
     camera.transform.position = Vector3(-5,5,-10);
@@ -155,25 +146,19 @@ void Scene_2() {
                          { 0, 0, 0,   1}
     }};
 
-    Object* sphere = new Sphere(Vector3().ONE*1, (translate*m_cord).to_vector());
-    Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
+    Object* sphere = new Sphere(Vector3::ONE, (translate*m_cord).to_vector());
+    Object* plane = new Plane(Vector3::ONE, Vector3::ZERO, Vector3::ZERO);
 
-    sphere->color = BLUE;
-    plane->color = GREEN;
+    sphere->color = colorRGB::BLUE;
+    plane->color = colorRGB::GREEN;
 
-    vector<Object*> objects;
-    objects.push_back(sphere);
-    objects.push_back(plane);
+    vector<Object*> objects = {sphere, plane};
 
     string image_ppm = camera.render(objects,{},nullptr);
     FileWriter::saveAsImage(image_ppm);
 }
 
 void Scene_3(){
-    colorRGB RED   = {255,0,0};
-    colorRGB GREEN = {0,255,0};
-    colorRGB BLUE  = {0,0,255};
-    colorRGB YELLOW  = {255,255,0};
 
     int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
@@ -181,49 +166,43 @@ void Scene_3(){
     camera.transform.rotation = Vector3(5,0,0);
 
     Object* icosaedro = CreateIcosaedro();
-    icosaedro->color = RED;
-    vector<Object*> objects;
-    objects.push_back(icosaedro);
+    icosaedro->color = colorRGB::RED;
 
-    string image_ppm = camera.render(objects,{},nullptr);
+    string image_ppm = camera.render({icosaedro},{},nullptr);
     FileWriter::saveAsImage(image_ppm);
 }
 
 void Scene_4(){
-    colorRGB RED   = {255,0,0};
-    colorRGB GREEN = {0,255,0};
-    colorRGB BLUE  = {0,0,255};
-    colorRGB YELLOW = {255,255,0};
-    colorRGB WHITE  = {255,255,255};
 
     int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
-    camera.transform.position = Vector3(0,0,-5);
-    camera.transform.rotation = Vector3(0,0,0);
+    camera.transform.position = {0,0,-5};
+    camera.transform.rotation = {0,0,0};
+
+    Vector3 lightPosition = {0,1,-.5};
+
 
     Object* sphere = new Sphere();
-    Object* plane = new Plane(Vector3::ONE, Vector3::UP*(-1));
-    sphere->color = RED;
-    plane->color = RED;
-
-    //Object* sphere2 = new Sphere(Vector3::ONE*0.2, Vector3(0,1.5,-0.5));
-    Vector3 lightPosition = Vector3(0,1,-.5);
-
     Object* sphere2 = new Sphere(Vector3::ONE*0.2, lightPosition);
-    sphere2->color = YELLOW;
+    Object* plane = new Plane(Vector3::ONE, Vector3::UP*(-1));
+    sphere->color = colorRGB::YELLOW;
+    plane->color = colorRGB::RED;
 
-    //Light* light = new Light(lightPosition, WHITE);
 
-    string image_ppm = camera.render({sphere, plane, sphere2},{new Light(lightPosition, WHITE)}, new Light(Vector3::UP*(-1), WHITE));
+    sphere2->color = colorRGB::YELLOW;
+
+    vector<Light*> lights = { new Light(lightPosition, colorRGB::WHITE) };
+
+    string image_ppm = camera.render({sphere, plane, sphere2},lights, new Light(Vector3::UP*(-1), colorRGB::WHITE));
     FileWriter::saveAsImage(image_ppm);
 }
 
 
 int main() {
-    Scene_1();
+    //Scene_1();
     //Scene_2();
     //Scene_3();
-    //Scene_4();
+    Scene_4();
     
     std::cout << "\n===============================\n" << std::endl;
     return 0;

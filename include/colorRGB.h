@@ -4,6 +4,14 @@
 #include <algorithm>
 
 struct colorRGB {
+
+    static const colorRGB RED;
+    static const colorRGB GREEN;
+    static const colorRGB BLUE;
+    static const colorRGB YELLOW;
+    static const colorRGB WHITE;
+    static const colorRGB BLACK;
+
     int red;
     int green;
     int blue;

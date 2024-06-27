@@ -75,20 +75,22 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
 
 
-    Vector3 normal = face_normal[f];
+    Vector3 n = face_normal[f];
     Vector3 df = (point - this->face_barycenters[f]);
 
-    double xc = df.getX();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double yc = df.getY();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double zc = df.getZ();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double xn = normal.getX();   // VETOR NORMAL AO PLANO
-    double yn = normal.getY();   // VETOR NORMAL AO PLANO
-    double zn = normal.getZ();   // VETOR NORMAL AO PLANO
-    double x = vector.getX();   // VETOR DIRETOR DA RETA
-    double y = vector.getY();   // VETOR DIRETOR DA RETA
-    double z = vector.getZ();   // VETOR DIRETOR DA RETA
-    double a = -(xn*xc + yn*yc + zn*zc);
-    double b = (xn*x + yn*y + zn*z);
+    /*double xc = df.x;  // VETOR (PONTO RETA) - (PONTO PLANO)
+    double yc = df.y;  // VETOR (PONTO RETA) - (PONTO PLANO)
+    double zc = df.z;  // VETOR (PONTO RETA) - (PONTO PLANO)
+    double xn = normal.x;   // VETOR NORMAL AO PLANO
+    double yn = normal.y;   // VETOR NORMAL AO PLANO
+    double zn = normal.z;   // VETOR NORMAL AO PLANO
+    double x = vector.x;    // VETOR DIRETOR DA RETA
+    double y = vector.y;    // VETOR DIRETOR DA RETA
+    double z = vector.z;    // VETOR DIRETOR DA RETA*/
+    double a = -(n.x*df.x + n.y*df.y + n.z*df.z);
+    double b = (n.x*vector.x + n.y*vector.y + n.x*vector.z);
+    //double a = -(xn*xc + yn*yc + zn*zc);
+    //double b = (xn*x + yn*y + zn*z);
 
 
 

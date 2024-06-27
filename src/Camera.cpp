@@ -49,7 +49,7 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
                 nearest = result;
             }
 
-            screen.set(y, x, phong(nearest, ray.at(nearest.t), lights, ambient_light));
+            screen.set(y, x, phong(nearest, ray.at(nearest.t), transform.position, lights, ambient_light));
             
         }
     }
@@ -104,7 +104,7 @@ colorRGB Camera::dephFog(colorRGB color, colorRGB fog, double distance) {
 }
 
 
-colorRGB Camera::phong(CollisionResult result, Vector3 position, std::vector<Light*>lights, Light* ambient_light) {
+colorRGB Camera::phong(CollisionResult result, Vector3 position, Vector3 observer, std::vector<Light*>lights, Light* ambient_light) {
 
     colorRGB I = {255, 0, 0};
     

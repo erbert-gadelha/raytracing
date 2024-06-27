@@ -17,23 +17,23 @@ Vector3 Transform::forward() {    return relative_vector3(Vector3().FORWARD); }
 
 
 Vector3 Transform::relative_vector3(Vector3 v) {
-    double cos_x = cos(rotation.getX()*(pi/180));
-    double sin_x = sin(rotation.getX()*(pi/180));
+    double cos_x = cos(rotation.x*(pi/180));
+    double sin_x = sin(rotation.x*(pi/180));
 
-    double cos_y = cos(rotation.getY()*(pi/180));
-    double sin_y = sin(rotation.getY()*(pi/180));
+    double cos_y = cos(rotation.y*(pi/180));
+    double sin_y = sin(rotation.y*(pi/180));
 
-    double cos_z = cos(rotation.getZ()*(pi/180));
-    double sin_z = sin(rotation.getZ()*(pi/180));
+    double cos_z = cos(rotation.z*(pi/180));
+    double sin_z = sin(rotation.z*(pi/180));
 
+    double x = v.x;
+    double y = v.y;
+    double z = v.z;
 
-    double x = v.getX();
-    double y = v.getY();
-    double z = v.getZ();
+    v.x = (cos_y*cos_z*x) - (sin_z*cos_y*y) + (sin_y*z);
+    v.y = (sin_x*sin_y*cos_z + sin_z*cos_x)*x + (cos_x*cos_z - sin_z*sin_x*sin_y)*y - (sin_x*cos_y*z);
+    v.z = (-cos_x*sin_y*cos_z)*x + (sin_x*cos_z + sin_z*cos_x*sin_y)*y + (cos_x*cos_y*z);
 
-    v.setX((cos_y*cos_z*x) - (sin_z*cos_y*y) + (sin_y*z));
-    v.setY((sin_x*sin_y*cos_z + sin_z*cos_x)*x + (cos_x*cos_z - sin_z*sin_x*sin_y)*y - (sin_x*cos_y*z));
-    v.setZ((-cos_x*sin_y*cos_z)*x + (sin_x*cos_z + sin_z*cos_x*sin_y)*y + (cos_x*cos_y*z));
     return v;
 }
 
