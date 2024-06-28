@@ -11,12 +11,12 @@
  * @tparam double n, coeficiente de rugosidade
  * */ 
 struct Material {
-    double d;   // coeficiente difuso
-    double s;   // coeficiente especular
-    double a;   // coeficiente ambiental
-    double r;   // coeficiente de reflexao
-    double t;   // coeficiente de transmissão
-    double n;   // coeficiente de rugosidade
+    double d = 1;   // coeficiente difuso
+    double s = 1;   // coeficiente especular
+    double a = 1;   // coeficiente ambiental
+    double r = 1;   // coeficiente de reflexao
+    double t = 1;   // coeficiente de transmissão
+    double n = 1;   // coeficiente de rugosidade
     colorRGB color = {128,128,128};
 };
 

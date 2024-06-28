@@ -33,7 +33,7 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
     for(int x = initial_x; x < final_x; x++) {
         // SIMULA PRESENCA DE UMA SKYBOX
         //colorRGB GRADIENT = SKY_COLOR + WHITE*(((double)x)/((double)vertical*2));
-        colorRGB GRADIENT = WHITE*0;
+        colorRGB GRADIENT = WHITE;
 
         for(int y = initial_y; y < final_y; y++) {
             //CollisionResult nearest = {this->MAX_DISTANCE, Vector3::UP, GRADIENT};
@@ -94,25 +94,20 @@ std::string Camera::render(std::vector<Object*> objects, std::vector<Light*> lig
 
 
 colorRGB Camera::phong(CollisionResult result, Vector3 point, Vector3 observer, std::vector<Light*> lights, Light* ambient_light) {
-    // Inicializa as componentes de cor
-    //colorRGB ambient = (result.material.color*ambient_light->color) * ambient_light->intensity / (255*255) ;
-    colorRGB ambient = (result.material.color*ambient_light->color)*ambient_light->intensity;
-    ambient = ambient/255;
 
 
     colorRGB diffuse = {0, 0, 0};
     colorRGB specular = {0, 0, 0};
 
-    Vector3 normal = result.normal;
     Vector3 viewDir = (observer - point).Normalized();
     
     for (int i = 0; i < lights.size(); i++) {
         Light light = *lights[i];
         Vector3 lightDir = (light.transform.position - point).Normalized();
-        Vector3 reflectDir = ((normal *2* Vector3::Product(normal, lightDir)) - lightDir).Normalized();
+        Vector3 reflectDir = ((result.normal *2* Vector3::Product(result.normal, lightDir)) - lightDir).Normalized();
         
         // Difusa
-        double diff = std::max(Vector3::Product(normal,lightDir), 0.0);
+        double diff = std::max(Vector3::Product(result.normal,lightDir), 0.0);
         diffuse += (light.color*light.intensity) * diff;
         
         // Especular
@@ -120,8 +115,21 @@ colorRGB Camera::phong(CollisionResult result, Vector3 point, Vector3 observer, 
         specular += (light.color*light.intensity) * spec;
     }
 
-    // Soma as componentes
-    colorRGB finalColor = ambient.clamped()*material.a + diffuse.clamped()*material.d + specular.clamped()*material.s;
+
+    colorRGB ambient = (result.material.color*ambient_light->color)*ambient_light->intensity;
+    ambient = (ambient/255).clamped();
+
+    diffuse = (result.material.color*diffuse);
+    diffuse = (diffuse/255).clamped();
+
+    specular = (result.material.color*specular);
+    specular = (specular/255).clamped();
+
+
+    colorRGB finalColor = ambient*result.material.a +
+                          diffuse*result.material.d +
+                          specular*result.material.s;
+
     return finalColor.clamped();
 }
 

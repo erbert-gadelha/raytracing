@@ -193,16 +193,26 @@ void Scene_4(){
     Object* s0 = new Sphere({1,1,1},{0,.35,0});
     Object* s1 = new Sphere({.2,.2,.2}, {-1.2, .5, 0});
     Object* s2 = new Sphere({.4,.4,.4}, {1.5, 1, 1});
+    Object* s3 = new Sphere({1,1,1},{-.35,1.4,.2});
     Object* p = new Plane();
     s0->material.color = colorRGB::RED;
     s1->material.color = colorRGB::YELLOW;
     s2->material.color = colorRGB::GREEN;
+    s3->material.color = colorRGB::RED;
     p->material.color = colorRGB::BLUE;
 
-    Light* ambiental =  new Light(colorRGB::WHITE, 0.5, Vector3::ONE);
-    vector<Light*> lights = { new Light(colorRGB::YELLOW, 0.5, {-5,1,-1}) };
+    s1->material.a = 0.8;
+    s1->material.s = 1.5;
+    s1->material.d = 0.2;
 
-    string image_ppm = camera.render({s0, s1, s2, p}, lights, ambiental);
+    s3->material.a = .1;
+    s3->material.s = 2;
+    s3->material.d = 1;
+
+    Light* ambiental =  new Light(colorRGB::WHITE, 0.5, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 0.5, {-5,1,-1}) };
+
+    string image_ppm = camera.render({s0, s1, s2, s3, p}, lights, ambiental);
     FileWriter::saveAsImage(image_ppm);
 }
 
