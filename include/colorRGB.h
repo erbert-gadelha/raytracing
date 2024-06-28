@@ -29,9 +29,10 @@ struct colorRGB {
     }
 
     inline colorRGB operator+(colorRGB c) {
-        return {std::clamp(0,red+c.red,255),
-                std::clamp(0,green+c.green,255),
-                std::clamp(0,blue+c.blue,255)};
+        return {red+c.red, 
+                green+c.green,
+                blue+c.blue
+            };
     }
 
     inline void operator+=(colorRGB c) {
@@ -64,9 +65,9 @@ struct colorRGB {
     }
 
     static colorRGB Clamp(colorRGB c) {
-        return {std::clamp(0,(int)(c.red),255),
-                std::clamp(0,(int)(c.green),255),
-                std::clamp(0,(int)(c.blue),255)};
+        return {std::clamp((int)(c.red),0,255),
+                std::clamp((int)(c.green),0,255),
+                std::clamp((int)(c.blue),0,255)};
     }
     colorRGB clamped() {
         return Clamp(*this);
