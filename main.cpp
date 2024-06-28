@@ -209,12 +209,13 @@ void Scene_4(){
     s3->material.s = 2;
     s3->material.d = 1;
 
-    Light* ambiental =  new Light(colorRGB::WHITE, 0.5, Vector3::ONE);
-    vector<Light*> lights = { new Light(colorRGB::WHITE, 0.5, {-5,1,-1}) };
+    Light* ambiental =  new Light(colorRGB::WHITE, 0.2, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 1, {-5,1,-1}) };
 
     string image_ppm = camera.render({s0, s1, s2, s3, p}, lights, ambiental);
     FileWriter::saveAsImage(image_ppm);
 }
+
 
 
 
@@ -224,7 +225,6 @@ int main() {
     //Scene_3();
     Scene_4();
     
-    std::cout << "\n===============================\n" << std::endl;
     return 0;
 }
 
