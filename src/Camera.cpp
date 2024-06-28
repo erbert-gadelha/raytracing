@@ -25,24 +25,22 @@ Camera::Camera(int horizontal, int vertical, double distance) {
 }
 
 void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>lights, Light* ambient_light, int initial_x, int final_x, int initial_y, int final_y) {
-    colorRGB SKY_COLOR = {120, 120, 255};
-    colorRGB WHITE = {255, 255, 255};
-    //colorRGB FOG = {124, 133, 148};
 
     Vector3 M = transform.position + (transform.forward()*distance);  // posição e direção câmera 
     for(int x = initial_x; x < final_x; x++) {
         // SIMULA PRESENCA DE UMA SKYBOX
-        //colorRGB GRADIENT = SKY_COLOR + WHITE*(((double)x)/((double)vertical*2));
-        colorRGB GRADIENT = WHITE;
+        double frac = ((double)x)/((double)vertical);
+        colorRGB w = colorRGB::WHITE;
+        colorRGB GRADIENT = ((ambient_light->color/frac)+(w.clamped() * frac)).clamped() * 0.1;
 
         for(int y = initial_y; y < final_y; y++) {
-            //CollisionResult nearest = {this->MAX_DISTANCE, Vector3::UP, GRADIENT};
             CollisionResult nearest = {this->MAX_DISTANCE, Vector3::UP};
             Vector3 pixel = M - (transform.up()*(x-(vertical/2))) + (transform.right()*(y-(horizontal/2))); 
             Vector3 V = (pixel-transform.position).Normalized(); // cria um vetor da câmera para o pixel
 
             screen.set(y, x, GRADIENT); // define a cor do pixel 
             Ray ray = Ray(transform.position, V);
+
 
             for(int i = 0; i < objects.size(); i++) { // verifica cada objeto
                 CollisionResult result = objects[i]->cast(ray);
