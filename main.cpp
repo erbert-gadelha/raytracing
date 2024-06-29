@@ -208,6 +208,7 @@ void Scene_4(){
     s3->material.a = .1;
     s3->material.s = 2;
     s3->material.d = 1;
+    s3->material.n = 50;
 
     Light* ambiental =  new Light(colorRGB::WHITE, 0.2, Vector3::ONE);
     vector<Light*> lights = { new Light(colorRGB::WHITE, 1, {-5,1,-1}) };

@@ -104,12 +104,13 @@ colorRGB Camera::phong(CollisionResult result, Vector3 point, Vector3 observer, 
         Vector3 lightDir = (light.transform.position - point).Normalized();
         Vector3 reflectDir = ((result.normal *2* Vector3::Product(result.normal, lightDir)) - lightDir).Normalized();
         
-        // Difusa
+        if(result.material.d > 1)
+            std::cout << material.d << std::endl;
+
         double diff = std::max(Vector3::Product(result.normal,lightDir), 0.0);
+        double spec = std::pow(std::max(Vector3::Product(viewDir,reflectDir), 0.0), result.material.n);
+
         diffuse += (light.color*light.intensity) * diff;
-        
-        // Especular
-        double spec = std::pow(std::max(Vector3::Product(viewDir,reflectDir), 0.0), 2);
         specular += (light.color*light.intensity) * spec;
     }
 
