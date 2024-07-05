@@ -155,27 +155,26 @@ colorRGB Camera::phong(CollisionResult result, Ray ray, std::vector<Object*>obje
 colorRGB Camera::reflection(CollisionResult collision, Ray ray, Vector3 observer, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, colorRGB defaultColor) {
     colorRGB r_color = colorRGB::BLACK;
 
-    CollisionResult nearest = collision;
-    nearest.material.color = defaultColor;
+    collision.material.color = defaultColor;
     for(int r = 0; r < 3; r++) { // NUMERO DE RECURSÕES DESEJADAS
-        Vector3 reflectDir = (ray.direction() - (nearest.normal * 2 * Vector3::Product(nearest.normal,ray.direction()))).Normalized();
-        Ray r_ray = Ray(ray.at(nearest.t)+(reflectDir*0.0), reflectDir);
+        Vector3 reflectDir = (ray.direction() - (collision.normal * 2 * Vector3::Product(collision.normal,ray.direction()))).Normalized();
+        Ray r_ray = Ray(ray.at(collision.t)+(reflectDir*0.0), reflectDir);
 
+        collision.t = MAX_DISTANCE;
+        CollisionResult nearest;
         nearest.t = MAX_DISTANCE;
-        CollisionResult reflection;
-        reflection.t = MAX_DISTANCE;
         for (int i = 0; i < objects.size(); i++) {
-            CollisionResult cr = objects[i]->cast(r_ray);
-            if(cr.t >= reflection.t || cr.t <= 0.005)
+            CollisionResult temp = objects[i]->cast(r_ray);
+            if(temp.t >= nearest.t || temp.t <= 0.0001)
                 continue;
-            reflection = cr;
+            nearest = temp;
         }
 
-        if(reflection.t == MAX_DISTANCE)
+        if(nearest.t == MAX_DISTANCE)
             break;
 
-        r_color = r_color + phong(reflection, r_ray, objects, lights, ambient_light);
-        nearest = reflection;
+        r_color = r_color + phong(nearest, r_ray, objects, lights, ambient_light);
+        collision = nearest;
     }
 
     return r_color.clamped();
