@@ -57,9 +57,15 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
                 CollisionResult r_nearest;
                 r_nearest.t = MAX_DISTANCE;
                 r_nearest.material.color = colorRGB::BLACK;
-                Vector3 reflectDir = (nearest.normal*2 - (ray.at(nearest.t)-transform.position).Normalized()).Normalized();
+                //Vector3 reflectDi2 = (nearest.normal*2 - (ray.at(nearest.t)-transform.position).Normalized()).Normalized();
+                //Vector3 reflectDir = (nearest.normal*2 - ray.direction()).Normalized();
+                Vector3 reflectDir = (ray.direction() - (nearest.normal * 2 * Vector3::Product(nearest.normal,ray.direction()))).Normalized();
+
+                //Vector3 reflectDir = (nearest.normal*2*(nearest.normal*ray.direction()) - ray.direction()).Normalized();
+                //Vector3 reflectDir = ((ray.direction()) - (nearest.normal*2*(nearest.normal*ray.direction()))).Normalized();
+
                 //Vector3 reflectDir = {ray.direction().x * -1, ray.direction().y, ray.direction().z * -1};
-                
+                //u=vB*2 (x(vA) x(vB)+y(vA) y(vB)+z(vA) z(vB))-vA
                 Ray r_ray = Ray(ray.at(nearest.t)+(reflectDir*0.0), reflectDir);
                 for (int i = 0; i < objects.size(); i++) {
                     if(i == j)
