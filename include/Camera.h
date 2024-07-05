@@ -34,7 +34,9 @@ class Camera : public Object
          * @tparam Light* luz ambiental (posição espacial do objeto é irrelevante).
         */
         colorRGB phong(CollisionResult collision, Ray ray, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light);
-        colorRGB reflection(CollisionResult collision, Ray ray, Vector3 observer, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, colorRGB defaultColor);
+        colorRGB reflection(CollisionResult collision, Ray ray, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, colorRGB defaultColor);
+        colorRGB refract(CollisionResult collision, Ray ray, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light);
+
 
     private:
     void threadRendering(std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, int initial_x, int final_x, int initial_y, int final_y);

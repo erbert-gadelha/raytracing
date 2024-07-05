@@ -5,6 +5,7 @@
 #include <chrono>
 #include <Material.h>
 #include <math.h>
+#include <algorithm>
 
 Camera::Camera() {
     this->transform = Transform();
@@ -51,8 +52,10 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
 
             if(nearest.t != MAX_DISTANCE) {
                 colorRGB resultColor = phong(nearest, ray, objects, lights, ambient_light);
-                colorRGB r_color = reflection(nearest, ray, transform.position, objects, lights, ambient_light, GRADIENT);
-                screen.set(y, x, (resultColor + r_color));
+                colorRGB refracao_color = reflection(nearest, ray, objects, lights, ambient_light, GRADIENT);
+                colorRGB reflexao_color = refract(nearest, ray, objects, lights, ambient_light);
+
+                screen.set(y, x, (resultColor + refracao_color + reflexao_color));
             } else {
                 screen.set(y, x, GRADIENT);
             }
@@ -152,9 +155,10 @@ colorRGB Camera::phong(CollisionResult result, Ray ray, std::vector<Object*>obje
     return finalColor.clamped();
 }
 
-colorRGB Camera::reflection(CollisionResult collision, Ray ray, Vector3 observer, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, colorRGB defaultColor) {
+colorRGB Camera::reflection(CollisionResult collision, Ray ray, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, colorRGB defaultColor) {
     colorRGB r_color = colorRGB::BLACK;
 
+    double coeficiente_r = collision.material.r;
     collision.material.color = defaultColor;
     for(int r = 0; r < 3; r++) { // NUMERO DE RECURSÕES DESEJADAS
         Vector3 reflectDir = (ray.direction() - (collision.normal * 2 * Vector3::Product(collision.normal,ray.direction()))).Normalized();
@@ -173,12 +177,53 @@ colorRGB Camera::reflection(CollisionResult collision, Ray ray, Vector3 observer
         if(nearest.t == MAX_DISTANCE)
             break;
 
-        r_color = r_color + phong(nearest, r_ray, objects, lights, ambient_light);
+        r_color = r_color + phong(nearest, r_ray, objects, lights, ambient_light)*coeficiente_r;
         collision = nearest;
     }
 
     return r_color.clamped();
 }
+
+colorRGB Camera::refract(CollisionResult collision, Ray ray, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light) {
+    double opacity = collision.material.opacity;
+    double cosi = std::clamp((double)Vector3::Product(collision.normal, ray.direction()), (double)1, (double)2);
+    double etai = 1, etat = collision.material.ior;
+    Vector3 n = collision.normal;
+
+    if (cosi < 0) {
+        cosi = -cosi;
+        std::swap(etai, etat);
+        n = collision.normal* -1;
+    }
+
+    double etaRatio = etai / etat;
+    double k = 1 - etaRatio * etaRatio * (1 - cosi * cosi);
+
+    Vector3 refract;
+    if (k < 0)
+        refract = {0,0,0}; // Total internal reflection
+    else
+        refract =  {ray.direction() * etaRatio + n*(cosi*etaRatio - std::sqrt(k))};
+    
+
+
+    Vector3 point = ray.at(collision.t);
+    Ray ray2 = Ray(point, refract);
+    collision.t = MAX_DISTANCE;
+    for(int i = 0; i < objects.size(); i++) {
+        CollisionResult temp = objects[i]->cast(ray2);
+        if(temp.t >= collision.t || temp.t <= 0.0001)
+            continue;
+        collision = temp;
+    }
+
+    if(collision.t == MAX_DISTANCE)
+        return colorRGB::BLACK;
+    
+    return phong(collision, ray2, objects, lights, ambient_light) * (1-opacity);
+    //return collision.material.color * (1-opacity);
+}
+
 
 
 std::string Camera::to_string() {
