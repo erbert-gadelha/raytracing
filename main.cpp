@@ -17,7 +17,7 @@
 
 using namespace std;
 
-Mesh CreateCube() {
+Mesh CreateCube(Matrix* transform) {
     std::vector<Vector3> vertices = {
         {0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0},
         {0, 0, 1}, {1, 0, 1}, {1, 1, 1}, {0, 1, 1}
@@ -27,7 +27,14 @@ Mesh CreateCube() {
         {0, 1, 2}, {2, 3, 0},{4, 5, 6}, {6, 7, 4}, 
         {0, 1, 5}, {5, 4, 0},{2, 3, 7}, {7, 6, 2},
         {1, 2, 6}, {6, 5, 1},{0, 3, 7}, {7, 4, 0} 
-    };    
+    };
+
+    if(transform != nullptr) {
+        for (int i = 0; i < vertices.size(); i++) {
+            Matrix cord = transform->vectorToMatrix(vertices[i]);
+            vertices[i] = (*transform * cord).to_vector();
+        }
+    }
 
     return Mesh(vertices, faces);
 }
@@ -81,17 +88,16 @@ Object* CreateIcosaedro() {
 
 /// @brief 1xEsfera, 1xRetangulo, 1xCubo e 1xPlano com iluminação ambiental.
 void Scene_1() {
-    int RESOLUTION = 1080;
+    int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
-    camera.transform.position = {-5,5,-10};
-    camera.transform.rotation = {10,25,0};
+    camera.transform.position = {0,1,-10};
+    camera.transform.rotation = {4,0,0};
 
 
 
     Object* sphere = new Sphere(Vector3::ONE, {2,1.5,0.25});
     Object* mesh = new Mesh({ {0,2,0},{0,0,0},{2,0,0},{2,2,0}}, {{1,2,3}});
     Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
-    Mesh cube = CreateCube();
 
 
 
@@ -111,16 +117,13 @@ void Scene_1() {
     };
 
     matrix = translate*rotateY;
-    for (int i = 0; i < cube.vertices.size(); i++) {
-        Matrix cord = matrix.vectorToMatrix(cube.vertices[i]);
-        cube.vertices[i] = (matrix * cord).to_vector();
-    }
+    Mesh cube = CreateCube(&matrix);
 
 
-    sphere->material.color = colorRGB::BLUE;
-    plane->material.color = colorRGB::GREEN;
-    mesh->material.color = colorRGB::RED;
-    cube.material.color = colorRGB::YELLOW;
+    sphere->material = { 1, 5, 1, 1, 1, 100, colorRGB::BLUE};
+    plane->material = { 1, 5, 1, 1, 1, 100, colorRGB::GREEN};
+    mesh->material = { 1, 4, 1, 1, 1, 1000, colorRGB::RED};
+    cube.material = { 1, 5, 1, 1, 1, 100, colorRGB::YELLOW};
 
     vector<Object*> objects = {
         sphere,
@@ -130,9 +133,10 @@ void Scene_1() {
     };
 
 
-    Light* ambiental =  new Light(colorRGB::WHITE, 1, Vector3::ONE);
+    Light* ambiental =  new Light(colorRGB::WHITE, .2, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 1, {0,.5,-5})};
 
-    string image_ppm = camera.render(objects,{},ambiental);
+    string image_ppm = camera.render(objects,lights,ambiental);
     FileWriter::saveAsImage(image_ppm);
 }
 
@@ -171,11 +175,18 @@ void Scene_3(){
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
 
-    Object* icosaedro = CreateIcosaedro();
-    icosaedro->material.color = colorRGB::RED;
+    //Object* icosaedro = CreateIcosaedro();
+    Object* icosaedro = new Plane(Vector3::ONE, Vector3::ZERO, Vector3::ZERO);
 
-    Light* ambiental =  new Light(colorRGB::WHITE, 0.5, Vector3::ONE);
-    vector<Light*> lights = { new Light(colorRGB::YELLOW, 0.5, {-5,1,-1}) };
+    icosaedro->material.a = 1;
+    icosaedro->material.s = 2;
+    icosaedro->material.d = 1;
+    icosaedro->material.n = 50000;
+    icosaedro->material.color = colorRGB::RED;
+    //icosaedro->material.specularColor = colorRGB::BLUE;
+
+    Light* ambiental =  new Light(colorRGB::WHITE, 0.2, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 0.5, {0,1,10}) };
 
     string image_ppm = camera.render({icosaedro}, lights, ambiental);
     FileWriter::saveAsImage(image_ppm);
@@ -185,7 +196,7 @@ void Scene_3(){
 void Scene_4(){
 
 
-    int RESOLUTION = 512;
+    int RESOLUTION = 1024;
     Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
@@ -199,16 +210,18 @@ void Scene_4(){
     s1->material.color = colorRGB::YELLOW;
     s2->material.color = colorRGB::GREEN;
     s3->material.color = colorRGB::RED;
-    p->material.color = colorRGB::BLUE;
+    p->material.color = colorRGB::WHITE;
 
     s1->material.a = 0.8;
-    s1->material.s = 1.5;
-    s1->material.d = 0.2;
+    s1->material.s = 2;
+    s1->material.d = 1;
+    s1->material.n = 10;
 
     s3->material.a = .1;
     s3->material.s = 2;
     s3->material.d = 1;
-    s3->material.n = 50;
+    s3->material.n = 100;
+
 
     Light* ambiental =  new Light(colorRGB::WHITE, 0.2, Vector3::ONE);
     vector<Light*> lights = { new Light(colorRGB::WHITE, 1, {-5,1,-1}) };
