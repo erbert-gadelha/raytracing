@@ -108,12 +108,13 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
     result.t = t;
     result.material = this->material;
     // FLATTEN
-        //result.normal = normal;
+        // result.normal = normal;
     
     // PHONG
-        result.normal = vertice_normal[v0]*areaTBC +
-                        vertice_normal[v1]*areaTAC +
-                        vertice_normal[v2]*areaTAB;
+        result.normal = (vertice_normal[v0]*(areaTBC/areaTotal) +
+                        vertice_normal[v1]*(areaTAC/areaTotal) +
+                        vertice_normal[v2]*(areaTAB/areaTotal)).Normalized();
+    
 
 
     return result;
