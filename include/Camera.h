@@ -33,7 +33,8 @@ class Camera : public Object
          * @tparam vector<Light*> vetor contendo todas fontes de luz pontuais.
          * @tparam Light* luz ambiental (posição espacial do objeto é irrelevante).
         */
-        colorRGB phong(CollisionResult collision,Vector3 position, Vector3 observer, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light);
+        colorRGB phong(CollisionResult collision, Ray ray, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light);
+        colorRGB reflection(CollisionResult collision, Ray ray, Vector3 observer, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, colorRGB defaultColor);
 
     private:
     void threadRendering(std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, int initial_x, int final_x, int initial_y, int final_y);

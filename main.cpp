@@ -175,20 +175,32 @@ void Scene_3(){
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
 
-    //Object* icosaedro = CreateIcosaedro();
-    Object* icosaedro = new Plane(Vector3::ONE, Vector3::ZERO, Vector3::ZERO);
+    Object* icosaedro = CreateIcosaedro();
+    Object* plane = new Plane(Vector3::ONE, {0,-1,0}, Vector3::ZERO);
 
-    icosaedro->material.a = 1;
+    icosaedro->material.a = .1;
     icosaedro->material.s = 2;
-    icosaedro->material.d = 1;
-    icosaedro->material.n = 50000;
-    icosaedro->material.color = colorRGB::RED;
-    //icosaedro->material.specularColor = colorRGB::BLUE;
+    icosaedro->material.d = .5;
+    icosaedro->material.n = 200;
+    icosaedro->material.color = colorRGB::BLUE;
 
-    Light* ambiental =  new Light(colorRGB::WHITE, 0.2, Vector3::ONE);
-    vector<Light*> lights = { new Light(colorRGB::WHITE, 0.5, {0,1,10}) };
+    plane->material.a = .1;
+    /*plane->material.s = 2;
+    plane->material.d = 1;
+    plane->material.n = 50000;*/
+    plane->material.color = colorRGB::RED;
+    Object* s3 = new Sphere({3,3,3},{-2,1.4,7});
+    s3->material.a = .1;
+    s3->material.s = 2;
+    s3->material.d = 1;
+    s3->material.n = 100;
 
-    string image_ppm = camera.render({icosaedro}, lights, ambiental);
+    
+
+    Light* ambiental =  new Light(colorRGB::WHITE, 1, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 0.5, {0,1,-1}) };
+
+    string image_ppm = camera.render({icosaedro, plane, s3 }, lights, ambiental);
     FileWriter::saveAsImage(image_ppm);
 }
 
@@ -196,7 +208,7 @@ void Scene_3(){
 void Scene_4(){
 
 
-    int RESOLUTION = 1024;
+    int RESOLUTION = 2048;
     Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
@@ -210,7 +222,7 @@ void Scene_4(){
     s1->material.color = colorRGB::YELLOW;
     s2->material.color = colorRGB::GREEN;
     s3->material.color = colorRGB::RED;
-    p->material.color = colorRGB::WHITE;
+    p->material.color = colorRGB::YELLOW;
 
     s1->material.a = 0.8;
     s1->material.s = 2;

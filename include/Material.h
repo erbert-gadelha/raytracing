@@ -19,6 +19,8 @@ struct Material {
     double n = 10;   // coeficiente de rugosidade
     colorRGB color = {128,128,128};
     colorRGB specularColor = {255,255,255};
+    double opacity = 1;
+    double ior = 1;
 };
 
 #endif // MATERIAL_H

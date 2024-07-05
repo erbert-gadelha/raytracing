@@ -41,47 +41,21 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
             screen.set(y, x, GRADIENT); // define a cor do pixel 
             Ray ray = Ray(transform.position, V);
 
-            int j = -1;
 
             for(int i = 0; i < objects.size(); i++) { // verifica cada objeto
                 CollisionResult result = objects[i]->cast(ray);
                 if(result.t < 0 || result.t > nearest.t)
                     continue;
-                j = i;
                 nearest = result;
             }
 
             if(nearest.t != MAX_DISTANCE) {
-                colorRGB resultColor = phong(nearest, ray.at(nearest.t), transform.position, objects, lights, ambient_light);
-
-                CollisionResult r_nearest;
-                r_nearest.t = MAX_DISTANCE;
-                r_nearest.material.color = colorRGB::BLACK;
-                //Vector3 reflectDi2 = (nearest.normal*2 - (ray.at(nearest.t)-transform.position).Normalized()).Normalized();
-                //Vector3 reflectDir = (nearest.normal*2 - ray.direction()).Normalized();
-                Vector3 reflectDir = (ray.direction() - (nearest.normal * 2 * Vector3::Product(nearest.normal,ray.direction()))).Normalized();
-
-                //Vector3 reflectDir = (nearest.normal*2*(nearest.normal*ray.direction()) - ray.direction()).Normalized();
-                //Vector3 reflectDir = ((ray.direction()) - (nearest.normal*2*(nearest.normal*ray.direction()))).Normalized();
-
-                //Vector3 reflectDir = {ray.direction().x * -1, ray.direction().y, ray.direction().z * -1};
-                //u=vB*2 (x(vA) x(vB)+y(vA) y(vB)+z(vA) z(vB))-vA
-                Ray r_ray = Ray(ray.at(nearest.t)+(reflectDir*0.0), reflectDir);
-                for (int i = 0; i < objects.size(); i++) {
-                    if(i == j)
-                        continue;
-
-                    CollisionResult reflection = objects[i]->cast(r_ray);
-                    
-                    if(reflection.t >= r_nearest.t || reflection.t <= 0)
-                        continue;
-                    r_nearest = reflection;
-                }
-
-                colorRGB r_color = phong(r_nearest, r_ray.at(r_nearest.t), ray.at(nearest.t), objects, lights, ambient_light);
+                colorRGB resultColor = phong(nearest, ray, objects, lights, ambient_light);
+                colorRGB r_color = reflection(nearest, ray, transform.position, objects, lights, ambient_light, GRADIENT);
                 screen.set(y, x, (resultColor + r_color));
-            } else
+            } else {
                 screen.set(y, x, GRADIENT);
+            }
             
         }
     }
@@ -120,17 +94,19 @@ std::string Camera::render(std::vector<Object*> objects, std::vector<Light*> lig
 
 
 
-colorRGB Camera::phong(CollisionResult result, Vector3 point, Vector3 observer, std::vector<Object*>objects, std::vector<Light*> lights, Light* ambient_light) {
+colorRGB Camera::phong(CollisionResult result, Ray ray, std::vector<Object*>objects, std::vector<Light*> lights, Light* ambient_light) {
 
 
     colorRGB diffuse = {0, 0, 0};
     colorRGB specular = {0, 0, 0};
 
-    Vector3 viewDir = (observer - point).Normalized();
+    //Vector3 viewDir = (observer - point).Normalized();
+    Vector3 viewDir = ray.direction();
     
     for (int i = 0; i < lights.size(); i++) {
         Light light = *lights[i];
 
+        Vector3 point = ray.at(result.t);
         double distance = (point - light.transform.position).Magnitude();
 
         bool isVisible = true;
@@ -148,7 +124,8 @@ colorRGB Camera::phong(CollisionResult result, Vector3 point, Vector3 observer, 
             continue;
 
         Vector3 lightDir = (light.transform.position - point).Normalized();
-        Vector3 reflectDir = ((result.normal *2* Vector3::Product(result.normal, lightDir)) - lightDir).Normalized();
+        Vector3 reflectDir = (lightDir - (result.normal * 2 * Vector3::Product(result.normal,lightDir))).Normalized();
+
 
         double diff = std::max(Vector3::Product(result.normal,lightDir), 0.0);
         double spec = std::pow(std::max(Vector3::Product(viewDir,reflectDir), 0.0), result.material.n);
@@ -175,6 +152,34 @@ colorRGB Camera::phong(CollisionResult result, Vector3 point, Vector3 observer, 
     return finalColor.clamped();
 }
 
+colorRGB Camera::reflection(CollisionResult collision, Ray ray, Vector3 observer, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light, colorRGB defaultColor) {
+    colorRGB r_color = colorRGB::BLACK;
+
+    CollisionResult nearest = collision;
+    nearest.material.color = defaultColor;
+    for(int r = 0; r < 3; r++) { // NUMERO DE RECURSÕES DESEJADAS
+        Vector3 reflectDir = (ray.direction() - (nearest.normal * 2 * Vector3::Product(nearest.normal,ray.direction()))).Normalized();
+        Ray r_ray = Ray(ray.at(nearest.t)+(reflectDir*0.0), reflectDir);
+
+        nearest.t = MAX_DISTANCE;
+        CollisionResult reflection;
+        reflection.t = MAX_DISTANCE;
+        for (int i = 0; i < objects.size(); i++) {
+            CollisionResult cr = objects[i]->cast(r_ray);
+            if(cr.t >= reflection.t || cr.t <= 0.005)
+                continue;
+            reflection = cr;
+        }
+
+        if(reflection.t == MAX_DISTANCE)
+            break;
+
+        r_color = r_color + phong(reflection, r_ray, objects, lights, ambient_light);
+        nearest = reflection;
+    }
+
+    return r_color.clamped();
+}
 
 
 std::string Camera::to_string() {
