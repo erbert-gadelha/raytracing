@@ -78,17 +78,8 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
     Vector3 normal = face_normal[f];
     Vector3 df = (point - this->face_barycenters[f]);
 
-    double xc = df.getX();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double yc = df.getY();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double zc = df.getZ();  // VETOR (PONTO RETA) - (PONTO PLANO)
-    double xn = normal.getX();   // VETOR NORMAL AO PLANO
-    double yn = normal.getY();   // VETOR NORMAL AO PLANO
-    double zn = normal.getZ();   // VETOR NORMAL AO PLANO
-    double x = vector.getX();   // VETOR DIRETOR DA RETA
-    double y = vector.getY();   // VETOR DIRETOR DA RETA
-    double z = vector.getZ();   // VETOR DIRETOR DA RETA
-    double a = -(xn*xc + yn*yc + zn*zc);
-    double b = (xn*x + yn*y + zn*z);
+    double a = -Vector3::Product(normal, df);
+    double b = Vector3::Product(normal, vector);
 
 
 
@@ -115,14 +106,15 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
 
 
     result.t = t;
-    result.color = this->color;
+    result.material = this->material;
     // FLATTEN
-        //result.normal = normal;
+        // result.normal = normal;
     
     // PHONG
-        result.normal = vertice_normal[v0]*areaTBC +
-                        vertice_normal[v1]*areaTAC +
-                        vertice_normal[v2]*areaTAB;
+        result.normal = (vertice_normal[v0]*(areaTBC/areaTotal) +
+                        vertice_normal[v1]*(areaTAC/areaTotal) +
+                        vertice_normal[v2]*(areaTAB/areaTotal)).Normalized();
+    
 
 
     return result;

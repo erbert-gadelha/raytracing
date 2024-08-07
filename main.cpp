@@ -14,11 +14,10 @@
 #include "Matrix.h"
 
 #include "FileWriter.h"
-#include "TransformAfim.h"
 
 using namespace std;
 
-Object* CreateCube() {
+Mesh CreateCube(Matrix* transform) {
     std::vector<Vector3> vertices = {
         {0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0},
         {0, 0, 1}, {1, 0, 1}, {1, 1, 1}, {0, 1, 1}
@@ -30,29 +29,14 @@ Object* CreateCube() {
         {1, 2, 6}, {6, 5, 1},{0, 3, 7}, {7, 4, 0} 
     };
 
-    Matrix matrix, translate, rotateY;
-    int angle = -30;
-    double c = std::cos(angle),
-           s = std::sin(angle);
-    rotateY.values = {{ c,0,s,0},
-                      { 0,1,0,0},
-                      {-s,0,c,0},
-                      { 0,0,0,1}
-    };
-    translate.values = {{1,0,0,0},
-                        {0,1,0,0.5},
-                        {0,0,1,0},
-                        {0,0,0,1}
-    };
-
-    matrix = translate*rotateY;
-    for (int i = 0; i < vertices.size(); i++) {
-        Matrix cord = matrix.vectorToMatrix(vertices[i]);
-        vertices[i] = (matrix * cord).to_vector();
+    if(transform != nullptr) {
+        for (int i = 0; i < vertices.size(); i++) {
+            Matrix cord = transform->vectorToMatrix(vertices[i]);
+            vertices[i] = (*transform * cord).to_vector();
+        }
     }
-    
 
-    return new Mesh(vertices, faces);
+    return Mesh(vertices, faces);
 }
 
 
@@ -102,69 +86,63 @@ Object* CreateIcosaedro() {
     return new Mesh(vertices, faces);
 }
 
+/// @brief 1xEsfera, 1xRetangulo, 1xCubo e 1xPlano com iluminação ambiental.
 void Scene_1() {
-    colorRGB RED   = {255,0,0};
-    colorRGB GREEN = {0,255,0};
-    colorRGB BLUE  = {0,0,255};
-    colorRGB YELLOW  = {255,255,0};
-
-    int RESOLUTION = 1080;
+    int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
-    camera.transform.position = Vector3(-5,5,-10);
-    camera.transform.rotation = Vector3(10,25,0);
+    camera.transform.position = {0,1,-10};
+    camera.transform.rotation = {4,0,0};
 
 
 
-
-    Object* sphere = new Sphere(Vector3().ONE*1, Vector3(2,1.5,0.25));
-    Object* mesh = new Mesh({Vector3(0,2,0),Vector3(0,0,0),Vector3(2,0,0),Vector3(2,2,0)}, {{1,2,3}});
+    Object* sphere = new Sphere(Vector3::ONE, {2,1.5,0.25});
+    Object* mesh = new Mesh({ {0,2,0},{0,0,0},{2,0,0},{2,2,0}}, {{1,2,3}});
     Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
-    Object* cube = CreateCube();
-
-    // Transformação 
-
-    // std::vector<Vector3> vertices = {
-    //     {0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0},
-    //     {0, 0, 1}, {1, 0, 1}, {1, 1, 1}, {0, 1, 1}
-    // };
-
-    // std::vector<std::tuple<int, int, int>> faces = {
-    //     {0, 1, 2}, {2, 3, 0},{4, 5, 6}, {6, 7, 4}, 
-    //     {0, 1, 5}, {5, 4, 0},{2, 3, 7}, {7, 6, 2},
-    //     {1, 2, 6}, {6, 5, 1},{0, 3, 7}, {7, 4, 0} 
-    // };
-    // std::vector<Vector3> newVertices;
-
-    // for (int i = 0; i < vertices.size(); i++) {
-    //     TransformAfim transform = TransformAfim("rotY", 90, vertices[i].getX(), vertices[i].getY(), vertices[i].getZ());
-    //     std::vector<double> coord = transform.getCoord();
-    //     newVertices.push_back({coord[0], coord[1], coord[2]});
-
-    // }
-    // cube = new Mesh(newVertices, faces);
 
 
-    sphere->color = BLUE;
-    plane->color = GREEN;
-    mesh->color = RED;
-    cube->color = YELLOW;
 
-    vector<Object*> objects;
-    objects.push_back(sphere);
-    objects.push_back(plane);
-    objects.push_back(mesh);
-    objects.push_back(cube);
+    Matrix matrix, translate, rotateY;
+    int angle = -30;
+    double c = std::cos(angle),
+           s = std::sin(angle);
+    rotateY.values = {{ c,0,s,0},
+                      { 0,1,0,0},
+                      {-s,0,c,0},
+                      { 0,0,0,1}
+    };
+    translate.values = {{1,0,0,0},
+                        {0,1,0,0.5},
+                        {0,0,1,0},
+                        {0,0,0,1}
+    };
 
-    string image_ppm = camera.render(objects);
+    matrix = translate*rotateY;
+    Mesh cube = CreateCube(&matrix);
+
+
+    sphere->material = { 1, 5, 1, 1, 1, 100, colorRGB::BLUE};
+    plane->material = { 1, 5, 1, 1, 1, 100, colorRGB::GREEN};
+    mesh->material = { 1, 4, 1, 1, 1, 1000, colorRGB::RED};
+    cube.material = { 1, 5, 1, 1, 1, 100, colorRGB::YELLOW};
+
+    vector<Object*> objects = {
+        sphere,
+        plane,
+        mesh,
+        &cube
+    };
+
+
+    Light* ambiental =  new Light(colorRGB::WHITE, .2, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 1, {0,.5,-5})};
+
+    string image_ppm = camera.render(objects,lights,ambiental);
     FileWriter::saveAsImage(image_ppm);
 }
 
+/// @brief Transformação vetorial aplicada à uma esfera.
 void Scene_2() {
-    colorRGB RED   = {255,0,0};
-    colorRGB GREEN = {0,255,0};
-    colorRGB BLUE  = {0,0,255};
-    colorRGB YELLOW  = {255,255,0};
-
+    
     int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, (RESOLUTION/512)*1000);
     camera.transform.position = Vector3(-5,5,-10);
@@ -178,58 +156,111 @@ void Scene_2() {
                          { 0, 0, 0,   1}
     }};
 
-    Object* sphere = new Sphere(Vector3().ONE*1, (translate*m_cord).to_vector());
-    Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
+    Object* sphere = new Sphere(Vector3::ONE, (translate*m_cord).to_vector());
+    Object* plane = new Plane(Vector3::ONE, Vector3::ZERO, Vector3::ZERO);
 
-    sphere->color = BLUE;
-    plane->color = GREEN;
+    sphere->material.color = colorRGB::BLUE;
+    plane->material.color = colorRGB::GREEN;
 
-    vector<Object*> objects;
-    objects.push_back(sphere);
-    objects.push_back(plane);
-
-    string image_ppm = camera.render(objects);
+    Light* ambiental =  new Light(colorRGB::WHITE, 1, Vector3::ONE);
+    string image_ppm = camera.render({sphere, plane},{},ambiental);
     FileWriter::saveAsImage(image_ppm);
 }
 
+/// @brief 1xIcosaedro com luz pontual
 void Scene_3(){
-    colorRGB RED   = {255,0,0};
-    colorRGB GREEN = {0,255,0};
-    colorRGB BLUE  = {0,0,255};
-    colorRGB YELLOW  = {255,255,0};
 
     int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
 
-
-
-    //Object* plane = new Plane(Vector3().ONE, Vector3(0,0,0), Vector3(0,0,0));
-    //Object* cube = CreateCube();
     Object* icosaedro = CreateIcosaedro();
+    Object* plane = new Plane(Vector3::ONE, {0,-1,0}, Vector3::ZERO);
 
-    //plane->color = GREEN;
-    //cube->color = YELLOW;
-    icosaedro->color = RED;
+    icosaedro->material.a = .1;
+    icosaedro->material.s = 2;
+    icosaedro->material.d = .5;
+    icosaedro->material.n = 200;
+    icosaedro->material.color = colorRGB::BLUE;
 
+    plane->material.a = .1;
+    /*plane->material.s = 2;
+    plane->material.d = 1;
+    plane->material.n = 50000;*/
+    plane->material.color = colorRGB::RED;
+    Object* s3 = new Sphere({3,3,3},{-2,1.4,7});
+    s3->material.a = .1;
+    s3->material.s = 2;
+    s3->material.d = 1;
+    s3->material.n = 100;
 
-    vector<Object*> objects;
-    //objects.push_back(plane);
-    //objects.push_back(cube);
-    objects.push_back(icosaedro);
+    
 
-    string image_ppm = camera.render(objects);
+    Light* ambiental =  new Light(colorRGB::WHITE, 1, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 0.5, {0,1,-1}) };
+
+    string image_ppm = camera.render({icosaedro, plane, s3 }, lights, ambiental);
     FileWriter::saveAsImage(image_ppm);
 }
+
+/// @brief 3xEsferas, 1xPlano com uma Luz pontual
+void Scene_4(){
+
+
+    int RESOLUTION = 2048;
+    Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
+    camera.transform.position = Vector3(0,2,-10);
+    camera.transform.rotation = Vector3(5,0,0);
+
+    Object* s0 = new Sphere({1,1,1},{0,.35,0});
+    Object* s1 = new Sphere({.2,.2,.2}, {-1.2, .5, 0});
+    Object* s2 = new Sphere({.4,.4,.4}, {1.5, 1, 1});
+    Object* s3 = new Sphere({1,1,1},{-.35,1.7,.2});
+    Object* s4 = new Sphere({1,1,1},{1,2,.2});
+    Object* p = new Plane();
+    s0->material.color = colorRGB::RED;
+    s1->material.color = colorRGB::YELLOW;
+    s2->material.color = colorRGB::GREEN;
+    s3->material.color = colorRGB::RED;
+    p->material.color = colorRGB::YELLOW;
+
+    s1->material.a = 0.8;
+    s1->material.s = 2;
+    s1->material.d = 1;
+    s1->material.n = 10;
+
+    s3->material.a = .1;
+    s3->material.s = 2;
+    s3->material.d = 1;
+    s3->material.n = 100;
+
+    s4->material.a = .1;
+    s4->material.s = .4;
+    s4->material.d = .3;
+    s4->material.n = 100;
+    s4->material.r = 0.1;
+    s4->material.color = colorRGB::BLACK;
+    s4->material.opacity = 0.1;
+    s4->material.ior = 10.8;
+
+
+    Light* ambiental =  new Light(colorRGB::WHITE, 0.2, Vector3::ONE);
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 1, {-5,1,-1}) };
+
+    string image_ppm = camera.render({s0, s1, s2, s3, s4, p}, lights, ambiental);
+    FileWriter::saveAsImage(image_ppm);
+}
+
+
 
 
 int main() {
     //Scene_1();
     //Scene_2();
-    Scene_3();
+    //Scene_3();
+    Scene_4();
     
-    std::cout << "\n===============================\n" << std::endl;
     return 0;
 }
 

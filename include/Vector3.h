@@ -3,22 +3,27 @@
 #include <string>
 #include <iostream>
 
-class Vector3 {
-public:
+struct Vector3 {
+    
     static const Vector3 ONE;
     static const Vector3 ZERO;
     static const Vector3 UP;
     static const Vector3 RIGHT;
     static const Vector3 FORWARD;
 
+    double x = 0;
+    double y = 0;
+    double z = 0;
+
     Vector3();
     Vector3(double x, double y, double z);
     std::string to_string();
 
-    Vector3 operator+(const Vector3 other) const { return Vector3(cord_XYZ[0]+other.cord_XYZ[0], cord_XYZ[1]+other.cord_XYZ[1], cord_XYZ[2]+other.cord_XYZ[2]); }
-    Vector3 operator-(const Vector3 other) const { return Vector3(cord_XYZ[0]-other.cord_XYZ[0], cord_XYZ[1]-other.cord_XYZ[1], cord_XYZ[2]-other.cord_XYZ[2]); }
-    Vector3 operator*(const double scale) const { return Vector3(cord_XYZ[0]*scale, cord_XYZ[1]*scale, cord_XYZ[2]*scale); }
-    Vector3 operator/(const double scale) const { return Vector3(cord_XYZ[0]/scale, cord_XYZ[1]/scale, cord_XYZ[2]/scale); }
+    inline Vector3 operator+(const Vector3 other) const { return {x+other.x,y+other.y,z+other.z}; }
+    inline Vector3 operator-(const Vector3 other) const { return {x-other.x,y-other.y,z-other.z}; }
+    inline Vector3 operator*(const Vector3 other) const { return {x*other.x,y*other.y,z*other.z}; }
+    inline Vector3 operator*(const double t) const { return {x*t,y*t,z*t}; }
+    inline Vector3 operator/(const double t) const { return {x/t,y/t,z/t};  }
 
     double Norm();
     double Magnitude();
@@ -28,15 +33,14 @@ public:
     static double Product(Vector3 v1, Vector3 v2);
     static Vector3 CrossProduct(Vector3 v1, Vector3 v2);
 
-    void setX(double x);
+    /*void setX(double x);
     void setY(double y);
     void setZ(double y);
     double getX();
     double getY();
-    double getZ();
+    double getZ();*/
 
 private:
-    double cord_XYZ[3];
     std::string doubleToString(double value);
 };
 

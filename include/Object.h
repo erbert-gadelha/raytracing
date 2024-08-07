@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "colorRGB.h"
 #include "CollisionResult.h"
+#include "Material.h"
 #include <vector>
 
 class Object {
@@ -17,10 +18,7 @@ class Object {
         virtual std::string to_string();
         virtual CollisionResult cast(Ray ray);
         Transform transform;
-        colorRGB color;
-
-        void setColor(int r, int g, int b);
-        std::string getColor();
+        Material material;
 
     protected:
 

@@ -3,30 +3,20 @@
 #include <string>
 #include <math.h>
 
-const Vector3 Vector3::ONE = Vector3(1, 1, 1);
-const Vector3 Vector3::ZERO = Vector3(0, 0, 0);
-const Vector3 Vector3::UP = Vector3(0, 1, 0);
-const Vector3 Vector3::RIGHT = Vector3(1, 0, 0);
-const Vector3 Vector3::FORWARD = Vector3(0, 0, 1);
+const Vector3 Vector3::ONE = {1, 1, 1};
+const Vector3 Vector3::ZERO = {0, 0, 0};
+const Vector3 Vector3::UP = {0, 1, 0};
+const Vector3 Vector3::RIGHT = {1, 0, 0};
+const Vector3 Vector3::FORWARD = {0, 0, 1};
 
-Vector3::Vector3() {
-    this->cord_XYZ[0] = 0;
-    this->cord_XYZ[1] = 0;
-    this->cord_XYZ[2] = 0;
-}
+Vector3::Vector3() {}
 
 Vector3::Vector3(double x, double y, double z) {
-    this->cord_XYZ[0] = x;
-    this->cord_XYZ[1] = y;
-    this->cord_XYZ[2] = z;
+    this->x = x;
+    this->y = y;
+    this->z = z;
 }
 
-void Vector3::setX(double x) {    this->cord_XYZ[0] = x;    }
-void Vector3::setY(double y) {    this->cord_XYZ[1] = y;    }
-void Vector3::setZ(double z) {    this->cord_XYZ[2] = z;    }
-double Vector3::getX() {    return this->cord_XYZ[0];   }
-double Vector3::getY() {    return this->cord_XYZ[1];   }
-double Vector3::getZ() {    return this->cord_XYZ[2];   }
 
 double Vector3::Norm() {
     return Product(*this,*this);
@@ -40,14 +30,16 @@ Vector3 Vector3::Normalized() {
     double m = Magnitude();
 
     if(m != 0) 
-        return Vector3(cord_XYZ[0],cord_XYZ[1],cord_XYZ[2])/m;
+        return {x/m,y/m,z/m};
         
     return Vector3::ZERO;
 }
 
-double Vector3::Angle(Vector3 v1, Vector3 v2) {
-    double dotProduct = v1.Product(v1,v2);
-    double magnitudeProduct = v1.Magnitude() * v2.Magnitude();
+/**Função estática que retorna angulo formado entre dois vetores do R3
+ */
+double Vector3::Angle(Vector3 a, Vector3 b) {
+    double dotProduct = Vector3::Product(a,b);
+    double magnitudeProduct = a.Magnitude() * b.Magnitude();
 
     if (magnitudeProduct == 0.0) {
         //throw std::invalid_argument("Cannot calculate angle with zero magnitude vector.");
@@ -69,9 +61,7 @@ double Vector3::Distance(Vector3 v1, Vector3 v2) {
 
 std::string Vector3::to_string() {
     //return ("(" + std::to_string(cord_XYZ[0]) + ", " + std::to_string(cord_XYZ[1]) + ", " + std::to_string(cord_XYZ[2]) + ")");
-
-
-    return ("(" + doubleToString(cord_XYZ[0]) + ", " + doubleToString(cord_XYZ[1]) + ", " + doubleToString(cord_XYZ[2]) + ")");
+    return ("(" + doubleToString(x) + ", " + doubleToString(y) + ", " + doubleToString(z) + ")");
 }
 
 std::string Vector3::doubleToString(double value) {
@@ -81,15 +71,13 @@ std::string Vector3::doubleToString(double value) {
     return str;
 }
 
-
-
-double Vector3::Product(Vector3 v1, Vector3 v2) {
-    return v1.getX()*v2.getX() + v1.getY()*v2.getY() + v1.getZ()*v2.getZ();
+/**
+ * Produto vetorial no R3
+ */
+double Vector3::Product(Vector3 a, Vector3 b) {
+    Vector3 v = a*b;
+    return v.x + v.y + v.z;
 }
-
-
-
-
 
 
 
@@ -105,8 +93,8 @@ Vector3 Vector3::CrossProduct(Vector3 v1, Vector3 v2) {
 
     
     return Vector3 (
-        v1.getY()*v2.getZ() - v1.getZ()*v2.getY(),
-        v1.getZ()*v2.getX() - v1.getX()*v2.getZ(),
-        v1.getX()*v2.getY() - v1.getY()*v2.getX()
+        v1.y*v2.z - v1.z*v2.y,
+        v1.z*v2.x - v1.x*v2.z,
+        v1.x*v2.y - v1.y*v2.x
     );
 }

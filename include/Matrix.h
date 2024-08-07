@@ -158,9 +158,9 @@ struct Matrix {
     Matrix vectorToMatrix(Vector3 v) {
         Matrix m;
         m.values = {
-            {v.getX()},
-            {v.getY()},
-            {v.getZ()},
+            {v.x},
+            {v.y},
+            {v.z},
             {1}
         };
         return m;
@@ -169,8 +169,8 @@ struct Matrix {
     Vector3 to_vector() {
         if(size_v() < 3)
             return Vector3::ZERO;
-            
-        return Vector3(values[0][0],values[1][0],values[2][0]);
+        
+        return { values[0][0], values[1][0], values[2][0]};
     }
 
 };

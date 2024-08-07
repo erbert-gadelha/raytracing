@@ -40,13 +40,13 @@ CollisionResult Sphere::cast(Ray ray) {
 
     //Vector3 df = point - transform.position;
     Vector3 df = transform.position-point;
-    double x = vector.getX(); // VETOR DIRETOR DA RETA
-    double y = vector.getY(); // VETOR DIRETOR DA RETA
-    double z = vector.getZ(); // VETOR DIRETOR DA RETA
-    double xc = df.getX();    // DIFERENCA DAS COORDENADAS
-    double yc = df.getY();    // DIFERENCA DAS COORDENADAS
-    double zc = df.getZ();    // DIFERENCA DAS COORDENADAS
-    double radius = this->transform.scale.getX()/2;    // RAIO DA ESFERA
+    double x = vector.x; // VETOR DIRETOR DA RETA
+    double y = vector.y; // VETOR DIRETOR DA RETA
+    double z = vector.z; // VETOR DIRETOR DA RETA
+    double xc = df.x;    // DIFERENCA DAS COORDENADAS
+    double yc = df.y;    // DIFERENCA DAS COORDENADAS
+    double zc = df.z;    // DIFERENCA DAS COORDENADAS
+    double radius = this->transform.scale.x/2;    // RAIO DA ESFERA
 
     // equaçao que define a interseccao da esfera com o raio
     double a = (x*x) + (y*y) + (z*z);
@@ -78,7 +78,7 @@ CollisionResult Sphere::cast(Ray ray) {
     else
         result.t = (t1<t2?t1:t2);
 
-    result.color = this->color;
+    result.material = this->material;
     result.normal = (ray.at(result.t)-transform.position).Normalized();
 
     return result;
@@ -87,5 +87,5 @@ CollisionResult Sphere::cast(Ray ray) {
 
 
 std::string Sphere::to_string() {
-    return ("{\n\tmesh: sphere,\n\tcolor: (" + getColor() + ")\n\ttransform: " + this->transform.to_string() + "\n}");
+    return ("{\n\tmesh: sphere,\n\tcolor: (" + material.color.to_string() + ")\n\ttransform: " + this->transform.to_string() + "\n}");
 }

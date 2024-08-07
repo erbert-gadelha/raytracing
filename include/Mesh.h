@@ -28,11 +28,9 @@ class Mesh : public Object {
         int v() {return vertices.size();}
         int f() {return faces.size();}
 
-
-
-    protected:
         std::vector<Vector3> vertices;
         std::vector<std::tuple<int, int, int>> faces;
+
     
     private:
         std::vector<Vector3> vertice_normal;
