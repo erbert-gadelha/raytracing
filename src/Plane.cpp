@@ -1,49 +1,49 @@
 //plane.cpp
 #include "Plane.h"
 #include "colorRGB.h"
+#include <cmath>
+
 
 Plane::Plane() : Object() {
-    this->transform = Transform();
+    this->normal = Vector3::UP;
+    this->right = Vector3::RIGHT;
+    this->forward = Vector3::FORWARD;
 }
 
-Plane::Plane(Vector3 scale) : Object() {
-    this->transform = Transform();
-    this->transform.scale = scale;
+Plane::Plane(Vector3 normal) : Object() {
+    this->normal = normal.Normalized();
+
+
+    Vector3 arbitrary(1, 0, 0);
+    Vector3 temp = Vector3::CrossProduct(normal, arbitrary);
+    if (temp.x == 0 && temp.y == 0 && temp.z == 0)
+        arbitrary = Vector3(0, 1, 0);
+    this->forward = Vector3::CrossProduct(normal, arbitrary).Normalized() * -1;
+    this->right = Vector3::CrossProduct(normal, this->forward).Normalized();
+
 }
 
-Plane::Plane(Vector3 scale, Vector3 position) : Object() {
-    this->transform = Transform();
-    this->transform.scale = scale;
+Plane::Plane(Vector3 normal, Vector3 position) : Object() {
     this->transform.position = position;
+
+    this->normal = normal.Normalized();
+    Vector3 arbitrary(1, 0, 0);
+    Vector3 temp = Vector3::CrossProduct(normal, arbitrary);
+    if (temp.x == 0 && temp.y == 0 && temp.z == 0)
+        arbitrary = Vector3(0, 1, 0);
+    this->forward = Vector3::CrossProduct(normal, arbitrary).Normalized() * -1;
+    this->right = Vector3::CrossProduct(normal, this->forward).Normalized();
+
 }
 
-Plane::Plane(Vector3 scale, Vector3 position, Vector3 rotation ) : Object() {
-    this->transform = Transform();
-    this->transform.scale = scale;
-    this->transform.position = position;
-    this->transform.rotation = rotation;
-}
-
-/*double Plane::getD() {
-    Vector3 normal = transform.up();
-    Vector3 pos = transform.position;
-    return (normal.getX()*pos.getX()) + (normal.getY()*pos.getY()) + (normal.getZ()*pos.getZ());
-}*/
-
-/*double Plane::contains (Vector3 point) {
-    Vector3 normal = transform.up();
-    Vector3 pos = transform.position;
-    return ((normal.x*pos.x) + (normal.getY()*pos.getY()) + (normal.getZ()*pos.getZ()) - this->getD());
-}*/
 
 CollisionResult Plane::cast(Ray ray) {
     CollisionResult result;
 
-    //Vector3 point, Vector3 vector
     Vector3 point = ray.origin(),
             vector = ray.direction();
 
-    Vector3 normal = transform.up();
+    Vector3 normal = this->normal;
     Vector3 df = (point - transform.position);
 
     double a = -Vector3::Product(normal, df);
@@ -58,6 +58,28 @@ CollisionResult Plane::cast(Ray ray) {
     result.t = t;
     result.material = this->material;
     result.normal = normal;
+
+
+    // PROJ
+
+    if(this->material.texture.v > 0 && this->material.texture.h > 0) {
+        double o = Vector3::Proj(ray.at(t), this->right),
+               p = Vector3::Proj(ray.at(t), this->forward);
+
+        o -= std::floor(o);
+        p -= std::floor(p);
+
+        int v = floor(o*material.texture.v),
+            h = floor(p*material.texture.h);
+        
+        if(v < 0 || v >= material.texture.v)
+            v = material.texture.v;
+        else if (h < 0 || h >= material.texture.h)
+            h = material.texture.h;
+        else
+            result.material.color = result.material.color * this->material.texture.image[h][v];
+    }
+
 
     return result;
 }

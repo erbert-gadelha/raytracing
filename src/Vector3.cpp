@@ -98,3 +98,11 @@ Vector3 Vector3::CrossProduct(Vector3 v1, Vector3 v2) {
         v1.x*v2.y - v1.y*v2.x
     );
 }
+
+/// @brief Escalar da projeção do Vector3 v1 sobre o Vector3 v2.
+double Vector3::Proj(Vector3 v1, Vector3 v2) {
+    double a = v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+    double b = v2.x*v2.x + v2.y*v2.y + v2.z*v2.z;
+
+    return a/b;
+}

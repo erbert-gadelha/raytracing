@@ -7,9 +7,8 @@ class Plane : public Object
 {
     public:
         Plane();
-        Plane(Vector3 scale);
-        Plane(Vector3 scale, Vector3 position);
-        Plane(Vector3 scale, Vector3 position, Vector3 rotation);
+        Plane(Vector3 normal);
+        Plane(Vector3 normal, Vector3 position);
         std::string to_string() override;
         CollisionResult cast(Ray ray) override;
         //double contains (Vector3 point);
@@ -18,6 +17,9 @@ class Plane : public Object
     protected:
 
     private:
+        Vector3 normal;
+        Vector3 right;
+        Vector3 forward;
 };
 
 #endif // PLANE_H
