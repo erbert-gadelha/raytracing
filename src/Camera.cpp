@@ -108,33 +108,46 @@ colorRGB Camera::phong(CollisionResult result, Ray ray, std::vector<Object*>obje
     
     for (int i = 0; i < lights.size(); i++) {
         Light light = *lights[i];
+        Vector3 lightCenter = light.points[lights.size()/2];
 
         Vector3 point = ray.at(result.t);
-        double distance = (point - light.transform.position).Magnitude();
+        double distance = (point - lightCenter).Magnitude();
 
-        bool isVisible = true;
-        for(int j = 0; j < objects.size(); j++) {
-            Vector3 dir = (light.transform.position - point).Normalized();
-            CollisionResult col = objects[j]->cast(Ray(point, dir));
+        int visiblePoints = 0;
+        double ratio;
 
-            if(col.t < 0.0001 || col.t > distance)
-                continue;
 
-            isVisible = false;
-            break;
-        }
-        if(!isVisible)
+
+        for(int k = 0; k < light.points.size(); k++) {
+
+            int visible = 1;
+            for(int j = 0; j < objects.size(); j++) {
+
+                Vector3 dir = (light.points[k] - point).Normalized();
+                CollisionResult col = objects[j]->cast(Ray(point, dir));
+
+                if(col.t > 0.0001 && col.t < distance) {
+                    visible = 0;
+                }
+            }
+            
+            visiblePoints+=visible;
+        }        
+
+        if(visiblePoints == 0)
             continue;
+        
+        ratio = ((double)visiblePoints)/light.points.size();
 
-        Vector3 lightDir = (light.transform.position - point).Normalized();
+        Vector3 lightDir = (lightCenter - point).Normalized();
         Vector3 reflectDir = (lightDir - (result.normal * 2 * Vector3::Product(result.normal,lightDir))).Normalized();
 
 
         double diff = std::max(Vector3::Product(result.normal,lightDir), 0.0);
         double spec = std::pow(std::max(Vector3::Product(viewDir,reflectDir), 0.0), result.material.n);
 
-        diffuse += (light.color*light.intensity) * diff;
-        specular += (light.color*light.intensity) * spec;
+        diffuse += (light.color*light.intensity) * diff * ratio;
+        specular += (light.color*light.intensity) * spec * ratio;
     }
 
 

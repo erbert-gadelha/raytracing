@@ -5,16 +5,18 @@
 #include "Vector3.h"
 #include "Transform.h"
 #include "colorRGB.h"
+#include <vector>
 
 class Light {
 
     public:
         Light();
-        Light(colorRGB color, Vector3 position);
-        Light(colorRGB color, double intensity, Vector3 position);
+        Light(colorRGB color, std::vector<Vector3> points);
+        Light(colorRGB color, double intensity, std::vector<Vector3> points);
         
         std::string to_string();
-        Transform transform;
+        //Transform transform;
+        std::vector<Vector3> points;
         colorRGB color = {128, 128, 128};
         double intensity = 1;
 

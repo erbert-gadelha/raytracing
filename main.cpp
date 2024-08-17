@@ -10,7 +10,6 @@
 #include "Mesh.h"
 #include "Vector3.h"
 #include "Camera.h"
-#include "Vector3.h"
 #include "Matrix.h"
 
 #include "FileWriter.h"
@@ -85,6 +84,27 @@ Object* CreateIcosaedro() {
 
     return new Mesh(vertices, faces);
 }
+
+
+std::vector<Vector3> CreatePoints(Vector3 point, int occur, double gap) {
+    std::vector<Vector3> points = {};
+
+    for (double i = -occur; i < occur; i++)
+        for (double j = -occur; j < occur; j++)
+            for (double k = -occur; k < occur; k++)
+                points.push_back(Vector3{i*gap,j*gap,k*gap});
+
+
+    for(int i = 0; i < points.size(); i++)
+        points[i] = points[i] + point;
+
+    return points;
+    //return {point};
+}
+
+
+
+/*
 
 /// @brief 1xEsfera, 1xRetangulo, 1xCubo e 1xPlano com iluminação ambiental.
 void Scene_1() {
@@ -185,9 +205,6 @@ void Scene_3(){
     icosaedro->material.color = colorRGB::BLUE;
 
     plane->material.a = .1;
-    /*plane->material.s = 2;
-    plane->material.d = 1;
-    plane->material.n = 50000;*/
     plane->material.color = colorRGB::RED;
     Object* s3 = new Sphere({3,3,3},{-2,1.4,7});
     s3->material.a = .1;
@@ -202,13 +219,13 @@ void Scene_3(){
 
     string image_ppm = camera.render({icosaedro, plane, s3 }, lights, ambiental);
     FileWriter::saveAsImage(image_ppm);
-}
+}*/
 
 /// @brief 3xEsferas, 1xPlano com uma Luz pontual
 void Scene_4(){
 
 
-    int RESOLUTION = 2048;
+    int RESOLUTION = 512;
     Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
     camera.transform.position = Vector3(0,2,-10);
     camera.transform.rotation = Vector3(5,0,0);
@@ -245,8 +262,60 @@ void Scene_4(){
     s4->material.ior = 10.8;
 
 
-    Light* ambiental =  new Light(colorRGB::WHITE, 0.2, Vector3::ONE);
-    vector<Light*> lights = { new Light(colorRGB::WHITE, 1, {-5,1,-1}) };
+    Light* ambiental =  new Light(colorRGB::WHITE, 0.2, {Vector3::ONE});
+
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 1, CreatePoints({-5,1,-1}, 1, 0.4))};
+
+
+    string image_ppm = camera.render({s0, s1, s2, s3, s4, p}, lights, ambiental);
+    FileWriter::saveAsImage(image_ppm);
+}
+
+/// @brief 3xEsferas, 1xPlano com uma Luz pontual
+void Scene_5(){
+
+
+    int RESOLUTION = 512;
+    Camera camera = Camera(RESOLUTION, RESOLUTION, ((double)RESOLUTION/512)*1000);
+    camera.transform.position = Vector3(0,2,-10);
+    camera.transform.rotation = Vector3(5,0,0);
+
+    Object* s0 = new Sphere({1,1,1},{0,.35,0});
+    Object* s1 = new Sphere({.2,.2,.2}, {-1.2, .5, 0});
+    Object* s2 = new Sphere({.4,.4,.4}, {1.5, 1, 1});
+    Object* s3 = new Sphere({1,1,1},{-.35,1.7,.2});
+    Object* s4 = new Sphere({1,1,1},{1,2,.2});
+    Object* p = new Plane();
+    s0->material.color = colorRGB::RED;
+    s1->material.color = colorRGB::YELLOW;
+    s2->material.color = colorRGB::GREEN;
+    s3->material.color = colorRGB::RED;
+    p->material.color = colorRGB::BLUE;
+
+    s1->material.a = 0.8;
+    s1->material.s = 2;
+    s1->material.d = 1;
+    s1->material.n = 10;
+
+    s3->material.a = .1;
+    s3->material.s = 2;
+    s3->material.d = 1;
+    s3->material.n = 100;
+
+    s4->material.a = .1;
+    s4->material.s = .4;
+    s4->material.d = .3;
+    s4->material.n = 100;
+    s4->material.r = 0.1;
+    s4->material.color = colorRGB::BLACK;
+    s4->material.opacity = 0.1;
+    s4->material.ior = 10.8;
+
+
+    Light* ambiental =  new Light(colorRGB::WHITE, 0.2, {Vector3::ONE});
+
+    vector<Light*> lights = { new Light(colorRGB::WHITE, 1, CreatePoints({0,3,0}, 2, 0.1))};
+
 
     string image_ppm = camera.render({s0, s1, s2, s3, s4, p}, lights, ambiental);
     FileWriter::saveAsImage(image_ppm);
@@ -259,7 +328,8 @@ int main() {
     //Scene_1();
     //Scene_2();
     //Scene_3();
-    Scene_4();
+    //Scene_4();
+    Scene_5();
     
     return 0;
 }
