@@ -1,6 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 #include "colorRGB.h"
+#include "Texture.h"
 
 /** coeficiente
  * @tparam double d, coeficiente difuso
@@ -21,6 +22,7 @@ struct Material {
     colorRGB specularColor = {255,255,255};
     double opacity = 1;
     double ior = 1;
+    Texture texture;
 };
 
 #endif // MATERIAL_H
