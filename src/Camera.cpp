@@ -68,8 +68,8 @@ void Camera::threadRendering(std::vector<Object*> objects, std::vector<Light*>li
 
 std::string Camera::render(std::vector<Object*> objects, std::vector<Light*> lights, Light* ambient_light) {
     // ===== DEBUG ===== //
-    std::cout << "Rendering <" << objects.size() << "> object(s)";
-    auto start = std::chrono::high_resolution_clock::now();
+    /*std::cout << "Rendering <" << objects.size() << "> object(s)";
+    auto start = std::chrono::high_resolution_clock::now();*/
     // ===== DEBUG ===== //
     
 
@@ -87,9 +87,9 @@ std::string Camera::render(std::vector<Object*> objects, std::vector<Light*> lig
 
 
     // ===== DEBUG ===== //
-    auto end = std::chrono::high_resolution_clock::now();
+    /*auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
-    std::cout << " ~ (Complete in (" << (elapsed_seconds.count()) << ") seconds)." << std::endl;
+    std::cout << " ~ (Complete in (" << (elapsed_seconds.count()) << ") seconds)." << std::endl;*/
     // ===== DEBUG ===== //
 
     return this->screen.to_string();

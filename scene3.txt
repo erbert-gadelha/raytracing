@@ -1,0 +1,15 @@
+// Material { difuso, especular, ambiental, reflexao, transmissão, rugosidade }
+
+// Definição da câmera
+Camera (512) (0 0 0) (0 1 -10)
+Ambiental (255 255 255) (0.5)
+Luz (-2 3 -1) (255 255 255) (0.2)
+
+
+// Definição de uma esfera
+// Esfera (1) (0 1 0) (255 255 0) (1 1 1 1 1 1 1 1)
+// Esfera (1) (0 1 0) (255 255 0) (1 0.1 0.1 0.1 0.1 0.1 1 1)
+Esfera (1) (0 1 0) (255 255 0) (1 1 1 0.1 0.1 0.1 1 0.2)
+Esfera (2) (2 1 0) (0 255 0) (1 1 1 0.1 0.1 0.1 1 0.2)
+
+Plano (0 0 0) (0 1 0) (128 128 255) (1 1 1 0.1 0.1 0.1 1 0.2)

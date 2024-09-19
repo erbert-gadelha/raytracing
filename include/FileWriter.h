@@ -12,7 +12,7 @@
 class FileWriter {
     public:
         FileWriter() {};
-        static bool saveAsImage (std::string image);
+        static std::string saveAsImage (std::string image, std::string targetDirectory);
 };
 
 #endif // FILEWRITER_H
