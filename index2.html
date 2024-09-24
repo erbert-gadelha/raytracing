@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WASM with Arguments</title>
+    <script>
+        var Module = {
+            onRuntimeInitialized: function() {
+                // Passando argumentos para o main do WebAssembly
+                const args = ['main', 'param1', 'param2'];  // Simulando argv[0], argv[1], argv[2]
+                const result = Module.callMain(args);
+
+                //console.log(result);
+            }
+        };
+    </script>
+    <script src="output.js"></script>
+</head>
+<body>
+</body>
+</html>

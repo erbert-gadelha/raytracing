@@ -9,7 +9,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "FileWriter.h"
 #include <fstream>
 
 bool Parser::logging = false;
@@ -60,6 +59,7 @@ std::string Parser::parseScene(std::istream& stream) {
     std::vector<Object*> objects;
     std::vector<Light*> lights;
     Light* ambiental =  new Light(colorRGB::WHITE, 1, {Vector3::ONE});
+
 
     while (std::getline(stream, line)) {
         /*if(logging)
@@ -170,7 +170,6 @@ std::string Parser::parseScene(std::istream& stream) {
         }
     }
     
-
     if(camera == nullptr) {
         if(logging)
             std::cerr << "Não foi possível instanciar a camera.\n";

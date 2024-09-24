@@ -2,6 +2,7 @@
 #include <vector>
 #include <tuple>
 #include <cmath>
+#include <string>
 
 
 #include "Object.h"
@@ -14,7 +15,6 @@
 #include "Texture.h"
 #include <fstream>
 
-#include "FileWriter.h"
 #include "Parser.h"
 
 using namespace std;
@@ -144,39 +144,43 @@ void Scene_1() {
 }*/
 
 
+void replaceNewlines(std::string& str) {
+    std::string target = "\\n"; // Isso é o que você espera como entrada
+    std::string replacement = "\n"; // Isso é o que você quer na string
+    
+    // Substituindo todas as ocorrências de "\\n" por "\n"
+    size_t pos = 0;
+    while ((pos = str.find(target, pos)) != std::string::npos) {
+        str.replace(pos, target.length(), replacement);
+        pos += replacement.length();
+    }
+}
+
 int main(int argc, char* argv[]) {
 
-    cout << argc << endl;
-
     if(argc == 3) {
-        cout << argv[0] << endl;
-        cout << argv[1] << endl;
-        cout << argv[2] << endl << endl;
+
+        Parser::logging = false;
 
         string v0 = argv[1];
         string v1 = argv[2];
         string image_ppm;
 
-        Parser::logging = true;
-
-        if(v0[0] == '0') {
-            image_ppm = Parser::parseFromFile(v1);
-            cout << "[abrir arquivo]" << endl;            
-        }
-        else if (v0[0] == '1') {
-            image_ppm = Parser::parseFromString(v1);
-            cout << "[ler string]" << endl;
+        if (v0[0] == '1') {
+            replaceNewlines(v1);
+            try {
+                image_ppm = Parser::parseFromString(v1);
+            } catch (exception e) {
+                cout << "Error\n";
+            }
         }
         
         if(!image_ppm.empty()) {
-            string fileName = FileWriter::saveAsImage(image_ppm, "screenshots/");
-            cout << fileName << std::endl;
+            cout << image_ppm << std::endl;
             return 0;
         } else {
-
-            cout << "empt";
+            //cout << "EMPTY";
         }
-        
     }
 
     cout << "NOOP" << std::endl;    

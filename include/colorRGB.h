@@ -2,6 +2,7 @@
 #define COLORRGB_H
 #include <string>
 #include <algorithm>
+#include <math.h>
 
 struct colorRGB {
 
@@ -65,13 +66,27 @@ struct colorRGB {
     }
 
     static colorRGB Clamp(colorRGB c) {
-        return {std::clamp((int)(c.red),0,255),
-                std::clamp((int)(c.green),0,255),
-                std::clamp((int)(c.blue),0,255)};
+        return {colorRGB::clamp((int)(c.red),0,255),
+                colorRGB::clamp((int)(c.green),0,255),
+                colorRGB::clamp((int)(c.blue),0,255)};
     }
+
+
+    
     colorRGB clamped() {
         return Clamp(*this);
     }
+
+    //private:
+        static int clamp(int value, int min, int max) {
+            if(value > max)
+                return value;
+            if(value < min)
+                return min;
+            
+            return value;
+
+        }
 };
 
 #endif // COLORRGB_H

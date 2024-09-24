@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "Matrix.h"
+#include <tuple>
 
 
 Mesh::Mesh(const std::vector<Vector3>& vertices, const std::vector<std::tuple<int, int, int>>& faces) {
@@ -67,7 +68,10 @@ CollisionResult Mesh::cast_face(Ray ray, int f) {
     Vector3 point = ray.origin(),
             vector = ray.direction();
 
-    auto[v0, v1, v2] = faces[f];
+    int v0 = std::get<0>(faces[f]);
+    int v1 = std::get<1>(faces[f]);
+    int v2 = std::get<2>(faces[f]);
+
     Vector3 A = vertices[v0],
             B = vertices[v1],
             C = vertices[v2];

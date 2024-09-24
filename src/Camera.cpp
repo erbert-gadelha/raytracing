@@ -75,16 +75,16 @@ std::string Camera::render(std::vector<Object*> objects, std::vector<Light*> lig
 
 
     // ===== CRIANDO THREADS ===== //
-    int cores = 8;
+    /*int cores = 8;
     int chunck = vertical/cores;
     std::thread threads [cores];
     for(int i = 0; i < cores; i++)
         threads[i] = std::thread ([this](std::vector<Object*> objects, std::vector<Light*>lights, Light* ambient_light, int initial_x, int final_x, int initial_y, int final_y) { this->threadRendering(objects, lights, ambient_light, initial_x, final_x, initial_y, final_y); }, objects, lights, ambient_light,  0, horizontal, chunck*i, chunck*(i+1));
     for(int i = 0; i < cores; i++)
-        threads[i].join();
+        threads[i].join();*/
     // ===== CRIANDO THREADS ===== //
 
-
+    threadRendering(objects, lights, ambient_light, 0, vertical, 0, vertical);
 
     // ===== DEBUG ===== //
     /*auto end = std::chrono::high_resolution_clock::now();
@@ -144,7 +144,7 @@ colorRGB Camera::phong(CollisionResult result, Ray ray, std::vector<Object*>obje
 
 
         double diff = std::max(Vector3::Product(result.normal,lightDir), 0.0);
-        double spec = std::pow(std::max(Vector3::Product(viewDir,reflectDir), 0.0), result.material.n);
+        double spec = pow(std::max(Vector3::Product(viewDir,reflectDir), 0.0), result.material.n);
 
         diffuse += (light.color*light.intensity) * diff * ratio;
         specular += (light.color*light.intensity) * spec * ratio;
@@ -199,7 +199,7 @@ colorRGB Camera::reflection(CollisionResult collision, Ray ray, std::vector<Obje
 
 colorRGB Camera::refract(CollisionResult collision, Ray ray, std::vector<Object*>objects, std::vector<Light*>lights, Light* ambient_light) {
     double opacity = collision.material.opacity;
-    double cosi = std::clamp((double)Vector3::Product(collision.normal, ray.direction()), (double)1, (double)2);
+    double cosi = colorRGB::clamp((double)Vector3::Product(collision.normal, ray.direction()), (double)1, (double)2);
     double etai = 1, etat = collision.material.ior;
     Vector3 n = collision.normal;
 
@@ -216,7 +216,7 @@ colorRGB Camera::refract(CollisionResult collision, Ray ray, std::vector<Object*
     if (k < 0)
         refract = {0,0,0}; // Total internal reflection
     else
-        refract =  {ray.direction() * etaRatio + n*(cosi*etaRatio - std::sqrt(k))};
+        refract =  {ray.direction() * etaRatio + n*(cosi*etaRatio - sqrt(k))};
     
 
 

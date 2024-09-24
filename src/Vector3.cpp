@@ -51,7 +51,7 @@ double Vector3::Angle(Vector3 a, Vector3 b) {
     if (cosTheta < -1.0) cosTheta = -1.0;
     if (cosTheta > 1.0) cosTheta = 1.0;
 
-    return std::acos(cosTheta) / 3.14;
+    return acos(cosTheta) / 3.14;
 }
 
 
