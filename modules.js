@@ -204,7 +204,7 @@ document.querySelector("#btn-submit").addEventListener('click',() => {
     
     switch(obj['type']) {
       // CAMERA_OBJECT
-      case 'Camera': str = `Camera (256) (${obj['#rot-x']} ${obj['#rot-y']} ${obj['#rot-z']}) (${obj['#cord-x']} ${obj['#cord-y']} ${obj['#cord-z']})`; break;
+      case 'Camera': str = `Camera (${obj['#input-unique']}) (${obj['#rot-x']} ${obj['#rot-y']} ${obj['#rot-z']}) (${obj['#cord-x']} ${obj['#cord-y']} ${obj['#cord-z']})`; break;
       
       // AMBIENTAL_OBJECT
       case 'Ambiental': str = `Ambiental (${color.r} ${color.g} ${color.b}) (${obj['#input-unique']})`; break;
@@ -222,6 +222,7 @@ document.querySelector("#btn-submit").addEventListener('click',() => {
     result += str + '\n';
   }
   
+
   //console.log(result);
   const ppm = RenderScene(result);
   RenderCanvas(ppm);
