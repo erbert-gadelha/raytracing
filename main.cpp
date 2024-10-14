@@ -16,6 +16,7 @@
 #include <fstream>
 
 #include "Parser.h"
+#include <emscripten.h>
 
 using namespace std;
 
@@ -144,47 +145,53 @@ void Scene_1() {
 }*/
 
 
-void replaceNewlines(std::string& str) {
+/*void replaceNewlines(const char* text) {
     std::string target = "\\n"; // Isso é o que você espera como entrada
     std::string replacement = "\n"; // Isso é o que você quer na string
     
+    //string str;
     // Substituindo todas as ocorrências de "\\n" por "\n"
     size_t pos = 0;
     while ((pos = str.find(target, pos)) != std::string::npos) {
         str.replace(pos, target.length(), replacement);
         pos += replacement.length();
     }
+}*/
+
+int main() {
+    cout << "Aplicação iniciada.\n";
+    return 0;
 }
 
-int main(int argc, char* argv[]) {
 
-    if(argc == 3) {
-
-        Parser::logging = false;
-
-        string v0 = argv[1];
-        string v1 = argv[2];
+/*extern "C" {
+    EMSCRIPTEN_KEEPALIVE
+    int Render(string scene_description) {
+        replaceNewlines(scene_description);
         string image_ppm;
+        try {
+            cout << Parser::parseFromString(scene_description);
+        } catch (exception e) {
+            cout << "Error";
+        }
 
-        if (v0[0] == '1') {
-            replaceNewlines(v1);
-            try {
-                image_ppm = Parser::parseFromString(v1);
-            } catch (exception e) {
-                cout << "Error\n";
-            }
-        }
-        
-        if(!image_ppm.empty()) {
-            cout << image_ppm << std::endl;
-            return 0;
-        } else {
-            //cout << "EMPTY";
-        }
+        return 0;
+    }
+}*/
+
+extern "C" {
+    EMSCRIPTEN_KEEPALIVE
+    int sumValues(int a, int b) {
+        printf("%d + %d = %d;\n", a, b, a+b);
+        return a+b;
     }
 
-    cout << "NOOP" << std::endl;    
-    return -1;
+
+    EMSCRIPTEN_KEEPALIVE
+    const char* Render(const char* scene_description) {
+        const char* result = Parser::parseFromString(scene_description);
+        return result;
+    }
 }
 
 

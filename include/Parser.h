@@ -14,11 +14,11 @@ class Parser {
 
     public:
         static bool logging;
-        static std::string parseFromString(const std::string str);
-        static std::string parseFromFile(const std::string filePath);
+        static const char* parseFromString(const std::string str);
+        static const char* parseFromFile(const std::string filePath);
 
     private:
-        static std::string parseScene(std::istream& stream);
+        static const char* parseScene(std::istream& stream);
 
 
 };

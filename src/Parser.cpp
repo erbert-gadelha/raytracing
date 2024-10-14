@@ -13,7 +13,7 @@
 
 bool Parser::logging = false;
 
-std::string Parser::parseFromFile(const std::string filePath) {
+const char* Parser::parseFromFile(const std::string filePath) {
     std::ifstream sceneStream(filePath);
 
     if (!sceneStream.is_open()) {
@@ -25,19 +25,18 @@ std::string Parser::parseFromFile(const std::string filePath) {
     std::string result = parseScene(sceneStream);
     sceneStream.close();
 
-    return result;
+    return result.c_str();
 }
 
-std::string Parser::parseFromString(const std::string str) {
+const char* Parser::parseFromString(const std::string str) {
     std::istringstream sceneStream(str);
     std::string result = parseScene(sceneStream);
-    //sceneStream.close();
 
-    return result;
+    return result.c_str();
 }
 
 
-std::string Parser::parseScene(std::istream& stream) {
+const char*Parser::parseScene(std::istream& stream) {
 
     //std::istringstream a("sceneDescription");
 
@@ -176,7 +175,7 @@ std::string Parser::parseScene(std::istream& stream) {
         return "";
     }
 
-    return camera->render(objects, lights, ambiental);
+    return camera->render(objects, lights, ambiental).c_str();
 
 
 }
