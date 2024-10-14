@@ -4,91 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAssembly com Emscripten</title>
-    <!-- Corrigido para usar "text/javascript" -->
     <script type="text/javascript" src="main.js" defer></script>
-    <!--<script type="text/javascript" src="test.js" defer></script>-->
+    <script type="text/javascript" src="modules.js" defer></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="styles.css" />
+
 </head>
 <body>
+    <article>
+        <div>
+            <button id="btn-add-sphere">Adicionar Esfera</button>
+            <button id="btn-add-plane">Adicionar Plano</button>
+            <button id="btn-add-light">Adicionar Luz</button>
+          </div>
+          
+          <div id="container">
+            
+            <div id="object-camera" class="object camera">
+              <div class="object-title">
+                <span class="material-symbols-outlined"> video_camera_back </span>
+                <span id="object-title"> Camera </span>
+              </div>
+               
+              
+              <span class="param-cord label"> cordenada </span>
+              <div class="param-cord input param-vector">
+                <span>x:</span>
+                <input id="cord-x" type="number" value="0" step=".5" max="100" min="-100">
+                <span>y:</span>
+                <input id="cord-y" type="number" value="1" step=".5" max="100" min="-100">
+                <span>z:</span>
+                <input id="cord-z" type="number" value="-10" step=".5" max="100" min="-100">
+              </div>
+              
+              
+              <span class="param-rot label"> rotacao </span>
+              <div class="param-rot input param-vector">
+                <span>x:</span>
+                <input id="rot-x" type="number" value="0" step=".5" max="100" min="-100">
+                <span>y:</span>
+                <input id="rot-y" type="number" value="0" step=".5" max="100" min="-100">
+                <span>z:</span>
+                <input id="rot-z" type="number" value="0" step=".5" max="100" min="-100">
+              </div>
+            </div>
+            
+            <div id="object-ambiental"  class="object ambiental">
+              <div class="object-title">
+                <span class="material-symbols-outlined"> brightness_5 </span>
+                <span id="object-title"> Ambiental </span>
+              </div>
+              
+              
+              <span class="param-unique label"> itensidade </span>
+              <input id="input-unique" class="param-unique input" type="number" value=".2" step=".1" max="100" min="0.01">
+               
+              
+              <span class="param-color label"> color </span>
+              <input id="input-color" class="param-color input" type="color" value="#FFFFB3">
+              
+            </div>  
+            
+          </div>
+          
+          <button id="btn-submit"">
+            renderizar
+          </B>
+    </article>
 
-    <h1>Visualizador PPM</h1>
-
-    <button onclick="Wasd()">Renderizar Imagem</button>
-
-    <canvas id="canvas"></canvas>
-
-    <script>
-
-
-        function Wasd() {
-            const scene_description = "Camera (128) (5 0 0) (0 2 -10)\nAmbiental (255 255 255) (0.2)\nLuz (-5 1 -1) (255 255 255) (1)\n\nEsfera (1) (0 .35 0) (255 0 0) (1 0.1 1 1 1 1 1 1)\nEsfera (0.2) (-1.2 .5 0) (255 255 0) (1 2 0.8 1 1 10 1 1)\nEsfera (0.4) (1.5 1 1) (0 255 0) (1 0.1 1 1 1 1 1 1)\nEsfera (1) (-0.35 1.7 0.2) (255 0 0) (1 2 0.1 1 1 100 1 1)\nEsfera (1) (1 2 0.2) (0 0 0) (0.3 0.4 0.1 0.1 1 100 0.1 10.8)\n\nPlano (0 0 0) (0 1 0) (255 255 0) (1 0.1 1 1 1 1 1 1)";
-
-
-            const result = Module.ccall(
-            "Render", // name of C function
-            "number", // return type
-            ["string"], // argument types
-            [scene_description], // arguments
-            );
-
-            const ppm = Module.UTF8ToString(result);
-            //console.log(ppm)
-            RenderCanvas(ppm);
-        }
-
-
-        //document.getElementById('renderButton').addEventListener('click', function() {
-        function RenderCanvas(ppm) {
-            //const text = document.getElementById('inputText').value;
-            const lines = ppm.split('\n');
-
-            let width, height, maxVal;
-            let headerEnded = false;
-            let pixelData = [];
-            let headerLines = 0;
-
-            // Parse the header
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (line.startsWith('#')) continue; // Ignore comments
-                if (line === 'P3') continue; // Ignore magic number (P3 for ASCII PPM)
-
-                if (!headerEnded) {
-                    if (headerLines === 0) {
-                        // Get width and height
-                        [width, height] = line.split(' ').map(Number);
-                        headerLines++;
-                    } else if (headerLines === 1) {
-                        // Get max value
-                        maxVal = Number(line);
-                        headerEnded = true;
-                    }
-                    continue;
-                }
-
-                // After header, collect pixel data
-                pixelData.push(...line.split(' ').map(Number));
-            }
-
-            // Create a Canvas and draw the image
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = width;
-            canvas.height = height;
-
-            const imageData = ctx.createImageData(width, height);
-            const data = imageData.data;
-
-            // Fill the canvas pixel data with the PPM values
-            for (let i = 0, j = 0; i < pixelData.length; i += 3, j += 4) {
-                data[j] = pixelData[i];       // Red
-                data[j + 1] = pixelData[i + 1]; // Green
-                data[j + 2] = pixelData[i + 2]; // Blue
-                data[j + 3] = 255;            // Alpha (fully opaque)
-            }
-
-            ctx.putImageData(imageData, 0, 0);
-        }
-    </script>
+    <article>
+        <canvas id="canvas"></canvas>
+    </article>
 
 </body>
 </html>
