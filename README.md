@@ -1,4 +1,6 @@
-O projeto foi compilado para WebAssembly através do emScript, portanto é possível testar a aplicação (sem uso de threads e com número de reflexões reduzido) pelo navegador web.
+Projeto escrito em C++ compilado para WebAssembly.
+
+As demais branches do projeto contém paralismo, e portanto disso melhor perfomance, mas possuem bibliotecas incompatíveis com o compilador emScript.
 
 Acesse pelo link.
 [https://erbert-gadelha.github.io/raytracing/](https://erbert-gadelha.github.io/raytracing/)
