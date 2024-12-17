@@ -1,6 +1,6 @@
 Projeto escrito em C++ compilado para WebAssembly.
 
-As demais branches do projeto contém paralismo, e portanto disso melhor perfomance, mas possuem bibliotecas incompatíveis com o compilador emScript.
+As demais branches do projeto contém paralismo, e portanto melhor perfomance, mas possuem bibliotecas incompatíveis com o compilador emScript.
 
 Acesse pelo link.
 [https://erbert-gadelha.github.io/raytracing/](https://erbert-gadelha.github.io/raytracing/)
