@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAssembly com Emscripten</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Erbert Gadelha - Raytracing C++ com WebAssembly</title>
     <script type="text/javascript" src="main.js" defer></script>
     <script type="text/javascript" src="modules.js" defer></script>
 
@@ -12,76 +13,83 @@
 
 </head>
 <body>
+
+
+
+
     <article>
-        <div>
-            <button id="btn-add-sphere">Adicionar Esfera</button>
-            <button id="btn-add-plane">Adicionar Plano</button>
-            <button id="btn-add-light">Adicionar Luz</button>
-          </div>
+      <canvas id="canvas" width="256px" height="256px"></canvas>
+
+      <section id="prompt-params">
           
-          <div id="container">
+        <button id="btn-submit">
+          renderizar
+        </button>
+
+        <div id="create-objects">
+          <button id="btn-add-sphere">Adicionar Esfera</button>
+          <button id="btn-add-plane">Adicionar Plano</button>
+          <button id="btn-add-light">Adicionar Luz</button>
+        </div>
+          
+        <div id="created-objects">
+          
+          <div id="object-camera" class="object camera">
+            <div class="object-title">
+              <span class="material-symbols-outlined"> video_camera_back </span>
+              <span id="object-title"> Camera </span>
+            </div>
+              
             
-            <div id="object-camera" class="object camera">
-              <div class="object-title">
-                <span class="material-symbols-outlined"> video_camera_back </span>
-                <span id="object-title"> Camera </span>
-              </div>
-               
-              
-              <span class="param-cord label"> cordenada </span>
-              <div class="param-cord input param-vector">
-                <span>x:</span>
-                <input id="cord-x" type="number" value="0" step=".5" max="100" min="-100">
-                <span>y:</span>
-                <input id="cord-y" type="number" value="1" step=".5" max="100" min="-100">
-                <span>z:</span>
-                <input id="cord-z" type="number" value="-10" step=".5" max="100" min="-100">
-              </div>
-              
-              
-              <span class="param-rot label"> rotacao </span>
-              <div class="param-rot input param-vector">
-                <span>x:</span>
-                <input id="rot-x" type="number" value="0" step=".5" max="100" min="-100">
-                <span>y:</span>
-                <input id="rot-y" type="number" value="0" step=".5" max="100" min="-100">
-                <span>z:</span>
-                <input id="rot-z" type="number" value="0" step=".5" max="100" min="-100">
-              </div>
-
-
-              <span class="param-unique label"> resolução </span>
-              <input id="input-unique" class="param-unique input" type="number" value="256" step="2" max="2048" min="16">
-               
-
+            <span class="param-cord label"> cordenada </span>
+            <div class="param-cord input param-vector">
+              <span>x:</span>
+              <input id="cord-x" type="number" value="0" step=".5" max="100" min="-100">
+              <span>y:</span>
+              <input id="cord-y" type="number" value="1" step=".5" max="100" min="-100">
+              <span>z:</span>
+              <input id="cord-z" type="number" value="-10" step=".5" max="100" min="-100">
             </div>
             
-            <div id="object-ambiental"  class="object ambiental">
-              <div class="object-title">
-                <span class="material-symbols-outlined"> brightness_5 </span>
-                <span id="object-title"> Ambiental </span>
-              </div>
-              
-              
-              <span class="param-unique label"> itensidade </span>
-              <input id="input-unique" class="param-unique input" type="number" value=".2" step=".1" max="100" min="0.01">
-               
-              
-              <span class="param-color label"> color </span>
-              <input id="input-color" class="param-color input" type="color" value="#FFFFB3">
-              
-            </div>  
             
+            <span class="param-rot label"> rotacao </span>
+            <div class="param-rot input param-vector">
+              <span>x:</span>
+              <input id="rot-x" type="number" value="0" step=".5" max="100" min="-100">
+              <span>y:</span>
+              <input id="rot-y" type="number" value="0" step=".5" max="100" min="-100">
+              <span>z:</span>
+              <input id="rot-z" type="number" value="0" step=".5" max="100" min="-100">
+            </div>
+
+
+            <span class="param-unique label"> resolução </span>
+            <input id="input-unique" class="param-unique input" type="number" value="256" step="2" max="512" min="16">
+              
+
           </div>
           
-          <button id="btn-submit"">
-            renderizar
-          </B>
+          <div id="object-ambiental"  class="object ambiental">
+            <div class="object-title">
+              <span class="material-symbols-outlined"> brightness_5 </span>
+              <span id="object-title"> Ambiental </span>
+            </div>
+            
+            
+            <span class="param-unique label"> itensidade </span>
+            <input id="input-unique" class="param-unique input" type="number" value=".2" step=".1" max="100" min="0.01">
+              
+            
+            <span class="param-color label"> color </span>
+            <input id="input-color" class="param-color input" type="color" value="#FFFFB3">
+            
+          </div>  
+          
+        </div>
+        
+      </section>
     </article>
 
-    <article>
-        <canvas id="canvas"></canvas>
-    </article>
 
 </body>
 </html>

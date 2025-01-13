@@ -1,3 +1,5 @@
+
+const body = document.querySelector("body");
 const btn_sphere = document.querySelector("#btn-add-sphere"),
   btn_plane = document.querySelector("#btn-add-plane"),
   btn_light = document.querySelector("#btn-add-light");
@@ -14,9 +16,7 @@ const objects = {
   }
 };
 
-const container = document.querySelector("#container");
-
-
+const container = document.querySelector("#created-objects");
 
 
 function addObject(objectName) {
@@ -143,9 +143,17 @@ function removeObject(objectId) {
 
 
 
-document.querySelector("#btn-submit").addEventListener('click',() => {
+document.querySelector("#btn-submit").addEventListener('click',async () => {
+  
+  body.classList.add("waiting");
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+  await new Promise(r => setTimeout(r, 100));
   
   
+
   const keys = Object.keys(objects.elements);
   const objectsAttributes = [];
   
@@ -223,15 +231,15 @@ document.querySelector("#btn-submit").addEventListener('click',() => {
   }
   
 
-  //console.log(result);
   const ppm = RenderScene(result);
   RenderCanvas(ppm);
+
+  body.classList.remove("waiting");
 });
 
 
 function RenderScene(scene_description) {
     //const scene_description = "Camera (128) (5 0 0) (0 2 -10)\nAmbiental (255 255 255) (0.2)\nLuz (-5 1 -1) (255 255 255) (1)\n\nEsfera (1) (0 .35 0) (255 0 0) (1 0.1 1 1 1 1 1 1)\nEsfera (0.2) (-1.2 .5 0) (255 255 0) (1 2 0.8 1 1 10 1 1)\nEsfera (0.4) (1.5 1 1) (0 255 0) (1 0.1 1 1 1 1 1 1)\nEsfera (1) (-0.35 1.7 0.2) (255 0 0) (1 2 0.1 1 1 100 1 1)\nEsfera (1) (1 2 0.2) (0 0 0) (0.3 0.4 0.1 0.1 1 100 0.1 10.8)\n\nPlano (0 0 0) (0 1 0) (255 255 0) (1 0.1 1 1 1 1 1 1)";
-
 
     const result = Module.ccall(
     "Render", // name of C function

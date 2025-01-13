@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Finlandica:ital,wght@0,400..700;1,400..700&family=Geologica:wght@100..900&display=swap');
 
+:root {
+  --low-opacity: rgba(255, 255, 255, 0.3);
+  --gap: 4px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -7,36 +12,88 @@
   font-family: "Geologica", sans-serif;
 }
 
-#container {
-  
-  width: fit-content;
-  
-  margin: 4px;
-  background-color: lightgray;
+#btn-submit {
+  border: var(--low-opacity) 1px solid;
+  background-color: transparent;
+  color: white;
+  background-color: rgb(255, 255, 255, .1);
+  font-weight: 100;
   padding: 4px;
-  border: gray solid 1px;
-  border-radius: 8px;
+
+  cursor: pointer;
+
+  &:hover{
+    background-color: var(--low-opacity);
+  }
+}
+
+#prompt-params {
+  display: flex;
+  gap: var(--gap);
+  flex-direction: column;
+}
+
+#create-objects {
+
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--gap);
+  
+
+  button {
+    border: var(--low-opacity) 1px solid;
+    background-color: transparent;
+    color: white;
+    background-color: rgb(255, 255, 255, .1);
+    font-weight: 100;
+    padding: 4px;
+
+    cursor: pointer;
+
+    &:hover{
+      background-color: var(--low-opacity);
+    }
+  }
+}
+
+#created-objects {
+  width: 100%;
   
   display: grid;
-  gap: 4px 0;
+  gap: var(--gap) 0;
   
   grid-template-columns: [container-start title-start] auto [title-end param-vector-start] minmax(150px, 200px) [param-vector-end param-unique-start] minmax(40px, 80px) [param-unique-end] auto [btn-remove-start] 50px [btn-remove-end container-end];
+
+    &:has(:focus), &:has(:hover) {
+      .object {
+        opacity: .2;
+      }
+      .object:hover {
+        opacity: 1;
+      }
+      .object:has(:focus) {
+        opacity: 1;
+      }
+      
+    }
 }
 
 .object {
+
+  transition: opacity 500ms ease;
   grid-column: container-start/container-end;
   
   display: grid;
-  border: gray solid 1px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.5);
+  border: var(--low-opacity) solid 1px;
+
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
   
   grid-template-columns: subgrid;
   grid-template-rows: [container-start upper-label-start] auto [upper-label-end upper-input-start] auto [upper-input-end lower-label-start] auto [lower-label-end lower-input-start] auto [lower-input-end container-end];
-  
-  /*grid-template-rows: [container-start upper-start] auto [upper-end lower-start] auto [lower-end container-end];*/
-  
-  /*grid-auto-rows: auto;*/
+
+
   
   gap: 0px 16px;  
   
@@ -46,13 +103,27 @@
     
     display: flex;
     align-items: center;
-  }  
+    font-weight: 100;
+  }
+
+  input {
+    background-color: transparent;
+    color: white;
+
+    &:hover, &:focus {
+      background-color: var(--low-opacity);
+    }
+  }
+
+  .material-symbols-outlined {
+    font-weight: 200;
+    margin: 4px;
+  }
     
   .label {
     font-size: 0.75rem;
-    font-weight: 300;
+    font-weight: 200;
   }
-
   
   .param-unique, .param-color {
     grid-column: param-unique;
@@ -94,16 +165,18 @@
     height: 24px;
     
     margin: auto;
-    border: gray solid 1px;
-    background-color: red;
+    border: var(--low-opacity) solid 1px;
+    background-color: transparent;
     color: white;
     
     border-radius: 100%;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
   }
   
   .btn-remove:hover {
-    background-color: darkred;
+    font-weight: 300;
+    color: black;
+    background-color: var(--low-opacity);
   }
   
   .param-vector { 
@@ -136,24 +209,41 @@
   }
 }
 
-
-body {
-    display: flex;
+.waiting {
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    text-align: center;
+    vertical-align: bottom;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    backdrop-filter: blur(2px);
+    width: 100%;
+    height: 100%;
+  }
 }
 
-/*input[type="number"] {
-  width: 1.5rem;
-  background-color: wheat;
+
+article {
+  margin: auto;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  padding:  32px 16px;
 }
 
-input[type="color"] {
-  width: 3rem;
-  border: none;
-  outline: none;
-  margin: 0;
-  padding: none;
-	-webkit-appearance: none;
-}*/
+#prompt-params {
+  width: 100%;
+}
+
+canvas {
+  background-color: rgba(255, 255, 255, 0.1);
+}
 
 
 
@@ -169,3 +259,52 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+
+body {
+	/*background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);  */
+
+	height: 100vh;
+  
+  background-image: url('data:image/svg+xml,%3Csvg width="52" height="26" viewBox="0 0 52 26" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-rule="evenodd"%3E%3Cg fill="white" fill-opacity=".2"%3E%3Cpath d="M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z" /%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+  background-color: black;
+  /*animation: gradient 120s linear infinite;
+  background-color: black;*/
+
+  background-color: #000000;
+  opacity: 1;
+  background-image:  repeating-linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), repeating-linear-gradient(45deg, #ffffff 25%, #000000 25%, #000000 75%, #ffffff 75%, #ffffff);
+  background-position: 0 0, 10px 10px;
+  background-size: 4px 4px;
+
+
+  &::after {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    /*background: linear-gradient(45deg, #333 40%, red, orange, yellow, greenyellow, cyan, blue, white 50%,  #333 60%);  */
+    /*background: linear-gradient(45deg, #333 45%, #f00, #FC0, #0f0, #0CC, #00f, white 50%, white 52%,  #f00, #FC0, #0f0, #0CC, #00f,  #333 57%);*/
+    background: linear-gradient(90deg, #333 25%, black 50%, #333 75%);   
+
+    background-size: 400% 400%;
+    background-repeat: repeat;
+    mix-blend-mode: multiply;
+    opacity: 1;
+  
+    animation: gradient 20s linear infinite;
+  }
+}
+
+
+
+@keyframes gradient {
+	0% {
+		background-position: 100% 0%;
+	}
+	100% {
+		background-position: 0% 0%;
+	}
+}
